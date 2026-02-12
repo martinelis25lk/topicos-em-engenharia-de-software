@@ -12,17 +12,23 @@ import java.util.List;
 public class VehiclePageMapper {
 
 
+
+
     public static VehiclePageDTO toDTO(VehicleCatalogModel vehicle, List<SetupModel> setups){
 
         VehiclePageDTO dto = new VehiclePageDTO();
 
 
         dto.setVehicle(VehiclePageMapper.buildSummary(vehicle));
+
         dto.setTechnicalSpecs(buildSpecs(vehicle));
         dto.setCommunitySetups(buildCommunitySetups(setups));
 
         return dto;
     }
+
+
+
 
 
 
@@ -51,7 +57,7 @@ public class VehiclePageMapper {
         specs.setFactoryTorque(vehicle.getFactoryTorque());
         //aspiração
 
-        specs.setAspirationType(vehicle.getAspirationType());
+        specs.setAspirationType(vehicle.getAspirationType().name());
 
 
         return specs;
@@ -65,7 +71,7 @@ public class VehiclePageMapper {
                     CommunitySetupDTO dto = new CommunitySetupDTO();
 
                     dto.setTargetHorsePower(setup.getTargetHorsePower());
-                    dto.setUsage(setup.getUsage());
+                    dto.setUsage(setup.getUsage().name());
                     dto.setEngineStage(String.valueOf(setup.getEngineStage()));
 
                     return dto;

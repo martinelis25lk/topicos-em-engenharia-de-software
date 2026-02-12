@@ -74,7 +74,7 @@ public class VehicleCatalogModel {
         return factoryTorque;
     }
 
-    public String getAspirationType() {
+    public AspirationType getAspirationType() {
         return aspirationType;
     }
 
