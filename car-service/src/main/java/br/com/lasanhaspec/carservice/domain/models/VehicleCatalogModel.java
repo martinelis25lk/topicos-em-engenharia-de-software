@@ -70,7 +70,7 @@ public class VehicleCatalogModel {
         return factoryHorsepower;
     }
 
-    public Integer getFactroyTorque() {
+    public Integer getFactoryTorque() {
         return factoryTorque;
     }
 

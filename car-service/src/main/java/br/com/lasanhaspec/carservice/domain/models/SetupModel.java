@@ -68,99 +68,102 @@ public class SetupModel {
     }
 
 
-    public Long getId() {
-        return id;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
 
-    public VehicleCatalogModel getVehicleCatalogModel() {
-        return vehicleCatalogModel;
-    }
-
-
-    public AspirationType getTargetAspirationType() {
-        return targetAspirationType;
-    }
 
     public void setTargetAspirationType(AspirationType targetAspirationType) {
         this.targetAspirationType = targetAspirationType;
-    }
-
-    public Boolean getCommunitySetup() {
-        return communitySetup;
     }
 
     public void setCommunitySetup(Boolean communitySetup) {
         this.communitySetup = communitySetup;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
-    }
-
-    public EngineStage getEngineStage() {
-        return engineStage;
     }
 
     public void setEngineStage(EngineStage engineStage) {
         this.engineStage = engineStage;
     }
 
-    public Integer getTargetHorsePower() {
-        return targetHorsePower;
-    }
-
     public void setTargetHorsePower(Integer targetHorsePower) {
         this.targetHorsePower = targetHorsePower;
-    }
-
-    public Integer getTargetTorque() {
-        return targetTorque;
     }
 
     public void setTargetTorque(Integer targetTorque) {
         this.targetTorque = targetTorque;
     }
 
-    public ReliabilityLevel getReliability() {
-        return reliability;
-    }
-
     public void setReliability(ReliabilityLevel reliability) {
         this.reliability = reliability;
-    }
-
-    public UsageType getUsage() {
-        return usage;
     }
 
     public void setUsage(UsageType usage) {
         this.usage = usage;
     }
 
-    public Boolean getForgedInternals() {
-        return forgedInternals;
-    }
-
     public void setForgedInternals(Boolean forgedInternals) {
         this.forgedInternals = forgedInternals;
-    }
-
-    public LocalDate getCreatedAt() {
-        return createdAt;
     }
 
     public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
 
+
+
+    // Getters
+
+    public Long getId() {
+        return id;
+    }
+
+    public VehicleCatalogModel getVehicleCatalogModel() {
+        return vehicleCatalogModel;
+    }
+
+    public AspirationType getTargetAspirationType() {
+        return targetAspirationType;
+    }
+
+    public Boolean getCommunitySetup() {
+        return communitySetup;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public EngineStage getEngineStage() {
+        return engineStage;
+    }
+
+    public Integer getTargetHorsePower() {
+        return targetHorsePower;
+    }
+
+    public Integer getTargetTorque() {
+        return targetTorque;
+    }
+
+    public ReliabilityLevel getReliability() {
+        return reliability;
+    }
+
+    public UsageType getUsage() {
+        return usage;
+    }
+
+    public Boolean getForgedInternals() {
+        return forgedInternals;
+    }
+
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
 
     ///  ainda n terminei aqui, ta muito cru
 }
