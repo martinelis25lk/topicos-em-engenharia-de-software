@@ -1,8 +1,7 @@
 package br.com.lasanhaspec.carservice.service;
 
-import br.com.lasanhaspec.carservice.repository.VehicleCatalogRepository;
+import br.com.lasanhaspec.carservice.domain.models.CommunitySetup;
 import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
-import br.com.lasanhaspec.carservice.domain.models.SetupModel;
 import br.com.lasanhaspec.carservice.dto.VehiclePageDTO;
 import br.com.lasanhaspec.carservice.mappers.VehiclePageMapper;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ public class VehiclePageService {
 
         VehicleCatalogModel vehicle = vehicleCatalogService.findById(vehicleId);
 
-        List<SetupModel> setups = setupService.findByVehicle(vehicle.getId());
+        List<CommunitySetup> setups = setupService.findByVehicle(vehicle.getId());
         // aqui só mapeamento, sem regra
         return  VehiclePageMapper.toDTO(vehicle, setups);
 

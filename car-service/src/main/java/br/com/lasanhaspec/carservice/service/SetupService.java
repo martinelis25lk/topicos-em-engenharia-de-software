@@ -1,7 +1,7 @@
 package br.com.lasanhaspec.carservice.service;
 
 
-import br.com.lasanhaspec.carservice.domain.models.SetupModel;
+import br.com.lasanhaspec.carservice.domain.models.CommunitySetup;
 import br.com.lasanhaspec.carservice.repository.SetupRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class SetupService {
 
 
 
-    public List<SetupModel> findByVehicle(Long vehicleId){
+    public List<CommunitySetup> findByVehicle(Long vehicleId){
         return setupRepository.findByVehicleCatalogModelId(vehicleId);
 
         //return null;

@@ -1,6 +1,6 @@
 package br.com.lasanhaspec.carservice.mappers;
 
-import br.com.lasanhaspec.carservice.domain.models.SetupModel;
+import br.com.lasanhaspec.carservice.domain.models.CommunitySetup;
 import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
 import br.com.lasanhaspec.carservice.dto.CommunitySetupDTO;
 import br.com.lasanhaspec.carservice.dto.TechnicalSpecsDTO;
@@ -14,7 +14,7 @@ public class VehiclePageMapper {
 
 
 
-    public static VehiclePageDTO toDTO(VehicleCatalogModel vehicle, List<SetupModel> setups){
+    public static VehiclePageDTO toDTO(VehicleCatalogModel vehicle, List<CommunitySetup> setups){
 
         VehiclePageDTO dto = new VehiclePageDTO();
 
@@ -64,7 +64,7 @@ public class VehiclePageMapper {
     }
 
 
-    private static List<CommunitySetupDTO> buildCommunitySetups(List<SetupModel> setups){
+    private static List<CommunitySetupDTO> buildCommunitySetups(List<CommunitySetup> setups){
         return setups.stream()
                 .map(setup ->{
 
