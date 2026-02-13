@@ -48,6 +48,15 @@ Novos serviços serão adicionados de forma incremental conforme a evolução e 
 Andei me informando sobre microserviços e percebi que não é todo projeto que se deve começar de cara com esse tipo de arquitetura de software, e que em muitos casos há a necessidade de maturar o projeto em um
 monolitico bem estruturado e de acordo com a escalabilidade e necessidades do projeto, ir quebrando o sistema para uma nova concepção, mas como este projeto é mais como uma cobaia para fins didáticos e de diversão mesmo. Então o projeto segue uma abordagem baseada em microserviços, iniciando com um serviço central de veículos.
 
+graph TD
+    Controller --> Service
+    Service --> Repository
+    Repository --> Database
+    Service --> SetupRulesService
+    UserVehicle --> CurrentSetup
+    CurrentSetup --> CommunitySetup
+
+
 
 
 
