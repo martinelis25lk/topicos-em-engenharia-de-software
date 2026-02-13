@@ -1,12 +1,11 @@
 package br.com.lasanhaspec.carservice.repository;
 
-import br.com.lasanhaspec.carservice.domain.models.SetupModel;
+import br.com.lasanhaspec.carservice.domain.models.CommunitySetup;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface SetupRepository extends JpaRepository<SetupModel, Long> {
+public interface SetupRepository extends JpaRepository<CommunitySetup, Long> {
 
-    List<SetupModel> findByVehicleCatalogModelId(Long Id);
+    List<CommunitySetup> findByVehicleCatalogModelId(Long Id);
 }

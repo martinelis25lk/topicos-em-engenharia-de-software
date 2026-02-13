@@ -1,5 +1,5 @@
 package br.com.lasanhaspec.carservice.domain.models;
-//SetupModel = Setup Base / Setup da Comunidade
+//CommunitySetup = Setup Base / Setup da Comunidade
 
 import br.com.lasanhaspec.carservice.domain.enums.AspirationType;
 import br.com.lasanhaspec.carservice.domain.enums.EngineStage;
@@ -11,7 +11,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-
+// esse arquivo era o antigo setupmodel
 /**
  * Setup genérico / perfil de preparação
  * Não representa um carro real de usuário
@@ -24,7 +24,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "setups")
-public class SetupModel {
+public class CommunitySetup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
