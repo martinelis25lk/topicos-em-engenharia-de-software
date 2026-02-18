@@ -15,4 +15,8 @@ spring:
       hibernate:
         format_sql: true
 
+  aws:
+    region: us-east-1
+    bucket-name: lasanhaspec-user-vehicles
+
 
