@@ -22,11 +22,10 @@ public class S3StorageService implements  StorageService{
 
 
     public S3StorageService(
-            @Value("${aws.bucket-name}") String bucketName,
+            @Value("${aws.lasanhaspec-vehicle-images-dev}") String bucketName,
             @Value("${aws.region}") String region
     ){
         this.bucketName = bucketName;
-
         this.s3Client   = S3Client.builder()
                 .region(Region.of(region))
                 .build();

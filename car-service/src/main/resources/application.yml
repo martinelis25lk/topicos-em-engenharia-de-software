@@ -16,7 +16,7 @@ spring:
         format_sql: true
 
   aws:
-    region: us-east-1
-    bucket-name: lasanhaspec-user-vehicles
+    region: us-east-2
+    bucket-name: lasanhaspec-vehicle-images-dev
 
 

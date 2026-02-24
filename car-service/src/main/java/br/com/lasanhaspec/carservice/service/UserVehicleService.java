@@ -15,22 +15,25 @@ public class UserVehicleService {
 
 
 
-    private UserVehicleRepository userVehicleRepository;
-    private S3StorageService storageService;
+    private final UserVehicleRepository userVehicleRepository;
+    private final S3StorageService storageService;
+
+    public UserVehicleService(UserVehicleRepository userVehicleRepository, S3StorageService storageService){
+        this.userVehicleRepository = userVehicleRepository;
+        this.storageService = storageService;
+    }
 
 
 
     public String uploadVehicleImage(Long vehicleId, MultipartFile file) {
 
         UserVehicle vehicle = userVehicleRepository.findById(vehicleId)
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("vehicle not found UserVehicleService"));
 
         String url = storageService.uploadFile(file);
 
-        VehicleImage image = new VehicleImage();
-        //image.setImageUrl(url);
-        //image.setUserVehicle(vehicle);
-        //imageRepository.save(image);
+        // TODO: salvar entidade VehicleImage
+
 
         return url;
     }

@@ -23,7 +23,7 @@ public class UserVehicle {
 
     private Boolean active = true;
 
-    @OneToMany(mappedBy = "UserVehicle", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userVehicle", cascade = CascadeType.ALL)
     private List<CurrentSetup>setups;
 }
 
