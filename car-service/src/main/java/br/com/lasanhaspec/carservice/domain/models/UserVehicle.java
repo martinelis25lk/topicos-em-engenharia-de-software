@@ -1,8 +1,9 @@
 package br.com.lasanhaspec.carservice.domain.models;
 
-
+//essa entidade n vai guardar potencia, ou modificação alguma, eh so pra representar o carro base do usuário.
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,11 +23,24 @@ public class UserVehicle {
 
     private Boolean active = true;
 
-    @OneToMany(mappedBy = "userVehicle", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userVehicle",
+            cascade = CascadeType.ALL)
     private List<CurrentSetup> setups;
 
+    public List<VehicleImage> getImages() {
+        return images;
+    }
 
-// essa entidade n vai guardar potencia, ou modificação alguma, eh so pra representar o carro base do usuário.
+    @OneToMany(mappedBy = "userVehicle",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<VehicleImage> images = new ArrayList<>();
+
+    public void setImages(List<VehicleImage> images) {
+        this.images = images;
+    }
+
+
 
 
     public Long getId() {

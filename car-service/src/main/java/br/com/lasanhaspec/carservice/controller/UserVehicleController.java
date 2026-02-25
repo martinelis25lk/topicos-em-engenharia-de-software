@@ -37,6 +37,16 @@ public class UserVehicleController {
     }
 
 
+    @DeleteMapping("/vehicles/{vehicleId}/images/{imageId}")
+    public ResponseEntity<Void> deleteImage(
+            @PathVariable Long vehicleId,
+            @PathVariable Long imageId){
+        userVehicleService.deleteVehicleImage(vehicleId, imageId);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
 
 
 }
