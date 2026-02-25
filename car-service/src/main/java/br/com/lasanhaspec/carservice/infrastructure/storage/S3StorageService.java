@@ -22,8 +22,8 @@ public class S3StorageService implements  StorageService{
 
 
     public S3StorageService(
-            @Value("${aws.lasanhaspec-vehicle-images-dev}") String bucketName,
-            @Value("${aws.region}") String region
+            @Value("${spring.aws.s3.bucket-name}") String bucketName,
+            @Value("${spring.aws.region}") String region
     ){
         this.bucketName = bucketName;
         this.s3Client   = S3Client.builder()

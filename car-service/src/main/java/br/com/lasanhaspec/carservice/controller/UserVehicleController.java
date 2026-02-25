@@ -1,14 +1,15 @@
 package br.com.lasanhaspec.carservice.controller;
 
 
+import br.com.lasanhaspec.carservice.dto.CreateUserVehicleDTO;
 import br.com.lasanhaspec.carservice.service.UserVehicleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@RestController("user-vehicle-controller")
-@RequestMapping("/vehicles")
+@RestController
+@RequestMapping("/user-vehicles")
 public class UserVehicleController {
 
     private final UserVehicleService userVehicleService;
@@ -26,6 +27,15 @@ public class UserVehicleController {
         String imageUrl = userVehicleService.uploadVehicleImage(vehicleId, file);
         return ResponseEntity.ok(imageUrl);
     }
+
+
+    @PostMapping
+    public ResponseEntity<Long>createVehicle(@RequestBody CreateUserVehicleDTO dto){
+
+        Long id = userVehicleService.createVehicle(dto);
+        return ResponseEntity.ok(id);
+    }
+
 
 
 
