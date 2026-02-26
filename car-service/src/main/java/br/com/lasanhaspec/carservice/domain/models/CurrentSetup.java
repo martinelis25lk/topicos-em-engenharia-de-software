@@ -8,6 +8,9 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
+
+
+
 @Entity
 @Table(name = "current_setups")
 public class CurrentSetup {
