@@ -9,10 +9,14 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
     properties:
       hibernate:
         format_sql: true
 
+  aws:
+    region: us-east-2
+    s3:
+      bucket-name: lasanhaspec-vehicle-images-dev
 

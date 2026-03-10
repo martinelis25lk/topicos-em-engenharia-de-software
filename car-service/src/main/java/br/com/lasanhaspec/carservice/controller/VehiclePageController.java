@@ -34,4 +34,26 @@ public class VehiclePageController {
 
     }
 
+
+
+
+
+    //CATÁLOGO
+    //GET    /catalog/vehicles
+    //POST   /catalog/vehicles
+    //GET    /catalog/vehicles/{id}
+
+    //VEÍCULOS DO USUÁRIO
+    //POST   /user-vehicles
+    //GET    /user-vehicles/{id}
+    //POST   /user-vehicles/{id}/images
+
+    //PÁGINA DO MODELO
+    //GET    /vehicles/{id}/page
+
+
+
+
+
+
 }
