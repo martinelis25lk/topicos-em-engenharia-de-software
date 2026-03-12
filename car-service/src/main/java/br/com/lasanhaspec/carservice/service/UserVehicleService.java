@@ -21,7 +21,7 @@ public class UserVehicleService {
     private final VehicleImageRepository vehicleImageRepository;
     private final S3StorageService storageService;
     private final VehicleCatalogRepository vehicleCatalogRepository;
-    VehicleImage image = new VehicleImage();
+
 
     private static final long MAX_SIZE = 5 * 1024 * 1024; // 5mb
 
@@ -31,7 +31,6 @@ public class UserVehicleService {
             UserVehicleRepository userVehicleRepository,
             S3StorageService storageService,
             VehicleCatalogRepository vehicleCatalogRepository,
-            VehicleImage vehicleImage,
             VehicleImageRepository vehicleImageRepository
             ){
         this.userVehicleRepository = userVehicleRepository;
@@ -65,7 +64,7 @@ public class UserVehicleService {
         String filename = file.getOriginalFilename();
 
         if (filename == null ||
-                !(filename.endsWith(".jpg") ||
+                !(filename.toLowerCase().endsWith(".jpg") ||
                         filename.endsWith(".jpeg") ||
                         filename.endsWith(".png") ||
                         filename.endsWith(".webp"))) {
@@ -79,8 +78,12 @@ public class UserVehicleService {
 
         String url = storageService.uploadFile(file);
 
+        VehicleImage image = new VehicleImage();
+        image.setUserVehicle(vehicle);
+        image.setImageUrl(url);
+        image.setS3Key(filename);
 
-
+        //vehicleImageRepository.save(image);
 
         return url;
     }

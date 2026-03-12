@@ -43,7 +43,7 @@ public class IssueVoteService {
 
             newIssueVote = new IssueVote();
             newIssueVote.setIssue(chronicIssue);
-            newIssueVote.setUser_id(userId);
+            newIssueVote.setUserId(userId);
             newIssueVote.setVoteType(voteType);
             issueVoteRepository.save(newIssueVote);
 

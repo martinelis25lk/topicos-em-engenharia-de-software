@@ -11,3 +11,6 @@ public class VehicleServiceApplication {
 	}
 
 }
+
+
+//http://localhost:5173/ front
