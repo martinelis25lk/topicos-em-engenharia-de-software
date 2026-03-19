@@ -40,6 +40,16 @@ public class VehicleCatalogModel {
 
     private Integer factoryHorsepower;
     private Integer factoryTorque;
+    private Integer factoryWeight;
+
+
+
+    public Integer getFactoryWeight() {
+        return factoryWeight;
+    }
+
+
+
 
     @Enumerated(EnumType.STRING)
     private AspirationType aspirationType;

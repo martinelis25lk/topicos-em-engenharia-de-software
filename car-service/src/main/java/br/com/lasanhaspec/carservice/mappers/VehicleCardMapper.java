@@ -14,6 +14,13 @@ public class VehicleCardMapper {
         dto.setName(vehicle.getNickname());
         dto.setFactoryHorsePower(vehicle.getVehicleCatalogModel().getFactoryHorsepower());
         dto.setCurrentHorsePower(vehicle.getCurrentHorsePower());
+        dto.setFactoryTorque(vehicle.getVehicleCatalogModel().getFactoryTorque());
+        dto.setCurrentTorque(vehicle.getCurrentTorque());
+        dto.setEngine(vehicle.getVehicleCatalogModel().getEngineCode());
+        //dto.setModificationsCount(null);
+        dto.setCurrentWeight(vehicle.getCurrentWeight());
+        dto.setFactoryWeight(vehicle.getVehicleCatalogModel().getFactoryWeight());
+
         String imageUrl = vehicle.getImages().stream()
                 .filter(img -> Boolean.TRUE.equals(img.getPrimaryImage()))
                 .map(img -> img.getImageUrl())

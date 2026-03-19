@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/user-vehicles")
 public class UserVehicleController {
@@ -38,14 +40,11 @@ public class UserVehicleController {
 
     @PutMapping("/{vehicleId}/images/{imageId}/primary")
     public ResponseEntity<Void> setPrimaryImage(
-            @PathVariable Long imageId,
-            @PathVariable Long vehicleId
-    )
-    {
-
+            @PathVariable Long vehicleId,
+            @PathVariable Long imageId
+    ) {
         userVehicleService.setPrimaryImage(vehicleId, imageId);
         return ResponseEntity.noContent().build();
-
     }
 
 

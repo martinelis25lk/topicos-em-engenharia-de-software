@@ -8,7 +8,23 @@ public class VehicleCardDTO {
 
     private Integer factoryHorsePower;
     private Integer currentHorsePower;
+//
+    private Integer factoryTorque;
+    private Integer currentTorque;
+    private String engine;
+    private Integer currentWeight;
+    private Integer modificationsCount; // ou quantidade de upgrades
 
+    public Integer getFactoryWeight() {
+        return factoryWeight;
+    }
+
+    public void setFactoryWeight(Integer factoryWeight) {
+        this.factoryWeight = factoryWeight;
+    }
+
+    private Integer factoryWeight;
+    //
     private Double powerGainPercentage;
 
     public Long getId() {
@@ -58,4 +74,30 @@ public class VehicleCardDTO {
     public void setPowerGainPercentage(Double powerGainPercentage) {
         this.powerGainPercentage = powerGainPercentage;
     }
+
+    public Integer getFactoryTorque() { return factoryTorque; }
+    public void setFactoryTorque(Integer factoryTorque) { this.factoryTorque = factoryTorque; }
+
+    public Integer getCurrentTorque() { return currentTorque; }
+    public void setCurrentTorque(Integer currentTorque) { this.currentTorque = currentTorque; }
+
+    public String getEngine() { return engine; }
+    public void setEngine(String engine) { this.engine = engine; }
+
+    public Integer getModificationsCount() { return modificationsCount; }
+    public void setModificationsCount(Integer modificationsCount) { this.modificationsCount = modificationsCount; }
+
+
+    public Integer getCurrentWeight() {
+        return currentWeight  ;
+    }
+
+    public void setCurrentWeight(Integer currentWeight) {
+        this.currentWeight = currentWeight;
+    }
+
+
+
+
+
 }
