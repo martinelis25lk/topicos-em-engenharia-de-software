@@ -16,6 +16,8 @@ public class UserVehicle {
     private Long id;
     private Long userId; // vai virar relacionamento
 
+    private Integer currentHorsePower;//potencia atual
+
     @ManyToOne(optional = false)
     private VehicleCatalogModel vehicleCatalogModel;
 
@@ -41,6 +43,14 @@ public class UserVehicle {
     }
 
 
+
+    public Integer getCurrentHorsePower(){
+        return currentHorsePower;
+    }
+
+    public void setCurrentHorsePower(Integer currentHorsePowers){
+        this.currentHorsePower = currentHorsePowers;
+    }
 
 
     public Long getId() {

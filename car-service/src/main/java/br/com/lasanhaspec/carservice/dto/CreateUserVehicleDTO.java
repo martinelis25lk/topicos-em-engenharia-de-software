@@ -4,6 +4,17 @@ public class CreateUserVehicleDTO {
     private Long userId;
     private Long vehicleCatalogModelId;
     private String nickName;
+    private Integer currentHorsePower;
+
+
+
+    public Integer getCurrentHorsePower(){
+        return currentHorsePower;
+    }
+
+    public void setCurrentHorsePower(Integer currentHorsePowers){
+        this.currentHorsePower = currentHorsePowers;
+    }
 
 
     public Long getUserId() {

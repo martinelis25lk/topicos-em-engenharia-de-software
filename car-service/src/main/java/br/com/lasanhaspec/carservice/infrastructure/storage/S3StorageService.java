@@ -1,6 +1,8 @@
 package br.com.lasanhaspec.carservice.infrastructure.storage;
 
 
+
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +11,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+
 
 import java.io.IOException;
 import java.util.UUID;
@@ -36,9 +39,11 @@ public class S3StorageService implements  StorageService{
 
 
     @Override
-    public String uploadFile(MultipartFile file){
+    public UploadResult uploadFile(MultipartFile file){
 
-        String fileName = UUID.randomUUID() + "-shmalugou-" + file.getOriginalFilename();
+        String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename().replace(" ", "_");
+
+        //String fileName = UUID.randomUUID() + "-shmalugou-" + file.getOriginalFilename();
 
 
         try{
@@ -54,7 +59,10 @@ public class S3StorageService implements  StorageService{
             throw new RuntimeException("Error during upload service kkkk S3StorageService", e);
         }
 
-        return "https://" + bucketName + ".s3.amazonaws.com/" + fileName;
+        String url = "https://" + bucketName + ".s3.amazonaws.com/" + fileName;
+
+        return new UploadResult(url, fileName);
+
     }
 
 
@@ -71,4 +79,22 @@ public class S3StorageService implements  StorageService{
     }
 
 
+    public class UploadResult {
+
+        private final String url;
+        private final String key;
+
+        public UploadResult(String url, String key) {
+            this.url = url;
+            this.key = key;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public String getKey() {
+            return key;
+        }
+    }
 }
