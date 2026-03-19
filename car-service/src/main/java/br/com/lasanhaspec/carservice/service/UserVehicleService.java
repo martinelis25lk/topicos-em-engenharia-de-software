@@ -5,12 +5,19 @@ import br.com.lasanhaspec.carservice.domain.models.UserVehicle;
 import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
 import br.com.lasanhaspec.carservice.domain.models.VehicleImage;
 import br.com.lasanhaspec.carservice.dto.CreateUserVehicleDTO;
+import br.com.lasanhaspec.carservice.dto.VehicleCardDTO;
 import br.com.lasanhaspec.carservice.infrastructure.storage.S3StorageService;
+import br.com.lasanhaspec.carservice.mappers.VehicleCardMapper;
 import br.com.lasanhaspec.carservice.repository.UserVehicleRepository;
 import br.com.lasanhaspec.carservice.repository.VehicleCatalogRepository;
 import br.com.lasanhaspec.carservice.repository.VehicleImageRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+
+
+import java.util.List;
 
 @Service
 public class UserVehicleService {
@@ -46,14 +53,29 @@ public class UserVehicleService {
 
 
 
+        UserVehicle vehicle = userVehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new RuntimeException("vehicle not found UserVehicleService KKKKK"));
+
+
+
+
+        long count = vehicleImageRepository.countByUserVehicleId(vehicleId);
+
+        if (count >= 5) {
+            throw new RuntimeException("Only 5 images per vehicle");
+        }
+
+
 
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Arquivo vazio");
         }
 
+
         if (file.getSize() > MAX_SIZE) {
             throw new IllegalArgumentException("Arquivo muito grande");
         }
+
 
         String contentType = file.getContentType();
 
@@ -61,7 +83,10 @@ public class UserVehicleService {
             throw new IllegalArgumentException("Apenas imagens são permitidas");
         }
 
+
         String filename = file.getOriginalFilename();
+
+
 
         if (filename == null ||
                 !(filename.toLowerCase().endsWith(".jpg") ||
@@ -72,21 +97,28 @@ public class UserVehicleService {
         }
 
 
+        S3StorageService.UploadResult result = storageService.uploadFile(file);
 
-        UserVehicle vehicle = userVehicleRepository.findById(vehicleId)
-                .orElseThrow(() -> new RuntimeException("vehicle not found UserVehicleService KKKKK"));
-
-        String url = storageService.uploadFile(file);
 
         VehicleImage image = new VehicleImage();
         image.setUserVehicle(vehicle);
-        image.setImageUrl(url);
-        image.setS3Key(filename);
+        image.setImageUrl(result.getUrl());
+        image.setS3Key(result.getKey());
 
-        //vehicleImageRepository.save(image);
+       // boolean isFirstImage = vehicle.getImages().isEmpty();
+       // image.setPrimaryImage(isFirstImage);
 
-        return url;
+        boolean hasImages = vehicleImageRepository.existsByUserVehicleId(vehicleId);
+        image.setPrimaryImage(!hasImages);
+
+
+
+        vehicleImageRepository.save(image);
+        System.out.println("SALVOU IMAGEM NO BANCO");
+
+        return result.getUrl();
     }
+
 
 
 
@@ -101,6 +133,10 @@ public class UserVehicleService {
         vehicle.setUserId(dto.getUserId());
         vehicle.setVehicleCatalogModel(model);
         vehicle.setNickname(dto.getNickName());
+        vehicle.setCurrentHorsePower(dto.getCurrentHorsePower());
+
+        System.out.println("ENTITY HP: " + vehicle.getCurrentHorsePower());
+
         vehicle.setActive(true);
 
         return userVehicleRepository.save(vehicle).getId();
@@ -122,6 +158,58 @@ public class UserVehicleService {
         vehicleImageRepository.delete(image);
 
     }
+
+
+    public List<VehicleCardDTO> getUserVehicles(){
+        return userVehicleRepository.findAll()
+                .stream()
+                .map(VehicleCardMapper::toDTO)
+                .toList();
+    }
+
+
+    public VehicleCardDTO getVehicleById(Long id) {
+        return userVehicleRepository.findById(id)
+                .map(VehicleCardMapper::toDTO)
+                .orElseThrow(()-> new RuntimeException("vehicle not found"));
+    }
+
+
+    @Transactional
+    public void setPrimaryImage(Long vehicleId, Long imageId) {
+
+
+        //buscar imagem
+        VehicleImage image = new VehicleImage();
+        image = vehicleImageRepository.findById(imageId)
+                .orElseThrow(() -> new RuntimeException("image not found kk vehcileservice"));
+
+        //valida se petence ao veiculo
+        if(!image.getUserVehicle().getId().equals(imageId)){
+            throw new RuntimeException("this image does not belong to the vehicle");
+
+        }
+
+        //remove primary das outras
+        vehicleImageRepository.clearPrimaryByVehicle(vehicleId);
+
+        image.setPrimaryImage(true);
+
+        vehicleImageRepository.save(image);
+    }
+
+    public String getPrimaryImageUrl(Long vehicleId){
+        VehicleImage image_url = new VehicleImage();
+
+
+        return vehicleImageRepository
+                .findByUserVehicleIdAndPrimaryImageTrue(vehicleId)
+                .map(VehicleImage::getImageUrl)
+                .orElse(null);
+
+    }
+
+
 
 }
 

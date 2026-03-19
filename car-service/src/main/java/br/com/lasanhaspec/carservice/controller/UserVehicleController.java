@@ -2,11 +2,14 @@ package br.com.lasanhaspec.carservice.controller;
 
 
 import br.com.lasanhaspec.carservice.dto.CreateUserVehicleDTO;
+import br.com.lasanhaspec.carservice.dto.VehicleCardDTO;
 import br.com.lasanhaspec.carservice.service.UserVehicleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user-vehicles")
@@ -24,8 +27,25 @@ public class UserVehicleController {
             @PathVariable Long vehicleId,
             @RequestParam("file") MultipartFile file
     ) {
+
+        System.out.println("CHEGOU NO CONTROLLER");
         String imageUrl = userVehicleService.uploadVehicleImage(vehicleId, file);
+        System.out.println("CHEGOU NO CONTROLLER");
         return ResponseEntity.ok(imageUrl);
+    }
+
+
+
+    @PutMapping("/{vehicleId}/images/{imageId}/primary")
+    public ResponseEntity<Void> setPrimaryImage(
+            @PathVariable Long imageId,
+            @PathVariable Long vehicleId
+    )
+    {
+
+        userVehicleService.setPrimaryImage(vehicleId, imageId);
+        return ResponseEntity.noContent().build();
+
     }
 
 
@@ -33,7 +53,15 @@ public class UserVehicleController {
     public ResponseEntity<Long>createVehicle(@RequestBody CreateUserVehicleDTO dto){
 
         Long id = userVehicleService.createVehicle(dto);
+        System.out.println("DTO HP: " + dto.getCurrentHorsePower());
         return ResponseEntity.ok(id);
+    }
+
+
+    @PostMapping("/teste")
+    public String teste() {
+        System.out.println("BATEU NO TESTE");
+        return "ok";
     }
 
 
@@ -45,6 +73,26 @@ public class UserVehicleController {
         return ResponseEntity.noContent().build();
     }
 
+
+    //retorna lista de veiculos do usuario
+    @GetMapping()
+    public ResponseEntity<List<VehicleCardDTO>> getUserVehicles(){
+        return ResponseEntity.ok(userVehicleService.getUserVehicles());
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<VehicleCardDTO> getOneUserVehicles(@PathVariable Long id){
+        return ResponseEntity.ok(userVehicleService.getVehicleById(id));
+        // revisar os metodos no service e repositorio
+    }
+
+
+
+    @GetMapping("/ping")
+    public String ping() {
+        return "pong";
+    }
 
 
 
