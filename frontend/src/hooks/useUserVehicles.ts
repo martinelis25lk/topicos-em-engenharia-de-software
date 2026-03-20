@@ -5,13 +5,14 @@ import type { VehicleCard } from "../types/vehicle";
 export const useUserVehicles = () => {
   const [vehicles, setVehicles] = useState<VehicleCard[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     getUserVehicles()
       .then(setVehicles)
-      .catch(console.error)
+      .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
 
-  return { vehicles, loading };
+  return { vehicles, loading, error };
 };

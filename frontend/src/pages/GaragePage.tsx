@@ -7,12 +7,17 @@ const GaragePage = () => {
   if (loading) return <p>Carregando...</p>;
 
   return (
-    <div>
+    <div className="garage">
       {vehicles.map((vehicle) => (
-        <VehicleCard key={vehicle.id} vehicle={vehicle} />
-      ))}
-    </div>
+    <VehicleCard key={vehicle.id} vehicle={vehicle} />
+  ))}
+</div>
+
+
   );
 };
 
 export default GaragePage;
+
+
+
