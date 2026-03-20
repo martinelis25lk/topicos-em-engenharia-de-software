@@ -179,13 +179,16 @@ public class UserVehicleService {
     public void setPrimaryImage(Long vehicleId, Long imageId) {
 
 
+
         //buscar imagem
         VehicleImage image = new VehicleImage();
         image = vehicleImageRepository.findById(imageId)
                 .orElseThrow(() -> new RuntimeException("image not found kk vehcileservice"));
 
+        System.out.println("TESTES HHHHHH service DE PRIMARY");
+
         //valida se petence ao veiculo
-        if(!image.getUserVehicle().getId().equals(imageId)){
+        if(!image.getUserVehicle().getId().equals(vehicleId)){
             throw new RuntimeException("this image does not belong to the vehicle");
 
         }
@@ -193,13 +196,20 @@ public class UserVehicleService {
         //remove primary das outras
         vehicleImageRepository.clearPrimaryByVehicle(vehicleId);
 
+
+
         image.setPrimaryImage(true);
 
         vehicleImageRepository.save(image);
+
+
     }
+
+
 
     public String getPrimaryImageUrl(Long vehicleId){
         VehicleImage image_url = new VehicleImage();
+
 
 
         return vehicleImageRepository
