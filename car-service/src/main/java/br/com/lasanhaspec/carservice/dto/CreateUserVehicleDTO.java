@@ -5,6 +5,8 @@ public class CreateUserVehicleDTO {
     private Long vehicleCatalogModelId;
     private String nickName;
     private Integer currentHorsePower;
+    private Integer currentWeight;
+    private Integer currentTorque;
 
 
 
@@ -39,5 +41,13 @@ public class CreateUserVehicleDTO {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public Integer getCurrentWeight() {
+        return currentWeight;
+    }
+
+    public Integer getCurrentTorque() {
+        return currentTorque;
     }
 }

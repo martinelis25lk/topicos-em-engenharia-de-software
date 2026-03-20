@@ -2,12 +2,10 @@ import { useParams } from "react-router-dom";
 import { useVehicleById } from "../hooks/useVehicleById";
 import { PerformanceBar } from "../components/PerformanceBar";
 
-
-
-
 const VehiclePage = () => {
   const { id } = useParams<{ id: string }>();
   const vehicleId = Number(id);
+
   const { data, loading, error } = useVehicleById(vehicleId);
 
   if (loading) return <p>Loading...</p>;
@@ -15,26 +13,38 @@ const VehiclePage = () => {
 
   return (
     <div>
-      <h1>{data.model}</h1>
-      <p>Owner: {data.ownerName}</p>
+      {/* Nome do veículo */}
+      <h1>{data.name}</h1>
 
+      {/* Engine */}
+      <p>{data.engine}</p>
+
+      {/* Horsepower */}
       <PerformanceBar
-     label="Horsepower"
-     factoryValue={data.factoryHorsePower}
-     currentValue={data.currentHorsePower}
-/>
+        label="Horsepower"
+        factoryValue={data.factoryHorsePower}
+        currentValue={data.currentHorsePower}
+        diff={data.horsepowerDiff}
+        trend={data.horsepowerTrend}
+      />
 
-<PerformanceBar
-     label="Torque"
-     factoryValue={data.factoryTorque}
-     currentValue={data.currentTorque}
-/>
+      {/* Torque */}
+      <PerformanceBar
+        label="Torque"
+        factoryValue={data.factoryTorque}
+        currentValue={data.currentTorque}
+        diff={data.torqueDiff}
+        trend={data.torqueTrend}
+      />
 
-<PerformanceBar
-     label="Weight"
-     factoryValue={data.factoryWeight}
-     currentValue={data.currentWeight}
-/>
+      {/* Weight */}
+      <PerformanceBar
+        label="Weight"
+        factoryValue={data.factoryWeight}
+        currentValue={data.currentWeight}
+        diff={data.weightDiff}
+        trend={data.weightTrend}
+      />
     </div>
   );
 };

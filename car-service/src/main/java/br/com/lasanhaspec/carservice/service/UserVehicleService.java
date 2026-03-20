@@ -134,6 +134,8 @@ public class UserVehicleService {
         vehicle.setVehicleCatalogModel(model);
         vehicle.setNickname(dto.getNickName());
         vehicle.setCurrentHorsePower(dto.getCurrentHorsePower());
+        vehicle.setCurrentWeight(dto.getCurrentWeight());
+        vehicle.setCurrentTorque(dto.getCurrentTorque());
 
         System.out.println("ENTITY HP: " + vehicle.getCurrentHorsePower());
 

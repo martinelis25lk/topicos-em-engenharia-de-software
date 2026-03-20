@@ -111,4 +111,23 @@ public class UserVehicle {
     public Integer getCurrentWeight() {
         return currentWeight;
     }
+
+
+    
+
+    public void setCurrentTorque(Integer currentTorque) {
+        this.currentTorque = currentTorque;
+    }
+
+
+
+
+    public void setCurrentWeight(Integer currentWeight) {
+        this.currentWeight = currentWeight;
+    }
+
+
+    //
+
+    
 }
