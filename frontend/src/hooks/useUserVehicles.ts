@@ -1,13 +1,17 @@
-import { useQuery } from "@tanstack/react-query"
-import { getUserVehicles } from "../api/vehicleApi"
+import { useEffect, useState } from "react";
+import { getUserVehicles } from "../api/vehicleApi";
+import type { VehicleCard } from "../types/vehicle";
 
-export function useUserVehicles() {
+export const useUserVehicles = () => {
+  const [vehicles, setVehicles] = useState<VehicleCard[]>([]);
+  const [loading, setLoading] = useState(true);
 
- return useQuery({
-  queryKey: ["userVehicles"],
-  queryFn: getUserVehicles
- })
+  useEffect(() => {
+    getUserVehicles()
+      .then(setVehicles)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
-}
-
-//logica de dados
+  return { vehicles, loading };
+};

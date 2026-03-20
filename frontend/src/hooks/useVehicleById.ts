@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { VehicleDetail } from "../types/vehicle"
+import type { VehicleDetail } from "../types/vehicle"
 import { getVehicleById } from "../api/vehicleApi"
 
 export function useVehicleById(id: number) {
