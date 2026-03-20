@@ -1,44 +1,42 @@
-import { useParams } from "react-router-dom"
-import { useVehicleById } from "../hooks/useVehicleById"
-import { PerformanceBar } from "../components/PerformanceBar"
+import { useParams } from "react-router-dom";
+import { useVehicleById } from "../hooks/useVehicleById";
+import { PerformanceBar } from "../components/PerformanceBar";
 
-export function VehiclePage() {
 
- const { id } = useParams()
 
- const { data, loading, error } = useVehicleById(Number(id))
 
- if (loading) return <p>Loading...</p>
- if (error || !data) return <p>Error</p>
+const VehiclePage = () => {
+  const { id } = useParams<{ id: string }>();
+  const vehicleId = Number(id);
+  const { data, loading, error } = useVehicleById(vehicleId);
 
- return (
+  if (loading) return <p>Loading...</p>;
+  if (error || !data) return <p>Error</p>;
 
-  <div>
+  return (
+    <div>
+      <h1>{data.model}</h1>
+      <p>Owner: {data.ownerName}</p>
 
-   <h1>{data.model}</h1>
-   <p>Owner: {data.ownerName}</p>
-
-   <PerformanceBar
+      <PerformanceBar
      label="Horsepower"
-     factoryValue={data.factoryHorsepower}
-     currentValue={data.currentHorsepower}
-   />
+     factoryValue={data.factoryHorsePower}
+     currentValue={data.currentHorsePower}
+/>
 
-   <PerformanceBar
+<PerformanceBar
      label="Torque"
      factoryValue={data.factoryTorque}
      currentValue={data.currentTorque}
-   />
+/>
 
-   <PerformanceBar
+<PerformanceBar
      label="Weight"
-     factoryValue={data.weight}
-     currentValue={data.weight}
-     reverseLogic
-   />
+     factoryValue={data.factoryWeight}
+     currentValue={data.currentWeight}
+/>
+    </div>
+  );
+};
 
-  </div>
-
- )
-
-}
+export default VehiclePage;

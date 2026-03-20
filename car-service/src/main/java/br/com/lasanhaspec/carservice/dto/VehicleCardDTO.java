@@ -15,6 +15,14 @@ public class VehicleCardDTO {
     private Integer currentWeight;
     private Integer modificationsCount; // ou quantidade de upgrades
 
+    private Integer horsepowerDiff;
+    private Integer torqueDiff;
+    private Integer weightDiff;
+
+    private String weightTrend;
+    private String horsepowerTrend;
+    private String torqueTrend;
+
     public Integer getFactoryWeight() {
         return factoryWeight;
     }
@@ -95,6 +103,59 @@ public class VehicleCardDTO {
     public void setCurrentWeight(Integer currentWeight) {
         this.currentWeight = currentWeight;
     }
+
+
+    public Integer getHorsepowerDiff() {
+        return horsepowerDiff;
+    }
+
+    public void setHorsepowerDiff(Integer horsepowerDiff) {
+        this.horsepowerDiff = horsepowerDiff;
+    }
+
+    public Integer getTorqueDiff() {
+        return torqueDiff;
+    }
+
+    public void setTorqueDiff(Integer torqueDiff) {
+        this.torqueDiff = torqueDiff;
+    }
+
+    public Integer getWeightDiff() {
+        return weightDiff;
+    }
+
+    public void setWeightDiff(Integer weightDiff) {
+        this.weightDiff = weightDiff;
+    }
+
+
+    public String getWeightTrend() {
+        return weightTrend;
+    }
+
+    public void setWeightTrend(String weightTrend) {
+        this.weightTrend = weightTrend;
+    }
+
+    public String getHorsepowerTrend() {
+        return horsepowerTrend;
+    }
+
+    public void setHorsepowerTrend(String horsepowerTrend) {
+        this.horsepowerTrend = horsepowerTrend;
+    }
+
+    public String getTorqueTrend() {
+        return torqueTrend;
+    }
+
+    public void setTorqueTrend(String torqueTrend) {
+        this.torqueTrend = torqueTrend;
+    }
+
+
+
 
 
 

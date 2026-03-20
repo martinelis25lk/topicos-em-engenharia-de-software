@@ -1,18 +1,20 @@
-import { useNavigate } from "react-router-dom"
+import type { VehicleCard as VehicleCardType } from "../types/vehicle";
 
-export function VehicleCard({ vehicle }) {
-
- const navigate = useNavigate()
-
- return (
-
-  <div onClick={() => navigate(`/vehicle/${vehicle.id}`)}>
-
-   <h2>{vehicle.model}</h2>
-   <p>{vehicle.ownerName}</p>
-
-  </div>
-
- )
-
+interface VehicleCardProps {
+  vehicle: VehicleCardType;
 }
+
+const VehicleCard = ({ vehicle }: VehicleCardProps) => {
+  const isPositive = vehicle.modificationsCount >= 0; // ou qualquer lógica que você queira
+
+  return (
+    <div>
+      <h2>{vehicle.model}</h2>
+      <img src={vehicle.imageUrl} alt={vehicle.model} width={200} />
+      <p>Owner: {vehicle.ownerName}</p>
+      <p>{vehicle.modificationsCount} modifications</p>
+    </div>
+  );
+};
+
+export default VehicleCard;

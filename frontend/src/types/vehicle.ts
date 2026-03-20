@@ -1,13 +1,20 @@
 export interface VehicleCard {
+  id: number
+  name: string
+  engine: string
+  imageUrl: string
 
- id: number
- model: string
- engine: string
- year: number
- ownerName: string
- modificationsCount: number
- imageUrl: string
+  factoryHorsePower: number
+  currentHorsePower: number
 
+  factoryTorque: number
+  currentTorque: number
+
+  factoryWeight: number
+  currentWeight: number
+
+  modificationsCount: number
+  powerGainPercentage: number
 }
 
 
@@ -15,23 +22,18 @@ export interface VehicleCard {
 
 //tipo pra pagina completa
 export interface VehicleDetail {
-
- id: number
- model: string
- engine: string
- year: number
- ownerName: string
-
- factoryHorsepower: number
- currentHorsepower: number
-
- factoryTorque: number
- currentTorque: number
-
- weight: number
-
- modifications: Modification[]
-
+  model: ReactNode
+  id: number;
+  name: string;
+  engine: string;
+  factoryHorsePower: number;
+  currentHorsePower: number;
+  factoryTorque: number;
+  currentTorque: number;
+  factoryWeight: number;
+  currentWeight: number;
+  ownerName: string;
+  modifications?: Modification[]; // se quiser trazer detalhes das mods
 }
 
 

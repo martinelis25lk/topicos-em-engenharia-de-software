@@ -17,10 +17,8 @@ public class UserVehicle {
     private Long userId; // vai virar relacionamento
 
     private Integer currentHorsePower;//potencia atual
-    private Integer currentTorque; // torque atual
-    private Integer currentWeight; // peso atual
-
-
+    private Integer currentTorque;
+    private Integer currentWeight;
 
     @ManyToOne(optional = false)
     private VehicleCatalogModel vehicleCatalogModel;
@@ -110,19 +108,7 @@ public class UserVehicle {
         return currentTorque;
     }
 
-    public void setCurrentTorque(Integer currentTorque) {
-        this.currentTorque = currentTorque;
-    }
-
     public Integer getCurrentWeight() {
         return currentWeight;
     }
-
-    public void setCurrentWeight(Integer currentWeight) {
-        this.currentWeight = currentWeight;
-    }
-
-
-
-
 }

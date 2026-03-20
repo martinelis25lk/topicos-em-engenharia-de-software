@@ -42,15 +42,6 @@ public class VehicleCatalogModel {
     private Integer factoryTorque;
     private Integer factoryWeight;
 
-
-
-    public Integer getFactoryWeight() {
-        return factoryWeight;
-    }
-
-
-
-
     @Enumerated(EnumType.STRING)
     private AspirationType aspirationType;
 
@@ -86,6 +77,10 @@ public class VehicleCatalogModel {
 
     public AspirationType getAspirationType() {
         return aspirationType;
+    }
+
+    public Integer getFactoryWeight() {
+        return factoryWeight;
     }
 
 

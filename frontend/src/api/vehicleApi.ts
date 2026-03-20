@@ -1,13 +1,13 @@
-export async function  getUserVehicles() {
-    const response = await fetch("http://localhost:8080/user-vehicles")
+import axios from "axios";
 
-    if(!response.ok){
-        throw new  Error("Failed to fetch vehicles");
-        
-    }
-    return response.json()
-    
-}
+const API_URL = "http://localhost:8080";
 
+export const getUserVehicles = async () => {
+  const response = await axios.get(`${API_URL}/user-vehicles`);
+  return response.data;
+};
 
-//fala com o backend
+export const getVehicleById = async (id: number) => {
+  const response = await axios.get(`${API_URL}/user-vehicles/${id}`);
+  return response.data;
+};

@@ -1,31 +1,18 @@
-import { useUserVehicles } from "../hooks/useUserVehicles"//logica de dados
-import { VehicleCard } from "../components/VehicleCard"// components reutilizaveis kkkk
+import { useUserVehicles } from "../hooks/useUserVehicles";
+import VehicleCard from "../components/VehicleCard";
 
-export function GaragePage() {
+const GaragePage = () => {
+  const { vehicles, loading } = useUserVehicles();
 
- const { data, isLoading, error } = useUserVehicles()
+  if (loading) return <p>Carregando...</p>;
 
- if (isLoading) {
-  return <p>Loading vehicles...</p>
- }
+  return (
+    <div>
+      {vehicles.map((vehicle) => (
+        <VehicleCard key={vehicle.id} vehicle={vehicle} />
+      ))}
+    </div>
+  );
+};
 
- if (error) {
-  return <p>Error loading vehicles</p>
- }
-
- return (
-
-  <div>
-
-   {data.map((vehicle) => (
-     <VehicleCard
-       key={vehicle.id}
-       vehicle={vehicle}
-     />
-   ))}
-
-  </div>
-
- )
-
-}
+export default GaragePage;

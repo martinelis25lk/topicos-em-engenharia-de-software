@@ -4,6 +4,8 @@ import br.com.lasanhaspec.carservice.domain.models.UserVehicle;
 import br.com.lasanhaspec.carservice.dto.VehicleCardDTO;
 import br.com.lasanhaspec.carservice.service.UserVehicleService;
 
+
+
 public class VehicleCardMapper {
 
     public static VehicleCardDTO toDTO(UserVehicle vehicle){
@@ -20,6 +22,18 @@ public class VehicleCardMapper {
         //dto.setModificationsCount(null);
         dto.setCurrentWeight(vehicle.getCurrentWeight());
         dto.setFactoryWeight(vehicle.getVehicleCatalogModel().getFactoryWeight());
+
+        //calculo dos ganhos ou perdas de cv, torque e peso
+        dto.setHorsepowerDiff(safeDiff(dto.getCurrentHorsePower() , dto.getFactoryHorsePower()));
+        dto.setTorqueDiff(safeDiff(dto.getCurrentTorque() ,dto.getFactoryTorque()));
+        dto.setWeightDiff(safeDiff(dto.getCurrentWeight() , dto.getFactoryWeight()));
+        //
+
+
+        //tendencias pras barras
+        dto.setHorsepowerTrend(getTrend(dto.getHorsepowerDiff(), true));
+        dto.setTorqueTrend(getTrend(dto.getTorqueDiff(), true));
+        dto.setWeightTrend(getTrend(dto.getWeightDiff(), false));
 
         String imageUrl = vehicle.getImages().stream()
                 .filter(img -> Boolean.TRUE.equals(img.getPrimaryImage()))
@@ -54,6 +68,33 @@ public class VehicleCardMapper {
         return ((double) (current - base) / base) * 100;
     }
 
+
+    private static int safeDiff(Integer current, Integer factory) {
+        if (current == null || factory == null) return 0;
+        return current - factory;
+    }
+
+
+    private static String getTrend(int diff, boolean positiveIsGood) {
+
+        if (diff == 0) {
+            return "NEUTRAL";
+        }
+
+        if (positiveIsGood) {
+            if (diff > 0) {
+                return "POSITIVE";
+            } else {
+                return "NEGATIVE";
+            }
+        } else {
+            if (diff < 0) {
+                return "POSITIVE";
+            } else {
+                return "NEGATIVE";
+            }
+        }
+    }
 
 
 }
