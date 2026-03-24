@@ -1,5 +1,6 @@
-import type { VehicleCard as VehicleCardType } from "../types/vehicle";
-import { PerformanceBar } from "./PerformanceBar";
+import type { VehicleCard as VehicleCardType } from "../../types/vehicle";
+import { PerformanceBar } from "../PerformanceBar/PerformanceBar";
+import "./VehicleCard.css";
 
 interface Props {
   vehicle: VehicleCardType;
@@ -8,13 +9,14 @@ interface Props {
 const VehicleCard = ({ vehicle }: Props) => {
   return (
     <div className="card">
+      
       {/* Imagem */}
       <div className="card-image">
         <img src={vehicle.imageUrl} alt={vehicle.name} />
       </div>
 
       {/* Conteúdo */}
-      <div className="card-content">
+      <div className="card-content" style={{width: "60%", padding: "16px"}}>
         <h2>{vehicle.name}</h2>
         <p className="engine">{vehicle.engine}</p>
 
@@ -46,7 +48,13 @@ const VehicleCard = ({ vehicle }: Props) => {
         />
       </div>
     </div>
+
+
+
+
+
   );
 };
 
 export default VehicleCard;
+
