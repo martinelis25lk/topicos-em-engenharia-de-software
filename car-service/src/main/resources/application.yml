@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/lasanhaspec
-    username: guilherme
-    password: 123456
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   profiles:
     active: dev
@@ -20,3 +20,6 @@ spring:
     s3:
       bucket-name: lasanhaspec-vehicle-images-dev
 
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
