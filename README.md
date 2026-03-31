@@ -183,7 +183,26 @@ Transformar a plataforma em referência para:
 
 Projeto desenvolvido como iniciativa independente com foco em aprendizado prático e potencial de produto real, readme ainda em andamento tbm kkk
 
----
+
+
+
+
+## Status das Funcionalidades
+
+###  Implementado
+- Cadastro e autenticação de usuários (JWT + Spring Security)
+- Garagem do usuário (CRUD de veículos)
+- Upload de imagens para AWS S3
+- Catálogo de veículos base
+- Problemas crônicos por modelo com sistema de votos
+
+###  Em desenvolvimento
+- Frontend (React + TypeScript)
+- Feed social
+- Setups da comunidade
+
+  ----
+
 
 
 
