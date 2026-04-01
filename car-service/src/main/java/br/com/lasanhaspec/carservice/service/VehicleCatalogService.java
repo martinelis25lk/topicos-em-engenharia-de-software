@@ -18,6 +18,8 @@ public class VehicleCatalogService {
     }
 
 
+
+
     public VehicleCatalogModel save(VehicleCatalogModel vehicleCatalogModel){
         return vehicleCatalogRepository.save(vehicleCatalogModel);
     }

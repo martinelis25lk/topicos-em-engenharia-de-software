@@ -51,13 +51,8 @@ public class UserVehicleService {
     public String uploadVehicleImage(Long vehicleId, MultipartFile file) {
 
 
-
-
         UserVehicle vehicle = userVehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new RuntimeException("vehicle not found UserVehicleService KKKKK"));
-
-
-
 
         long count = vehicleImageRepository.countByUserVehicleId(vehicleId);
 
@@ -110,7 +105,6 @@ public class UserVehicleService {
 
         boolean hasImages = vehicleImageRepository.existsByUserVehicleId(vehicleId);
         image.setPrimaryImage(!hasImages);
-
 
 
         vehicleImageRepository.save(image);
