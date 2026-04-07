@@ -125,7 +125,9 @@ public class UserVehicleService {
 
         UserVehicle vehicle = new UserVehicle();
         vehicle.setUserId(dto.getUserId());
+
         vehicle.setVehicleCatalogModel(model);
+
         vehicle.setNickname(dto.getNickName());
         vehicle.setCurrentHorsePower(dto.getCurrentHorsePower());
         vehicle.setCurrentWeight(dto.getCurrentWeight());
