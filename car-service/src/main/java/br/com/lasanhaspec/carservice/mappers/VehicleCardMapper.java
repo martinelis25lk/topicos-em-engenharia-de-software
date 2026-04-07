@@ -1,6 +1,7 @@
 package br.com.lasanhaspec.carservice.mappers;
 
 import br.com.lasanhaspec.carservice.domain.models.UserVehicle;
+import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
 import br.com.lasanhaspec.carservice.dto.VehicleCardDTO;
 import br.com.lasanhaspec.carservice.service.UserVehicleService;
 
@@ -12,8 +13,14 @@ public class VehicleCardMapper {
 
         VehicleCardDTO dto = new VehicleCardDTO();
 
+
+
+
         dto.setId(vehicle.getId());
         dto.setName(vehicle.getNickname());
+
+        VehicleCatalogModel model = vehicle.getVehicleCatalogModel();
+
         dto.setFactoryHorsePower(vehicle.getVehicleCatalogModel().getFactoryHorsepower());
         dto.setCurrentHorsePower(vehicle.getCurrentHorsePower());
         dto.setFactoryTorque(vehicle.getVehicleCatalogModel().getFactoryTorque());
@@ -28,6 +35,25 @@ public class VehicleCardMapper {
         dto.setTorqueDiff(safeDiff(dto.getCurrentTorque() ,dto.getFactoryTorque()));
         dto.setWeightDiff(safeDiff(dto.getCurrentWeight() , dto.getFactoryWeight()));
         //
+
+
+        dto.setDisplacement(vehicle.getVehicleCatalogModel().getDisplacement());
+        dto.setAcceleration0to100(vehicle.getVehicleCatalogModel().getAcceleration0to100());
+
+        //enums
+
+
+        dto.setTransmissionModel(
+                model.getTransmissionModel() != null ? model.getTransmissionModel().name() : null
+        );
+        dto.setDriveType(
+                model.getDriveType() != null ? model.getDriveType().name() : null
+        );
+
+
+
+
+
 
 
         //tendencias pras barras

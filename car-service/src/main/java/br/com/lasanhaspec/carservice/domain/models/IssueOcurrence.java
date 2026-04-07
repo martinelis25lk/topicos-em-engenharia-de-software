@@ -35,6 +35,10 @@ public class IssueOcurrence {
 
     private LocalDateTime updatedAt;
 
+    private String description; // relato do usuario
+
+
+
     @PrePersist
     public void prePersist(){
         this.createdAt = LocalDateTime.now();

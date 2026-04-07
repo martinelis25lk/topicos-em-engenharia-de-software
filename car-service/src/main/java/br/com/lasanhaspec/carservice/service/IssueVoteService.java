@@ -1,6 +1,7 @@
 package br.com.lasanhaspec.carservice.service;
 
 
+import br.com.lasanhaspec.carservice.domain.enums.IssueStatus;
 import br.com.lasanhaspec.carservice.domain.enums.VoteType;
 import br.com.lasanhaspec.carservice.domain.models.ChronicIssue;
 import br.com.lasanhaspec.carservice.domain.models.IssueVote;
@@ -78,6 +79,14 @@ public class IssueVoteService {
 
 
             vote.setVoteType(voteType);
+
+
+            // se numero de votos da entidade cronicos for > 10,setar campo getusewfulvotes
+            if(chronicIssue.getUsefulVotes() >= 10
+                    && chronicIssue.getStatus() == IssueStatus.PENDING) {
+                chronicIssue.setStatus(IssueStatus.IN_REVIEW);
+            }
+
 
             issueVoteRepository.save(vote);
         }

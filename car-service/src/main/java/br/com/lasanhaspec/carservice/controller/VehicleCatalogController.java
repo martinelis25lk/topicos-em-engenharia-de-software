@@ -37,7 +37,7 @@ public class VehicleCatalogController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public VehicleCatalogModel create(@RequestBody VehicleCatalogModel vehicleCatalogModel){
+    public VehicleCatalogModel createFactoryVehicle(@RequestBody VehicleCatalogModel vehicleCatalogModel){
         System.out.println("CARRRO RECEBIDO: " + vehicleCatalogModel);
         return vehicleCatalogService.save(vehicleCatalogModel);
     }

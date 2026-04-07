@@ -23,6 +23,14 @@ public class VehicleCardDTO {
     private String horsepowerTrend;
     private String torqueTrend;
 
+
+    //novos campos displacement, transmissionModel, driveType, acceleration0to100
+
+    private Double displacement;
+    private String transmissionModel;
+    private String driveType;
+    private Double acceleration0to100;
+
     public Integer getFactoryWeight() {
         return factoryWeight;
     }
@@ -152,6 +160,40 @@ public class VehicleCardDTO {
 
     public void setTorqueTrend(String torqueTrend) {
         this.torqueTrend = torqueTrend;
+    }
+
+
+
+    public Double getDisplacement() {
+        return displacement;
+    }
+
+    public void setDisplacement(Double displacement) {
+        this.displacement = displacement;
+    }
+
+    public String getTransmissionModel() {
+        return transmissionModel;
+    }
+
+    public void setTransmissionModel(String transmissionModel) {
+        this.transmissionModel = transmissionModel;
+    }
+
+    public String getDriveType() {
+        return driveType;
+    }
+
+    public void setDriveType(String driveType) {
+        this.driveType = driveType;
+    }
+
+    public Double getAcceleration0to100() {
+        return acceleration0to100;
+    }
+
+    public void setAcceleration0to100(Double acceleration0to100) {
+        this.acceleration0to100 = acceleration0to100;
     }
 
 

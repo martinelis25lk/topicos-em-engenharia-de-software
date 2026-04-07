@@ -1,8 +1,8 @@
 package br.com.lasanhaspec.carservice.domain.models;
 
 
+import br.com.lasanhaspec.carservice.domain.enums.*;
 import jakarta.persistence.*;
-import br.com.lasanhaspec.carservice.domain.enums.AspirationType;
 
 import lombok.Data;
 import lombok.Getter;
@@ -18,9 +18,8 @@ import lombok.ToString;
  //
  //
  //******************************************
-@Setter
+
 @Data
-@Getter
 @Entity
 @ToString
 @Table(name = "vehicle_models")
@@ -44,6 +43,27 @@ public class VehicleCatalogModel {
 
     @Enumerated(EnumType.STRING)
     private AspirationType aspirationType;
+
+
+
+    //novoa atributos
+    private Double displacement;
+    private Integer cylinderCount;
+    private Double topSpeed;
+    private Double acceleration0to100;
+
+    @Enumerated(EnumType.STRING)
+    private FuelType fuelType;
+
+    @Enumerated(EnumType.STRING)
+    private DriveType driveType;
+
+    @Enumerated(EnumType.STRING)
+    private TransmissionType transmissionType;
+
+    @Enumerated(EnumType.STRING)
+    private TransmissionModel transmissionModel;
+    private Integer  geraCount;
 
 
 
@@ -84,5 +104,77 @@ public class VehicleCatalogModel {
     }
 
 
-    // lombok will generate getters and setters
+    public Double getDisplacement() {
+        return displacement;
+    }
+
+    public void setDisplacement(Double displacement) {
+        this.displacement = displacement;
+    }
+
+    public Integer getCylinderCount() {
+        return cylinderCount;
+    }
+
+    public void setCylinderCount(Integer cylinderCount) {
+        this.cylinderCount = cylinderCount;
+    }
+
+    public Double getTopSpeed() {
+        return topSpeed;
+    }
+
+    public void setTopSpeed(Double topSpeed) {
+        this.topSpeed = topSpeed;
+    }
+
+    public Double getAcceleration0to100() {
+        return acceleration0to100;
+    }
+
+    public void setAcceleration0to100(Double acceleration0to100) {
+        this.acceleration0to100 = acceleration0to100;
+    }
+
+    public FuelType getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(FuelType fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public DriveType getDriveType() {
+        return driveType;
+    }
+
+    public void setDriveType(DriveType driveType) {
+        this.driveType = driveType;
+    }
+
+    public TransmissionType getTransmissionType() {
+        return transmissionType;
+    }
+
+    public void setTransmissionType(TransmissionType transmissionType) {
+        this.transmissionType = transmissionType;
+    }
+
+    public TransmissionModel getTransmissionModel() {
+        return transmissionModel;
+    }
+
+    public void setTransmissionModel(TransmissionModel transmissionModel) {
+        this.transmissionModel = transmissionModel;
+    }
+
+    public Integer getGearCount() {
+        return geraCount;
+    }
+
+    public void setGearCount(Integer geraCount) {
+        this.geraCount = geraCount;
+    }
+
+
 }

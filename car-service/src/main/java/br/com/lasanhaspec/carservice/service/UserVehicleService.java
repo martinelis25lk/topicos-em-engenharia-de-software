@@ -51,13 +51,8 @@ public class UserVehicleService {
     public String uploadVehicleImage(Long vehicleId, MultipartFile file) {
 
 
-
-
         UserVehicle vehicle = userVehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new RuntimeException("vehicle not found UserVehicleService KKKKK"));
-
-
-
 
         long count = vehicleImageRepository.countByUserVehicleId(vehicleId);
 
@@ -112,7 +107,6 @@ public class UserVehicleService {
         image.setPrimaryImage(!hasImages);
 
 
-
         vehicleImageRepository.save(image);
         System.out.println("SALVOU IMAGEM NO BANCO");
 
@@ -131,7 +125,9 @@ public class UserVehicleService {
 
         UserVehicle vehicle = new UserVehicle();
         vehicle.setUserId(dto.getUserId());
+
         vehicle.setVehicleCatalogModel(model);
+
         vehicle.setNickname(dto.getNickName());
         vehicle.setCurrentHorsePower(dto.getCurrentHorsePower());
         vehicle.setCurrentWeight(dto.getCurrentWeight());
