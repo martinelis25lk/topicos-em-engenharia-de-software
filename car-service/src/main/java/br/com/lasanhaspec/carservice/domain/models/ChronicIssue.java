@@ -31,7 +31,7 @@ public class ChronicIssue {
 
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "issue_id")
+    @JoinColumn(name = "vehicle_catalog_model_id")
     private VehicleCatalogModel vehicleCatalogModel;
 
     @Column(nullable = false)
@@ -268,5 +268,9 @@ public class ChronicIssue {
     }
 
     public void setCreatedByUserId(Long createdByUserId) {
+    }
+
+    public Object getTitle() {
+        return tittle;
     }
 }

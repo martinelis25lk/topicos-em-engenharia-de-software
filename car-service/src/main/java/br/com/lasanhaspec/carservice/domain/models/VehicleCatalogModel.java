@@ -5,8 +5,6 @@ import br.com.lasanhaspec.carservice.domain.enums.*;
 import jakarta.persistence.*;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 //****************************************
@@ -63,7 +61,7 @@ public class VehicleCatalogModel {
 
     @Enumerated(EnumType.STRING)
     private TransmissionModel transmissionModel;
-    private Integer  geraCount;
+    private Integer gearCount;
 
 
 
@@ -169,11 +167,11 @@ public class VehicleCatalogModel {
     }
 
     public Integer getGearCount() {
-        return geraCount;
+        return gearCount;
     }
 
     public void setGearCount(Integer geraCount) {
-        this.geraCount = geraCount;
+        this.gearCount = geraCount;
     }
 
 

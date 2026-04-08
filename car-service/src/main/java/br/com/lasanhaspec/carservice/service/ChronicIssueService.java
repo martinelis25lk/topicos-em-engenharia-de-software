@@ -18,6 +18,9 @@ import br.com.lasanhaspec.carservice.repository.VehicleCatalogRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class ChronicIssueService {
@@ -91,16 +94,45 @@ public class ChronicIssueService {
 
 
     //lista todos os modelos q tem cronicos approvados
-    public List<VehicleChronicSummaryDTO> getAllModelsWithIssues(){
+    public List<VehicleChronicSummaryDTO> getAllModelsWithIssues() {
 
+        List<VehicleCatalogModel> models =
+                vehicleCatalogRepository.findModelsWithIssuesByStatus(IssueStatus.APPROVED);
 
+        return models.stream().map(model -> {
+
+            List<ChronicIssue> issues =
+                    chronicIssueRepository.findByVehicleCatalogModelIdAndStatus(
+                            model.getId(),
+                            IssueStatus.APPROVED
+                    );
+
+            Double reliabilityScore = reliabilityScoreCalculator.calculate(issues);
+            Double criticalFailureRate = calculateCriticalFailureRate(issues);
+            Double avgAnnualCost = calculateAvgAnualCost(issues);
+
+            List<String> topIssueNames = issues.stream()
+                    .sorted((a, b) -> Integer.compare(b.getUsefulVotes(), a.getUsefulVotes()))
+                    .limit(3)
+                    .map(ChronicIssue::getTittle)
+                    .toList();
+
+            VehicleChronicSummaryDTO dto = new VehicleChronicSummaryDTO();
+            dto.setId(model.getId());
+            dto.setName(model.getBrand() + " " + model.getModel());
+            dto.setImageUrl(null);
+            dto.setReliabilityScore(reliabilityScore);
+            dto.setAvgAnnualCost(avgAnnualCost);
+            dto.setCriticalFailureRate(criticalFailureRate);
+            dto.setTopIssueNames(topIssueNames);
+
+            return dto;
+
+        }).toList();
     }
 
 
-    //pagina comppleta de um modelo com seus cronicos
-    public VehicleChronicPageDTO getModelChronicPage(Long vehicleId){
 
-    }
 
 
     // detalhe de um cronico em especifico
@@ -109,10 +141,70 @@ public class ChronicIssueService {
 
 
 
+
+
+    //pagina comppleta de um modelo com seus cronicos
+    public VehicleChronicPageDTO getModelChronicPage(Long vehicleId){
+
+    }
+
+
+
+
+
+
     //registrar ocorrencia
     public void reportOccurrence(Long issueId, Long vehicleId){
 
     }
+
+
+
+    private Double calculateCriticalFailureRate(List<ChronicIssue> issues){
+
+
+        if(issues == null || issues.isEmpty()) {
+            return 0.0;
+        }
+
+        long criticalCount = issues.stream()
+                .filter(issue -> issue.getSeverity() == IssueSeverity.CRITICAL)
+                .count();
+
+
+        return (criticalCount * 100.0)/ issues.size();
+
+
+
+    }
+
+
+    private Double calculateAvgAnualCost(List<ChronicIssue> issues){
+
+        if(issues == null || issues.isEmpty()){
+            return 0.0;
+
+        }
+
+        return  issues.stream()
+                .map(ChronicIssue::getCostMax)
+                .filter(Objects::nonNull)
+                .mapToDouble(Integer::doubleValue)
+                .average()
+                .orElse(0.0);
+
+    }
+
+
+
+
+
+
+    // 1 - contar total de issues
+    // 2 - contar quantos tem severity critical
+    // 3 - fazer a divisão e multiplicar por 100
+
+
 
 
 
