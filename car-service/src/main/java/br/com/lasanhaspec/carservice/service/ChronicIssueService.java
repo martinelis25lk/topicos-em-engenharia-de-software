@@ -7,10 +7,7 @@ import br.com.lasanhaspec.carservice.domain.enums.IssueStatus;
 import br.com.lasanhaspec.carservice.domain.enums.RepairComplexity;
 import br.com.lasanhaspec.carservice.domain.models.ChronicIssue;
 import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
-import br.com.lasanhaspec.carservice.dto.ChronicIssueDTO;
-import br.com.lasanhaspec.carservice.dto.ChronicIssueDetailDTO;
-import br.com.lasanhaspec.carservice.dto.VehicleChronicPageDTO;
-import br.com.lasanhaspec.carservice.dto.VehicleChronicSummaryDTO;
+import br.com.lasanhaspec.carservice.dto.*;
 import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
 import br.com.lasanhaspec.carservice.repository.IssueOccurrenceRepository;
 import br.com.lasanhaspec.carservice.repository.IssueVoteRepository;
@@ -145,6 +142,55 @@ public class ChronicIssueService {
 
     //pagina comppleta de um modelo com seus cronicos
     public VehicleChronicPageDTO getModelChronicPage(Long vehicleId){
+
+        // busca o modelo
+        // busca os cronicos aprovados
+        // calcula a metrica e monta o dto
+
+
+
+        //1 - busca o modelo
+        VehicleCatalogModel model = vehicleCatalogRepository
+                .findById(vehicleId)
+                .orElseThrow(() -> new RuntimeException("model from vehicle not found"));
+
+
+        //2 - busca os cronicos aprovados desse modelo
+
+        List<ChronicIssue> issues =
+                chronicIssueRepository.findByVehicleCatalogModelIdAndStatus(vehicleId,IssueStatus.APPROVED);
+
+        //3 - calcula as métricas
+
+
+        Double reliabilityScore = reliabilityScoreCalculator.calculate(issues);
+        Double criticalFailureRate = calculateCriticalFailureRate(issues);
+        Double avgAnnualCost = calculateAvgAnualCost(issues);
+
+
+        //4 - mapeia cada ChronicIssue para ChronicIssueCardDTO
+
+        List<ChronicIssueCardDTO> issueDTOs = issues.stream()
+                .map(issue -> {
+                    ChronicIssueCardDTO dto = new ChronicIssueCardDTO();
+                    dto.setTittle(issue.getTittle());
+                    //popular o resto
+
+                    return dto;
+                }).toList();
+
+        VehicleChronicPageDTO dto = new VehicleChronicPageDTO();
+
+        dto.setName();
+        dto.setYear();
+        dto.setDocumentedIssues();
+        //popular o resto
+
+
+
+        return dto;
+
+
 
     }
 

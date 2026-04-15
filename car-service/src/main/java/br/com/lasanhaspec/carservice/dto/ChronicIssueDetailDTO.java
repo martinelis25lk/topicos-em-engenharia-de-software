@@ -10,7 +10,7 @@ public class ChronicIssueDetailDTO {
 
     private String affectedEngines, affectedYears, repairComplexity;
 
-    private List<OccurrenceReportDTO> occurrenceReports;
+    //private List<OccurrenceReportDTO> occurrenceReports;
 
 
 }
