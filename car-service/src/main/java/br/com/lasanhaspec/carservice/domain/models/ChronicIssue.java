@@ -33,7 +33,7 @@ public class ChronicIssue {
     private VehicleCatalogModel vehicleCatalogModel;
 
     @Column(nullable = false)
-    private String tittle;
+    private String title;
 
 
     @Column(length = 2000, nullable = false)
@@ -126,12 +126,12 @@ public class ChronicIssue {
         this.vehicleCatalogModel = vehicleCatalogModel;
     }
 
-    public String getTittle() {
-        return tittle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTittle(String tittle) {
-        this.tittle = tittle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -142,7 +142,7 @@ public class ChronicIssue {
         this.description = description;
     }
 
-    public IssueSeverity getSeverity() {return severity;}
+    public String getSeverity() {return severity;}
 
     public void setSeverity(IssueSeverity severity) {
         this.severity = severity;
@@ -256,5 +256,5 @@ public class ChronicIssue {
         return createdByUserId;
     }
 
-    public Object getTitle() { return tittle;}
+
 }

@@ -2,12 +2,20 @@ package br.com.lasanhaspec.carservice.dto;
 
 import java.util.List;
 
+
+
+//página do modelo com lista de crônicos
 public class VehicleChronicPageDTO {
 
     private String name;
     private Integer year, documentedIssues;
     private String imgUrl;
     private double reliabilityScore, avgAnnualCost, criticalFailureRate;
+
+
+
+    //name, year, documentedissues,reliabilityscore,avganualcost,critinalfailurerate
+
 
     private List<ChronicIssueCardDTO> issues;
 

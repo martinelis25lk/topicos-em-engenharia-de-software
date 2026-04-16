@@ -2,16 +2,19 @@ package br.com.lasanhaspec.carservice.dto;
 
 public class ChronicIssueCardDTO {
 
-    private Integer id, occurrences, usefulVotes, notUsefulVotes;
-    private String tittle;
+
+
+    private Long id;
+    private Integer  occurrences, usefulVotes, notUsefulVotes;
+    private String title;
     private Integer millageMin, millageMax, costMin, costMax;
     private String description, severity;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -39,12 +42,12 @@ public class ChronicIssueCardDTO {
         this.notUsefulVotes = notUsefulVotes;
     }
 
-    public String getTittle() {
-        return tittle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTittle(String tittle) {
-        this.tittle = tittle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Integer getMillageMin() {

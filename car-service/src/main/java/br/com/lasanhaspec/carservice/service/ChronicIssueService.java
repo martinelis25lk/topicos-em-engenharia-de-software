@@ -6,18 +6,16 @@ import br.com.lasanhaspec.carservice.domain.enums.IssueSeverity;
 import br.com.lasanhaspec.carservice.domain.enums.IssueStatus;
 import br.com.lasanhaspec.carservice.domain.enums.RepairComplexity;
 import br.com.lasanhaspec.carservice.domain.models.ChronicIssue;
+import br.com.lasanhaspec.carservice.domain.models.IssueOcurrence;
 import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
 import br.com.lasanhaspec.carservice.dto.*;
 import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
 import br.com.lasanhaspec.carservice.repository.IssueOccurrenceRepository;
-import br.com.lasanhaspec.carservice.repository.IssueVoteRepository;
 import br.com.lasanhaspec.carservice.repository.VehicleCatalogRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class ChronicIssueService {
@@ -47,7 +45,7 @@ public class ChronicIssueService {
 
 
     //criar um novco cronico
-    public  Long createIssue(ChronicIssueDTO chronicIssueDTO){
+    public Integer createIssue(ChronicIssueDTO chronicIssueDTO){
 
         VehicleCatalogModel model = vehicleCatalogRepository
                 .findById(chronicIssueDTO.getVehicleCatalogModelId())
@@ -58,7 +56,7 @@ public class ChronicIssueService {
 
         ChronicIssue chronic = new ChronicIssue();
         chronic.setVehicleCatalogModel(model);
-        chronic.setTittle(chronicIssueDTO.getTittle());
+        chronic.setTitle(chronicIssueDTO.getTitle());
         chronic.setDescription(chronicIssueDTO.getDescription());
         chronic.setSeverity(IssueSeverity.valueOf(chronicIssueDTO.getSeverity()));
         chronic.setStatus(IssueStatus.PENDING);
@@ -111,7 +109,7 @@ public class ChronicIssueService {
             List<String> topIssueNames = issues.stream()
                     .sorted((a, b) -> Integer.compare(b.getUsefulVotes(), a.getUsefulVotes()))
                     .limit(3)
-                    .map(ChronicIssue::getTittle)
+                    .map(ChronicIssue::getTitle)
                     .toList();
 
             VehicleChronicSummaryDTO dto = new VehicleChronicSummaryDTO();
@@ -134,8 +132,55 @@ public class ChronicIssueService {
 
     // detalhe de um cronico em especifico
     public ChronicIssueDetailDTO getIssueDetail(Long issueId) {
-    }
 
+        ChronicIssue chronicIssue = chronicIssueRepository.findById(issueId)
+                .orElseThrow(() -> new RuntimeException("chronic issue not found"));
+
+        // ===== 1. mapear para card =====
+        ChronicIssueCardDTO cardDTO = new ChronicIssueCardDTO();
+
+        cardDTO.setId(chronicIssue.getId());
+        cardDTO.setNotUsefulVotes(chronicIssue.getNotUsefulVotes());
+        cardDTO.setUsefulVotes(chronicIssue.getUsefulVotes());
+        cardDTO.setOccurrences(chronicIssue.getOccurrences());
+        cardDTO.setSeverity(chronicIssue.getSeverity());
+        cardDTO.setTitle(chronicIssue.getTitle());
+        cardDTO.setDescription(chronicIssue.getDescription());
+        cardDTO.setMillageMax(chronicIssue.getMillageMax());
+        cardDTO.setMillageMin(chronicIssue.getMillageMin());
+        cardDTO.setCostMin(chronicIssue.getCostMin());
+        cardDTO.setCostMax(chronicIssue.getCostMax());
+
+        // ===== 2. buscar occurrences =====
+        List<IssueOcurrence> occurrences = issueOccurrenceRepository
+                .findByChronicIssueId(issueId);
+
+        // ===== 3. mapear occurrences =====
+        List<OccurrenceReportDTO> occurrenceDTOs = occurrences.stream()
+                .map(occurrence -> {
+                    OccurrenceReportDTO dto = new OccurrenceReportDTO();
+                    dto.setMillageAtOccurrence(occurrence.getMillageAtOccurrence());
+                    dto.setRepairCost(occurrence.getRepairCost());
+                    dto.setDescription(occurrence.getDescription());
+                    return dto;
+                })
+                .toList();
+
+        // ===== 4. montar DTO final =====
+        ChronicIssueDetailDTO detailDTO = new ChronicIssueDetailDTO();
+
+        detailDTO.setChronicIssueCardDTO(cardDTO);
+        detailDTO.setSymptoms(chronicIssue.getSymptoms());
+        detailDTO.setPreventiveMaintenance(chronicIssue.getPreventiveMaintenance());
+        detailDTO.setAffectedEngines(chronicIssue.getAffectedEngines());
+        detailDTO.setAffectedYears(chronicIssue.getAffectedYears());
+        detailDTO.setRepairComplexity(chronicIssue.getRepairComplexity());
+
+        // importante: você precisa ter esse campo no DTO
+        detailDTO.setOccurrenceReports(occurrenceDTOs);
+
+        return detailDTO;
+    }
 
 
 
@@ -173,18 +218,30 @@ public class ChronicIssueService {
         List<ChronicIssueCardDTO> issueDTOs = issues.stream()
                 .map(issue -> {
                     ChronicIssueCardDTO dto = new ChronicIssueCardDTO();
-                    dto.setTittle(issue.getTittle());
-                    //popular o resto
-
+                    dto.setId(issue.getId());
+                    dto.setTitle(issue.getTitle());
+                    dto.setCostMax(issue.getCostMax());
+                    dto.setCostMin(issue.getCostMin());
+                    dto.setDescription(issue.getDescription());
+                    dto.setSeverity(issue.getSeverity());
+                    dto.setOccurrences(issue.getOccurrences());
+                    dto.setMillageMax(issue.getMillageMax());
+                    dto.setMillageMin(issue.getMillageMin());
+                    dto.setUsefulVotes(issue.getUsefulVotes());
+                    dto.setNotUsefulVotes(issue.getNotUsefulVotes());
                     return dto;
                 }).toList();
 
         VehicleChronicPageDTO dto = new VehicleChronicPageDTO();
 
-        dto.setName();
-        dto.setYear();
-        dto.setDocumentedIssues();
-        //popular o resto
+        dto.setName(model.getBrand() + " " + model.getModel()); // <- model, não issue
+        dto.setYear(model.getYear());
+        dto.setDocumentedIssues(issues.size()); // <- tamanho da lista de crônicos
+        dto.setReliabilityScore(reliabilityScore);
+        dto.setAvgAnnualCost(avgAnnualCost);
+        dto.setCriticalFailureRate(criticalFailureRate);
+        dto.setIssues(issueDTOs);
+
 
 
 
@@ -217,10 +274,7 @@ public class ChronicIssueService {
                 .filter(issue -> issue.getSeverity() == IssueSeverity.CRITICAL)
                 .count();
 
-
         return (criticalCount * 100.0)/ issues.size();
-
-
 
     }
 
