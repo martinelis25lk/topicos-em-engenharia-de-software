@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface IssueOccurrenceRepository  extends JpaRepository<IssueOcurrence, Long> {
 
-    List<IssueOcurrence> finByChronicIssueId(Long issueId);
+    List<IssueOcurrence> findByChronicIssueId(Long issueId);
 
+    boolean existsByChronicIssueIdAndUserVehicleId(Long issueId, Long vehicleId);
 }

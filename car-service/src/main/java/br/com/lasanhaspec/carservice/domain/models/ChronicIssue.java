@@ -24,18 +24,16 @@ import java.util.List;
 public class ChronicIssue {
 
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
-
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "vehicle_catalog_model_id")
     private VehicleCatalogModel vehicleCatalogModel;
 
     @Column(nullable = false)
-    private String tittle;
+    private String title;
 
 
     @Column(length = 2000, nullable = false)
@@ -86,21 +84,22 @@ public class ChronicIssue {
     @ElementCollection
     private List<String> symptoms;
 
-
-    @ElementCollection
-    private List<String> preventiveMaintenace;
-
     private Long createdByUserId; // quem criou
-
-
 
     @Enumerated(EnumType.STRING)
 
     private IssueStatus status;
     // PENDING, APPROVED, REJECTED
 
-
     private List<String> preventiveMaintenance;
+
+    public List<String> getPreventiveMaintenance() {
+        return preventiveMaintenance;
+    }
+
+    public void setPreventiveMaintenance(List<String> preventiveMaintenance) {
+        this.preventiveMaintenance = preventiveMaintenance;
+    }
 
 
     public IssueStatus getStatus() {
@@ -110,15 +109,6 @@ public class ChronicIssue {
     public void setStatus(IssueStatus status) {
         this.status = status;
     }
-
-
-
-
-
-
-
-
-
 
     public Long getId() {
         return id;
@@ -136,12 +126,12 @@ public class ChronicIssue {
         this.vehicleCatalogModel = vehicleCatalogModel;
     }
 
-    public String getTittle() {
-        return tittle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTittle(String tittle) {
-        this.tittle = tittle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {
@@ -152,9 +142,7 @@ public class ChronicIssue {
         this.description = description;
     }
 
-    public IssueSeverity getSeverity() {
-        return severity;
-    }
+    public String getSeverity() {return severity;}
 
     public void setSeverity(IssueSeverity severity) {
         this.severity = severity;
@@ -192,9 +180,7 @@ public class ChronicIssue {
         this.costMax = costMax;
     }
 
-    public Integer getUsefulVotes() {
-        return usefulVotes;
-    }
+    public Integer getUsefulVotes() {return usefulVotes;}
 
     public void setUsefulVotes(Integer usefulVotes) {
         this.usefulVotes = usefulVotes;
@@ -264,13 +250,11 @@ public class ChronicIssue {
     }
 
 
-    public void setPreventiveMaintenance(List<String> preventiveMaintenance) {
+
+
+    public Long setCreatedByUserId(Long createdByUserId) {
+        return createdByUserId;
     }
 
-    public void setCreatedByUserId(Long createdByUserId) {
-    }
 
-    public Object getTitle() {
-        return tittle;
-    }
 }

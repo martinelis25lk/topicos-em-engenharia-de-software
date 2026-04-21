@@ -35,6 +35,62 @@ public class IssueOcurrence {
 
     private LocalDateTime updatedAt;
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UserVehicle getUserVehicle() {
+        return userVehicle;
+    }
+
+    public void setUserVehicle(UserVehicle userVehicle) {
+        this.userVehicle = userVehicle;
+    }
+
+    public Double getMillageAtOccurrence() {
+        return millageAtOccurrence;
+    }
+
+    public void setMillageAtOccurrence(Integer millageAtOccurrence) {
+        this.millageAtOccurrence = millageAtOccurrence;
+    }
+
+    public Double getRepairCost() {
+        return repairCost;
+    }
+
+    public void setRepairCost(Integer repairCost) {
+        this.repairCost = repairCost;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     private String description; // relato do usuario
 
 
@@ -42,5 +98,9 @@ public class IssueOcurrence {
     @PrePersist
     public void prePersist(){
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void setChronicIssue(ChronicIssue issue) {
+
     }
 }

@@ -6,7 +6,7 @@ public class ChronicIssueDTO {
 
     private Long vehicleCatalogModelId;
 
-    private String tittle, description;
+    private String title, description;
 
     private String severity;
 
@@ -38,12 +38,12 @@ public class ChronicIssueDTO {
         this.vehicleCatalogModelId = vehicleCatalogModelId;
     }
 
-    public String getTittle() {
-        return tittle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTittle(String tittle) {
-        this.tittle = tittle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDescription() {

@@ -1,8 +1,8 @@
 package br.com.lasanhaspec.carservice.domain.enums;
 
 public enum RepairComplexity {
-    DIY,
-    INTERMEDIATE,
-    PROFESSIONAL
+    DIY,           //do it yourself
+    INTERMEDIATE,  //mid
+    PROFESSIONAL   // só os caba q manja
 
 }
