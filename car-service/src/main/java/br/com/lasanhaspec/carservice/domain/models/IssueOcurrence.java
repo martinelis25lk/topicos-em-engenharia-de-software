@@ -99,4 +99,8 @@ public class IssueOcurrence {
     public void prePersist(){
         this.createdAt = LocalDateTime.now();
     }
+
+    public void setChronicIssue(ChronicIssue issue) {
+
+    }
 }

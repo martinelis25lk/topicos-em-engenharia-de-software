@@ -5,12 +5,11 @@ import br.com.lasanhaspec.carservice.domain.enums.IssueCategory;
 import br.com.lasanhaspec.carservice.domain.enums.IssueSeverity;
 import br.com.lasanhaspec.carservice.domain.enums.IssueStatus;
 import br.com.lasanhaspec.carservice.domain.enums.RepairComplexity;
-import br.com.lasanhaspec.carservice.domain.models.ChronicIssue;
-import br.com.lasanhaspec.carservice.domain.models.IssueOcurrence;
-import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
+import br.com.lasanhaspec.carservice.domain.models.*;
 import br.com.lasanhaspec.carservice.dto.*;
 import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
 import br.com.lasanhaspec.carservice.repository.IssueOccurrenceRepository;
+import br.com.lasanhaspec.carservice.repository.UserVehicleRepository;
 import br.com.lasanhaspec.carservice.repository.VehicleCatalogRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +24,7 @@ public class ChronicIssueService {
     private final VehicleCatalogRepository vehicleCatalogRepository;
     private final IssueOccurrenceRepository issueOccurrenceRepository;
     private final ReliabilityScoreCalculator reliabilityScoreCalculator;
+    private final UserVehicleRepository userVehicleRepository;
 
 
 
@@ -32,12 +32,15 @@ public class ChronicIssueService {
             ChronicIssueRepository chronicIssueRepository,
             VehicleCatalogRepository vehicleCatalogRepository,
             IssueOccurrenceRepository issueOccurrenceRepository,
-            ReliabilityScoreCalculator reliabilityScoreCalculator
+            ReliabilityScoreCalculator reliabilityScoreCalculator,
+            UserVehicleRepository userVehicleRepository
+
     ){
         this.chronicIssueRepository = chronicIssueRepository;
         this.vehicleCatalogRepository = vehicleCatalogRepository;
         this.issueOccurrenceRepository = issueOccurrenceRepository;
         this.reliabilityScoreCalculator = reliabilityScoreCalculator;
+        this.userVehicleRepository = userVehicleRepository;
 
     }
 
@@ -45,7 +48,7 @@ public class ChronicIssueService {
 
 
     //criar um novco cronico
-    public Integer createIssue(ChronicIssueDTO chronicIssueDTO){
+    public Long createIssue(ChronicIssueDTO chronicIssueDTO){
 
         VehicleCatalogModel model = vehicleCatalogRepository
                 .findById(chronicIssueDTO.getVehicleCatalogModelId())
@@ -55,28 +58,26 @@ public class ChronicIssueService {
         //cria a entidade nova
 
         ChronicIssue chronic = new ChronicIssue();
+
+
         chronic.setVehicleCatalogModel(model);
         chronic.setTitle(chronicIssueDTO.getTitle());
         chronic.setDescription(chronicIssueDTO.getDescription());
         chronic.setSeverity(IssueSeverity.valueOf(chronicIssueDTO.getSeverity()));
         chronic.setStatus(IssueStatus.PENDING);
-
         chronic.setIssueCategory(IssueCategory.valueOf(chronicIssueDTO.getCategory()));
-
-
         chronic.setMillageMax(chronicIssueDTO.getMillageMax());
         chronic.setMillageMin(chronicIssueDTO.getMillageMin());
         chronic.setCostMax(chronicIssueDTO.getCostMax());
         chronic.setCostMin(chronicIssueDTO.getCostMin());
         chronic.setAffectedEngines(chronicIssueDTO.getAffectedEngines());
         chronic.setAffectedYears(chronicIssueDTO.getAffectedYears());
-
         chronic.setRepairComplexity(RepairComplexity.valueOf(chronicIssueDTO.getRepairComplexity()));
-
         chronic.setSymptoms(chronicIssueDTO.getSymptoms());
         chronic.setPreventiveMaintenance(chronicIssueDTO.getPreventiveMaintenance());
-
         chronic.setCreatedByUserId(chronicIssueDTO.getCreatedByUserId());
+
+
         // 3. salva e retorna o id
         return chronicIssueRepository.save(chronic).getId();
 
@@ -136,14 +137,14 @@ public class ChronicIssueService {
         ChronicIssue chronicIssue = chronicIssueRepository.findById(issueId)
                 .orElseThrow(() -> new RuntimeException("chronic issue not found"));
 
-        // ===== 1. mapear para card =====
+        //  1. mapear para card
         ChronicIssueCardDTO cardDTO = new ChronicIssueCardDTO();
 
         cardDTO.setId(chronicIssue.getId());
         cardDTO.setNotUsefulVotes(chronicIssue.getNotUsefulVotes());
         cardDTO.setUsefulVotes(chronicIssue.getUsefulVotes());
         cardDTO.setOccurrences(chronicIssue.getOccurrences());
-        cardDTO.setSeverity(chronicIssue.getSeverity());
+        cardDTO.setSeverity(chronicIssue.getSeverity().name());
         cardDTO.setTitle(chronicIssue.getTitle());
         cardDTO.setDescription(chronicIssue.getDescription());
         cardDTO.setMillageMax(chronicIssue.getMillageMax());
@@ -151,11 +152,11 @@ public class ChronicIssueService {
         cardDTO.setCostMin(chronicIssue.getCostMin());
         cardDTO.setCostMax(chronicIssue.getCostMax());
 
-        // ===== 2. buscar occurrences =====
+        //  2. buscar occurrences
         List<IssueOcurrence> occurrences = issueOccurrenceRepository
                 .findByChronicIssueId(issueId);
 
-        // ===== 3. mapear occurrences =====
+        //  3. mapear occurrences
         List<OccurrenceReportDTO> occurrenceDTOs = occurrences.stream()
                 .map(occurrence -> {
                     OccurrenceReportDTO dto = new OccurrenceReportDTO();
@@ -166,7 +167,7 @@ public class ChronicIssueService {
                 })
                 .toList();
 
-        // ===== 4. montar DTO final =====
+        //  4. montar DTO final
         ChronicIssueDetailDTO detailDTO = new ChronicIssueDetailDTO();
 
         detailDTO.setChronicIssueCardDTO(cardDTO);
@@ -185,7 +186,7 @@ public class ChronicIssueService {
 
 
 
-    //pagina comppleta de um modelo com seus cronicos
+    //pagina completa de um modelo com seus cronicos
     public VehicleChronicPageDTO getModelChronicPage(Long vehicleId){
 
         // busca o modelo
@@ -259,6 +260,42 @@ public class ChronicIssueService {
     //registrar ocorrencia
     public void reportOccurrence(Long issueId, Long vehicleId){
 
+
+        //busca o chronicissue
+        ChronicIssue issue = chronicIssueRepository.findById(issueId).
+                orElseThrow(()-> new RuntimeException("Issue not found"));
+
+
+        //busca o uservehicle veiculo do usuario
+        UserVehicle vehicle = userVehicleRepository.findById(vehicleId).
+                orElseThrow(()-> new RuntimeException("vehicle not found"));
+
+
+        //há uma diferença entre saber se dois ids tem o mesmo valor e se dois objetos long são a mesma instancia em memoria
+
+        if(!vehicle.getVehicleCatalogModel().getId()
+                .equals(issue.getVehicleCatalogModel().getId())){
+            throw new RuntimeException("vehicle from uservehicle anf issue vehicle do not match");
+        }
+
+
+        //validando duplicidade
+        if(issueOccurrenceRepository.existsByChronicIssueIdAndUserVehicleId(issueId,vehicleId)){
+            throw new RuntimeException("occurence already registed to this vehicle");
+        }
+
+
+
+
+        IssueOcurrence occurrence = new IssueOcurrence();
+        occurrence.setChronicIssue(issue);
+        occurrence.setUserVehicle(vehicle);
+
+        issueOccurrenceRepository.save(occurrence);
+
+        // incrementa o contador de ocorrências no crônico
+        issue.setOccurrences(issue.getOccurrences() + 1);
+        chronicIssueRepository.save(issue);
     }
 
 
