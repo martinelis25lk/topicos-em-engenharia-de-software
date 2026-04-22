@@ -6,6 +6,8 @@ import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
 import br.com.lasanhaspec.carservice.domain.models.VehicleImage;
 import br.com.lasanhaspec.carservice.dto.CreateUserVehicleDTO;
 import br.com.lasanhaspec.carservice.dto.VehicleCardDTO;
+import br.com.lasanhaspec.carservice.exception.BusinessException;
+import br.com.lasanhaspec.carservice.exception.ResourceNotFoundException;
 import br.com.lasanhaspec.carservice.infrastructure.storage.S3StorageService;
 import br.com.lasanhaspec.carservice.mappers.VehicleCardMapper;
 import br.com.lasanhaspec.carservice.repository.UserVehicleRepository;
@@ -52,12 +54,12 @@ public class UserVehicleService {
 
 
         UserVehicle vehicle = userVehicleRepository.findById(vehicleId)
-                .orElseThrow(() -> new RuntimeException("vehicle not found UserVehicleService KKKKK"));
+                .orElseThrow(() -> new ResourceNotFoundException("vehicle not found UserVehicleService KKKKK"));
 
         long count = vehicleImageRepository.countByUserVehicleId(vehicleId);
 
         if (count >= 5) {
-            throw new RuntimeException("Only 5 images per vehicle");
+            throw new BusinessException("Only 5 images per vehicle");
         }
 
 
@@ -120,7 +122,7 @@ public class UserVehicleService {
         VehicleCatalogModel model = vehicleCatalogRepository
                 .findById(dto.getVehicleCatalogModelId())
                 .orElseThrow(() ->
-                        new RuntimeException("Catalog vehiclke not found, user vehicle service kkkkk"));
+                        new ResourceNotFoundException("Catalog vehiclke not found, user vehicle service kkkkk"));
 
 
         UserVehicle vehicle = new UserVehicle();
@@ -144,12 +146,12 @@ public class UserVehicleService {
 
     public void deleteVehicleImage(Long vehicleId, Long imageId){
         VehicleImage image = vehicleImageRepository.findById(imageId)
-                .orElseThrow(()-> new RuntimeException("Image not found, kkk uservehicle service"));
+                .orElseThrow(()-> new ResourceNotFoundException("Image not found, kkk uservehicle service"));
 
 
         if (image.getUserVehicle() == null ||
                 !image.getUserVehicle().getId().equals(vehicleId)) {
-            throw new RuntimeException("Image does not belong to vehicle");
+            throw new BusinessException("Image does not belong to vehicle");
         }
 
         storageService.deleteFile(image.getS3Key());
@@ -169,7 +171,7 @@ public class UserVehicleService {
     public VehicleCardDTO getVehicleById(Long id) {
         return userVehicleRepository.findById(id)
                 .map(VehicleCardMapper::toDTO)
-                .orElseThrow(()-> new RuntimeException("vehicle not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("vehicle not found"));
     }
 
 
@@ -181,13 +183,13 @@ public class UserVehicleService {
         //buscar imagem
         VehicleImage image = new VehicleImage();
         image = vehicleImageRepository.findById(imageId)
-                .orElseThrow(() -> new RuntimeException("image not found kk vehcileservice"));
+                .orElseThrow(() -> new ResourceNotFoundException("image not found kk vehcileservice"));
 
         System.out.println("TESTES HHHHHH service DE PRIMARY");
 
         //valida se petence ao veiculo
         if(!image.getUserVehicle().getId().equals(vehicleId)){
-            throw new RuntimeException("this image does not belong to the vehicle");
+            throw new BusinessException("this image does not belong to the vehicle");
 
         }
 

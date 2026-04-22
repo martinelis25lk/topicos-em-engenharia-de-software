@@ -20,6 +20,7 @@ const VehicleCard = ({ vehicle }: Props) => {
         <h2>{vehicle.name}</h2>
         <p className="engine">{vehicle.engine}</p>
 
+
         {/* Horsepower */}
         <PerformanceBar
           label="Horsepower"
