@@ -60,8 +60,7 @@ public class ChronicIssue {
     @Column(nullable = false)
     private Integer occurrences = 0;
 
-    @Column(nullable = false)
-    private boolean approved = false;
+
 
     private LocalDateTime createdAt;
 
@@ -142,7 +141,7 @@ public class ChronicIssue {
         this.description = description;
     }
 
-    public String getSeverity() {return severity;}
+    public  IssueSeverity getSeverity() {return severity;}
 
     public void setSeverity(IssueSeverity severity) {
         this.severity = severity;
@@ -202,13 +201,7 @@ public class ChronicIssue {
         this.occurrences = occurrences;
     }
 
-    public boolean isApproved() {
-        return approved;
-    }
 
-    public void setApproved(boolean approved) {
-        this.approved = approved;
-    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

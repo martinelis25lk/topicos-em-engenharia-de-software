@@ -6,6 +6,7 @@ import br.com.lasanhaspec.carservice.domain.enums.VoteType;
 import br.com.lasanhaspec.carservice.domain.models.ChronicIssue;
 import br.com.lasanhaspec.carservice.domain.models.IssueVote;
 import br.com.lasanhaspec.carservice.domain.models.VehicleImage;
+import br.com.lasanhaspec.carservice.exception.ResourceNotFoundException;
 import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
 import br.com.lasanhaspec.carservice.repository.IssueVoteRepository;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class IssueVoteService {
     @Transactional
     public void vote(Long issueId, Long userId, VoteType voteType) {
         ChronicIssue chronicIssue = chronicIssueRepository.findById(issueId)
-                .orElseThrow(() -> new RuntimeException("Issue not found kkservice"));
+                .orElseThrow(() -> new ResourceNotFoundException("Issue not found kkservice"));
 
 
         Optional<IssueVote> existingVote =

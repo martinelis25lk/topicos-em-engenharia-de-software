@@ -40,7 +40,7 @@ public class ChronicIssueController {
 
     // GET    /chronic-issues/models/{id}       getModelChronicPage
     @GetMapping("/models/{id}")
-    public ResponseEntity<VehicleChronicPageDTO> getModelChronicPage(@PathVariable Long modelId){
+    public ResponseEntity<VehicleChronicPageDTO> getModelChronicPage(@PathVariable("id") Long modelId){
         return ResponseEntity.ok(chronicIssueService.getModelChronicPage(modelId));
     }
 

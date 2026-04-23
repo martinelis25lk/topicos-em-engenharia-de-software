@@ -7,6 +7,8 @@ import br.com.lasanhaspec.carservice.domain.enums.IssueStatus;
 import br.com.lasanhaspec.carservice.domain.enums.RepairComplexity;
 import br.com.lasanhaspec.carservice.domain.models.*;
 import br.com.lasanhaspec.carservice.dto.*;
+import br.com.lasanhaspec.carservice.exception.BusinessException;
+import br.com.lasanhaspec.carservice.exception.ResourceNotFoundException;
 import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
 import br.com.lasanhaspec.carservice.repository.IssueOccurrenceRepository;
 import br.com.lasanhaspec.carservice.repository.UserVehicleRepository;
@@ -52,7 +54,7 @@ public class ChronicIssueService {
 
         VehicleCatalogModel model = vehicleCatalogRepository
                 .findById(chronicIssueDTO.getVehicleCatalogModelId())
-                .orElseThrow(() -> new RuntimeException("catalog vehicle not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("catalog vehicle not found"));
 
 
         //cria a entidade nova
@@ -135,7 +137,7 @@ public class ChronicIssueService {
     public ChronicIssueDetailDTO getIssueDetail(Long issueId) {
 
         ChronicIssue chronicIssue = chronicIssueRepository.findById(issueId)
-                .orElseThrow(() -> new RuntimeException("chronic issue not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("chronic issue not found"));
 
         //  1. mapear para card
         ChronicIssueCardDTO cardDTO = new ChronicIssueCardDTO();
@@ -198,7 +200,7 @@ public class ChronicIssueService {
         //1 - busca o modelo
         VehicleCatalogModel model = vehicleCatalogRepository
                 .findById(vehicleId)
-                .orElseThrow(() -> new RuntimeException("model from vehicle not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("model from vehicle not found"));
 
 
         //2 - busca os cronicos aprovados desse modelo
@@ -224,7 +226,7 @@ public class ChronicIssueService {
                     dto.setCostMax(issue.getCostMax());
                     dto.setCostMin(issue.getCostMin());
                     dto.setDescription(issue.getDescription());
-                    dto.setSeverity(issue.getSeverity());
+                    dto.setSeverity(issue.getSeverity().name());
                     dto.setOccurrences(issue.getOccurrences());
                     dto.setMillageMax(issue.getMillageMax());
                     dto.setMillageMin(issue.getMillageMin());
@@ -263,25 +265,25 @@ public class ChronicIssueService {
 
         //busca o chronicissue
         ChronicIssue issue = chronicIssueRepository.findById(issueId).
-                orElseThrow(()-> new RuntimeException("Issue not found"));
+                orElseThrow(()-> new ResourceNotFoundException("Issue not found"));
 
 
         //busca o uservehicle veiculo do usuario
         UserVehicle vehicle = userVehicleRepository.findById(vehicleId).
-                orElseThrow(()-> new RuntimeException("vehicle not found"));
+                orElseThrow(()-> new ResourceNotFoundException("vehicle not found"));
 
 
         //há uma diferença entre saber se dois ids tem o mesmo valor e se dois objetos long são a mesma instancia em memoria
 
         if(!vehicle.getVehicleCatalogModel().getId()
                 .equals(issue.getVehicleCatalogModel().getId())){
-            throw new RuntimeException("vehicle from uservehicle anf issue vehicle do not match");
+            throw new BusinessException("vehicle from uservehicle anf issue vehicle do not match");
         }
 
 
         //validando duplicidade
         if(issueOccurrenceRepository.existsByChronicIssueIdAndUserVehicleId(issueId,vehicleId)){
-            throw new RuntimeException("occurence already registed to this vehicle");
+            throw new BusinessException("occurence already registed to this vehicle");
         }
 
 

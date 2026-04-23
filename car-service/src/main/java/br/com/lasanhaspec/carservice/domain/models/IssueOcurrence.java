@@ -27,13 +27,17 @@ public class IssueOcurrence {
     private UserVehicle userVehicle;
 
     @Column(nullable = false)
-    private Integer millageAtOccurrence;
+    private Double millageAtOccurrence;
 
-    private Integer repairCost;
+    private Double repairCost;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "issue_id")
+    private ChronicIssue chronicIssue;
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -63,7 +67,7 @@ public class IssueOcurrence {
         return millageAtOccurrence;
     }
 
-    public void setMillageAtOccurrence(Integer millageAtOccurrence) {
+    public void setMillageAtOccurrence(Double millageAtOccurrence) {
         this.millageAtOccurrence = millageAtOccurrence;
     }
 
@@ -71,7 +75,7 @@ public class IssueOcurrence {
         return repairCost;
     }
 
-    public void setRepairCost(Integer repairCost) {
+    public void setRepairCost(Double repairCost) {
         this.repairCost = repairCost;
     }
 
@@ -100,7 +104,8 @@ public class IssueOcurrence {
         this.createdAt = LocalDateTime.now();
     }
 
-    public void setChronicIssue(ChronicIssue issue) {
+    public void setChronicIssue(ChronicIssue chronicIssue) {
+        this.chronicIssue = chronicIssue;
 
     }
 }

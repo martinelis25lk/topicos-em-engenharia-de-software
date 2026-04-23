@@ -96,4 +96,19 @@ public class UserVehicleController {
 
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<VehicleCardDTO> updateVehicle(@PathVariable Long id, @RequestBody CreateUserVehicleDTO dto){
+        return ResponseEntity.ok(userVehicleService.udpateVehicle(id, dto));
+    }
+
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVehicle(@PathVariable Long id){
+        return ResponseEntity.noContent().build();
+    }
+
+
+
+
 }
