@@ -174,6 +174,32 @@ public class UserVehicleService {
                 .orElseThrow(()-> new ResourceNotFoundException("vehicle not found"));
     }
 
+    public VehicleCardDTO udpateVehicle(Long id, CreateUserVehicleDTO dto){
+
+        //verifica se o veiculo existe
+        UserVehicle vehicle = userVehicleRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("vehicle not found"));
+
+        vehicle.setNickname(dto.getNickName());
+        vehicle.setCurrentHorsePower(dto.getCurrentHorsePower());
+        vehicle.setCurrentWeight(dto.getCurrentWeight());
+        vehicle.setCurrentTorque(dto.getCurrentTorque());
+
+        userVehicleRepository.save(vehicle);
+
+        return VehicleCardMapper.toDTO(vehicle);
+
+    }
+
+
+    public void deleteVehicle(Long id){
+        UserVehicle vehicle = userVehicleRepository.findById(id).
+                orElseThrow(() -> new ResourceNotFoundException("vehicle not found"));
+
+        userVehicleRepository.delete(vehicle);
+
+    }
+
 
     @Transactional
     public void setPrimaryImage(Long vehicleId, Long imageId) {
@@ -223,5 +249,3 @@ public class UserVehicleService {
 
 }
 
-
-//arn:aws:iam::697220083264:user/lasanhaspec-apilasanhaspec-api
