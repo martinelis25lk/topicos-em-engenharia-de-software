@@ -60,8 +60,6 @@ public class ChronicIssue {
     @Column(nullable = false)
     private Integer occurrences = 0;
 
-
-
     private LocalDateTime createdAt;
 
     @PrePersist

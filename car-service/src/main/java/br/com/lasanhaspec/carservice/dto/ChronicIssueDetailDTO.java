@@ -14,6 +14,8 @@ public class ChronicIssueDetailDTO {
 
     private String affectedEngines, affectedYears, repairComplexity;
 
+    
+
     public void setChronicIssueCardDTO(ChronicIssueCardDTO cardDTO) {
     }
 
@@ -37,5 +39,7 @@ public class ChronicIssueDetailDTO {
 
     //private List<OccurrenceReportDTO> occurrenceReports;
 
+
+//
 
 }

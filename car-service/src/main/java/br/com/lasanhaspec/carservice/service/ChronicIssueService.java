@@ -13,6 +13,7 @@ import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
 import br.com.lasanhaspec.carservice.repository.IssueOccurrenceRepository;
 import br.com.lasanhaspec.carservice.repository.UserVehicleRepository;
 import br.com.lasanhaspec.carservice.repository.VehicleCatalogRepository;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -85,6 +86,79 @@ public class ChronicIssueService {
 
 
     }
+
+
+    public ChronicIssueDetailDTO updateChronicIssue(Long id, ChronicIssueDTO  dto){
+        ChronicIssue chronicIssue = chronicIssueRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("chronic issue not found"));
+
+
+        chronicIssue.setSymptoms(dto.getSymptoms());
+        chronicIssue.setAffectedEngines(dto.getAffectedEngines());
+        chronicIssue.setAffectedYears(dto.getAffectedYears());
+        chronicIssue.setRepairComplexity(RepairComplexity.valueOf(dto.getRepairComplexity()));
+        chronicIssue.setPreventiveMaintenance(dto.getPreventiveMaintenance());
+
+        chronicIssueRepository.save(chronicIssue);
+
+        ChronicIssueDetailDTO chronicIssueDetailDTO = new ChronicIssueDetailDTO();
+
+        chronicIssueDetailDTO.setRepairComplexity(chronicIssue.getRepairComplexity());
+        chronicIssueDetailDTO.setAffectedYears(chronicIssue.getAffectedYears());
+        chronicIssueDetailDTO.setAffectedEngines(chronicIssue.getAffectedEngines());
+        chronicIssueDetailDTO.setSymptoms(chronicIssue.getSymptoms());
+        chronicIssueDetailDTO.setPreventiveMaintenance(chronicIssue.getPreventiveMaintenance());
+
+
+        return chronicIssueDetailDTO;
+
+    }
+
+
+    public void deleteIssue(Long id){
+        ChronicIssue chronicIssue = chronicIssueRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("chronic issue not found"));
+
+        chronicIssueRepository.delete(chronicIssue);
+
+    }
+
+
+
+
+
+
+    //private IssueStatus status;
+    // PENDING, APPROVED, REJECTED
+
+    public void approveChronicIssue(Long id){
+
+        ChronicIssue chronicIssue = chronicIssueRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("issue not found"));
+
+        //se o status do issue tiver pendente, trocar pra approved
+        if(chronicIssue.getStatus() == IssueStatus.IN_REVIEW){
+            chronicIssue.setStatus(IssueStatus.APPROVED);
+        }
+        chronicIssueRepository.save(chronicIssue);
+
+    }
+
+
+    public void rejectChronicIssue(Long id){
+        ChronicIssue chronicIssue = chronicIssueRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("issue not found"));
+
+        if (chronicIssue.getStatus() == IssueStatus.IN_REVIEW){
+            chronicIssue.setStatus(IssueStatus.REJECTED);
+        }
+        chronicIssueRepository.save(chronicIssue);
+
+    }
+
+
+
+
 
 
 

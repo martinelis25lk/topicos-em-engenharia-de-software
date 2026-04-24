@@ -6,15 +6,21 @@ public class ChronicIssueDTO {
 
     private Long vehicleCatalogModelId;
 
-    private String title, description;
+    private String title;
+
+    private String description;
 
     private String severity;
 
     private String category;
 
-    private Integer millageMin, millageMax;
+    private Integer millageMin;
 
-    private Integer costMin, costMax;
+    private Integer millageMax;
+
+    private Integer costMin;
+
+    private Integer costMax;
 
     private String affectedEngines;
 
@@ -27,6 +33,16 @@ public class ChronicIssueDTO {
     private List<String> preventiveMaintenance;
 
     private Long createdByUserId;
+
+    public String getIssueStatus() {
+        return IssueStatus;
+    }
+
+    public void setIssueStatus(String issueStatus) {
+        IssueStatus = issueStatus;
+    }
+
+    private String IssueStatus;
 
 
 
