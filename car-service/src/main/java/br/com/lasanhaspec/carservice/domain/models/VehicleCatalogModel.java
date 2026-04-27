@@ -77,11 +77,11 @@ public class VehicleCatalogModel {
         return model;
     }
 
-    public Integer getYear() {
+    public String getYear() {
         return year;
     }
 
-    public String getEngineCode() {
+    public Integer getEngineCode() {
         return engineCode;
     }
 

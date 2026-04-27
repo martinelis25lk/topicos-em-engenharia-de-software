@@ -4,6 +4,10 @@ import br.com.lasanhaspec.carservice.domain.enums.AspirationType;
 
 public class VehicleCatalogDTO {
 
+
+
+
+    private Long id;
     private  String brand;
     private  String aspirationtype;
     private  Integer engineCode;
@@ -78,5 +82,15 @@ public class VehicleCatalogDTO {
     public void setAspirationtype(String aspirationtype) {
         this.aspirationtype = aspirationtype;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
 
 }

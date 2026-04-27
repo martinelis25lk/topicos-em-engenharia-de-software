@@ -58,12 +58,13 @@ public class VehicleCatalogService {
 
         VehicleCatalogDTO vehicleCatalogDTO = new VehicleCatalogDTO();
 
+        vehicleCatalogDTO.setId(vehicle.getId());
         vehicleCatalogDTO.setAspirationtype(vehicle.getAspirationType().name());
-        vehicleCatalogDTO.setBrand(vehicleCatalogDTO.getBrand());
-        vehicleCatalogDTO.setYear(vehicleCatalogDTO.getYear());
-        vehicleCatalogDTO.setModel(vehicleCatalogDTO.getModel());
-        vehicleCatalogDTO.setFactoryTorque(vehicleCatalogDTO.getFactoryTorque());
-        vehicleCatalogDTO.setEngineCode(vehicleCatalogDTO.getEngineCode());
+        vehicleCatalogDTO.setBrand(vehicle.getBrand());
+        vehicleCatalogDTO.setYear(vehicle.getYear());
+        vehicleCatalogDTO.setModel(vehicle.getModel());
+        vehicleCatalogDTO.setFactoryTorque(vehicle.getFactoryTorque());
+        vehicleCatalogDTO.setEngineCode(vehicle.getEngineCode());
         vehicleCatalogDTO.setFactoryHorsePower(vehicle.getFactoryHorsepower());
 
         return vehicleCatalogDTO;
