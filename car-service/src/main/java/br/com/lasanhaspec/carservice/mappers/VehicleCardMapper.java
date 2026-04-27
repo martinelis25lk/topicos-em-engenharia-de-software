@@ -3,8 +3,6 @@ package br.com.lasanhaspec.carservice.mappers;
 import br.com.lasanhaspec.carservice.domain.models.UserVehicle;
 import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
 import br.com.lasanhaspec.carservice.dto.VehicleCardDTO;
-import br.com.lasanhaspec.carservice.service.UserVehicleService;
-
 
 
 public class VehicleCardMapper {
@@ -21,7 +19,7 @@ public class VehicleCardMapper {
 
         VehicleCatalogModel model = vehicle.getVehicleCatalogModel();
 
-        dto.setFactoryHorsePower(vehicle.getVehicleCatalogModel().getFactoryHorsepower());
+        dto.setFactoryHorsePower(vehicle.getVehicleCatalogModel().getFactoryHorsepower(dto.getFactoryHorsePower()));
         dto.setCurrentHorsePower(vehicle.getCurrentHorsePower());
         dto.setFactoryTorque(vehicle.getVehicleCatalogModel().getFactoryTorque());
         dto.setCurrentTorque(vehicle.getCurrentTorque());

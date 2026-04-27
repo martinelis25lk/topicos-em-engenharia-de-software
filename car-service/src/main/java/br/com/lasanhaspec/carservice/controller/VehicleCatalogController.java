@@ -2,10 +2,13 @@ package br.com.lasanhaspec.carservice.controller;
 
 
 import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
+import br.com.lasanhaspec.carservice.dto.CreateVehicleCatalogModelDTO;
+import br.com.lasanhaspec.carservice.dto.VehicleCatalogDTO;
 import br.com.lasanhaspec.carservice.dto.VehiclePageDTO;
 import br.com.lasanhaspec.carservice.service.VehicleCatalogService;
 import br.com.lasanhaspec.carservice.service.VehiclePageService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,6 +54,21 @@ public class VehicleCatalogController {
     @GetMapping("/{id}")
     public VehicleCatalogModel getById(@PathVariable Long id){
         return vehicleCatalogService.findById(id);
+    }
+
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<VehicleCatalogDTO> updateVehicleCatalogModel(@PathVariable Long id, @RequestBody CreateVehicleCatalogModelDTO dto ){
+        return ResponseEntity.ok(vehicleCatalogService.updateVehicleCatalog(id, dto));
+
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVehicleCatlogModel(@PathVariable Long id){
+        vehicleCatalogService.deleteVehicleCatalogModel(id);
+        return ResponseEntity.noContent().build();
     }
 
 

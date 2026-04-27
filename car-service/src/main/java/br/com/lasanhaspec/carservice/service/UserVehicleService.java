@@ -174,6 +174,8 @@ public class UserVehicleService {
                 .orElseThrow(()-> new ResourceNotFoundException("vehicle not found"));
     }
 
+
+
     public VehicleCardDTO udpateVehicle(Long id, CreateUserVehicleDTO dto){
 
         //verifica se o veiculo existe
@@ -193,8 +195,8 @@ public class UserVehicleService {
 
 
     public void deleteVehicle(Long id){
-        UserVehicle vehicle = userVehicleRepository.findById(id).
-                orElseThrow(() -> new ResourceNotFoundException("vehicle not found"));
+        UserVehicle vehicle = userVehicleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("vehicle not found"));
 
         userVehicleRepository.delete(vehicle);
 

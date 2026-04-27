@@ -61,7 +61,7 @@ public class VehiclePageMapper {
         );
 
 
-        specs.setFactoryHorsepower(vehicle.getFactoryHorsepower());
+        specs.setFactoryHorsepower(vehicle.getFactoryHorsepower(dto.getFactoryHorsePower()));
         specs.setFactoryTorque(vehicle.getFactoryTorque());
         specs.setCylinderCount(vehicle.getCylinderCount());
         specs.setTopSpeed(vehicle.getTopSpeed());

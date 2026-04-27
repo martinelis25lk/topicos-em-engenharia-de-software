@@ -85,7 +85,7 @@ public class VehicleCatalogModel {
         return engineCode;
     }
 
-    public Integer getFactoryHorsepower() {
+    public Integer getFactoryHorsepower(Integer factoryHorsePower) {
         return factoryHorsepower;
     }
 

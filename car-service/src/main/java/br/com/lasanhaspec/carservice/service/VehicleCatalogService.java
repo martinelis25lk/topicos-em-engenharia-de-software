@@ -2,6 +2,9 @@ package br.com.lasanhaspec.carservice.service;
 
 
 import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
+import br.com.lasanhaspec.carservice.dto.CreateVehicleCatalogModelDTO;
+import br.com.lasanhaspec.carservice.dto.VehicleCatalogDTO;
+import br.com.lasanhaspec.carservice.exception.ResourceNotFoundException;
 import br.com.lasanhaspec.carservice.repository.VehicleCatalogRepository;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +36,49 @@ public class VehicleCatalogService {
     public VehicleCatalogModel findById(Long id){
         return vehicleCatalogRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("vehicleModel not found"));
+    }
+
+
+    public VehicleCatalogDTO updateVehicleCatalog(Long id, CreateVehicleCatalogModelDTO  dto){
+        //verifica se a entidade existe
+
+        VehicleCatalogModel vehicle = vehicleCatalogRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("vehicle catalog model not found."));
+
+
+        vehicle.setBrand(dto.getBrand());
+        vehicle.setEngineCode(dto.getEngineCode());
+        vehicle.setFactoryHorsepower(dto.getFactoryHorsePower());
+        vehicle.setAspirationType(dto.getAspirationtype());
+        vehicle.setFactoryWeight(dto.getFactoryWeight());
+        vehicle.setFactoryTorque(dto.getFactoryTorque());
+
+
+        vehicleCatalogRepository.save(vehicle);
+
+        VehicleCatalogDTO vehicleCatalogDTO = new VehicleCatalogDTO();
+
+        vehicleCatalogDTO.setAspirationtype(vehicle.getAspirationType().name());
+        vehicleCatalogDTO.setBrand(vehicleCatalogDTO.getBrand());
+        vehicleCatalogDTO.setYear(vehicleCatalogDTO.getYear());
+        vehicleCatalogDTO.setModel(vehicleCatalogDTO.getModel());
+        vehicleCatalogDTO.setFactoryTorque(vehicleCatalogDTO.getFactoryTorque());
+        vehicleCatalogDTO.setEngineCode(vehicleCatalogDTO.getEngineCode());
+        vehicleCatalogDTO.setFactoryHorsePower(vehicle.getFactoryHorsepower());
+
+        return vehicleCatalogDTO;
+
+    }
+
+
+
+    public void deleteVehicleCatalogModel(Long id){
+        VehicleCatalogModel vehicleCatalogModel = vehicleCatalogRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("vehicle catalog model not found"));
+
+        vehicleCatalogRepository.delete(vehicleCatalogModel);
+
+
     }
 
 
