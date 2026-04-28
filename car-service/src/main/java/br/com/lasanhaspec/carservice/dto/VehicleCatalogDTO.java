@@ -1,7 +1,5 @@
 package br.com.lasanhaspec.carservice.dto;
 
-import br.com.lasanhaspec.carservice.domain.enums.AspirationType;
-
 public class VehicleCatalogDTO {
 
 
@@ -10,11 +8,11 @@ public class VehicleCatalogDTO {
     private Long id;
     private  String brand;
     private  String aspirationtype;
-    private  Integer engineCode;
+    private String engineCode;
     private Integer factoryHorsePower;
     private Integer factoryTorque ;
     private String model ;
-    private String year ;
+    private Integer year ;
     private Integer factoryWeight ;
 
 
@@ -35,11 +33,11 @@ public class VehicleCatalogDTO {
         this.factoryWeight = factoryWeight;
     }
 
-    public String getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(String year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 
@@ -67,15 +65,15 @@ public class VehicleCatalogDTO {
         this.factoryHorsePower = factoryHorsePower;
     }
 
-    public Integer getEngineCode() {
+    public String getEngineCode() {
         return engineCode;
     }
 
-    public void setEngineCode(Integer engineCode) {
+    public void setEngineCode(String engineCode) {
         this.engineCode = engineCode;
     }
 
-    public AspirationType getAspirationtype() {
+    public String getAspirationtype() {
         return aspirationtype;
     }
 

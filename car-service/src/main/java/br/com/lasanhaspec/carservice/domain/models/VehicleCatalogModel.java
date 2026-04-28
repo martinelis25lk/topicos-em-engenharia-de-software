@@ -39,6 +39,8 @@ public class VehicleCatalogModel {
     private Integer factoryTorque;
     private Integer factoryWeight;
 
+
+
     @Enumerated(EnumType.STRING)
     private AspirationType aspirationType;
 
@@ -77,15 +79,15 @@ public class VehicleCatalogModel {
         return model;
     }
 
-    public String getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public Integer getEngineCode() {
+    public String getEngineCode() {
         return engineCode;
     }
 
-    public Integer getFactoryHorsepower(Integer factoryHorsePower) {
+    public Integer getFactoryHorsepower() {
         return factoryHorsepower;
     }
 

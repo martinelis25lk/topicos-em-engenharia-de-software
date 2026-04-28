@@ -136,11 +136,12 @@ public class ChronicIssueService {
         ChronicIssue chronicIssue = chronicIssueRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("issue not found"));
 
-        //se o status do issue tiver pendente, trocar pra approved
-        if(chronicIssue.getStatus() == IssueStatus.IN_REVIEW){
+
+        if(chronicIssue.getStatus() == IssueStatus.IN_REVIEW
+                || chronicIssue.getStatus() == IssueStatus.PENDING) {
             chronicIssue.setStatus(IssueStatus.APPROVED);
+            chronicIssueRepository.save(chronicIssue);
         }
-        chronicIssueRepository.save(chronicIssue);
 
     }
 

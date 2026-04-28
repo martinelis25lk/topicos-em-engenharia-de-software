@@ -122,7 +122,7 @@ public class UserVehicleService {
         VehicleCatalogModel model = vehicleCatalogRepository
                 .findById(dto.getVehicleCatalogModelId())
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Catalog vehiclke not found, user vehicle service kkkkk"));
+                        new ResourceNotFoundException("Catalog vehicle not found, create firsta a vehicle in the catalog"));
 
 
         UserVehicle vehicle = new UserVehicle();

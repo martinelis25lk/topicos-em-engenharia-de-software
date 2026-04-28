@@ -19,7 +19,7 @@ public class VehicleCardMapper {
 
         VehicleCatalogModel model = vehicle.getVehicleCatalogModel();
 
-        dto.setFactoryHorsePower(vehicle.getVehicleCatalogModel().getFactoryHorsepower(dto.getFactoryHorsePower()));
+        dto.setFactoryHorsePower(vehicle.getVehicleCatalogModel().getFactoryHorsepower());
         dto.setCurrentHorsePower(vehicle.getCurrentHorsePower());
         dto.setFactoryTorque(vehicle.getVehicleCatalogModel().getFactoryTorque());
         dto.setCurrentTorque(vehicle.getCurrentTorque());

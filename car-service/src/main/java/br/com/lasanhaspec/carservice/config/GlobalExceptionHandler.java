@@ -55,7 +55,10 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorResponseDTO error = new ErrorResponseDTO(
-                LocalDateTime.now(), 500, "Internal Server Error", "An unexpected error occurred", request.getRequestURI()
+                LocalDateTime.now(), 500,
+                "Internal Server Error",
+                ex.getMessage(),
+                request.getRequestURI()
         );
 
         return ResponseEntity.status(500).body(error);

@@ -1,6 +1,7 @@
 package br.com.lasanhaspec.carservice.service;
 
 
+import br.com.lasanhaspec.carservice.domain.enums.AspirationType;
 import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
 import br.com.lasanhaspec.carservice.dto.CreateVehicleCatalogModelDTO;
 import br.com.lasanhaspec.carservice.dto.VehicleCatalogDTO;
@@ -49,7 +50,9 @@ public class VehicleCatalogService {
         vehicle.setBrand(dto.getBrand());
         vehicle.setEngineCode(dto.getEngineCode());
         vehicle.setFactoryHorsepower(dto.getFactoryHorsePower());
-        vehicle.setAspirationType(dto.getAspirationtype());
+        vehicle.setAspirationType(
+                AspirationType.valueOf(dto.getAspirationType())
+        );
         vehicle.setFactoryWeight(dto.getFactoryWeight());
         vehicle.setFactoryTorque(dto.getFactoryTorque());
 

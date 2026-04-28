@@ -88,6 +88,8 @@ public class ChronicIssue {
     private IssueStatus status;
     // PENDING, APPROVED, REJECTED
 
+    @ElementCollection
+    @CollectionTable(name = "chronic_issue_preventive_maintenance")
     private List<String> preventiveMaintenance;
 
     public List<String> getPreventiveMaintenance() {
@@ -243,8 +245,8 @@ public class ChronicIssue {
 
 
 
-    public Long setCreatedByUserId(Long createdByUserId) {
-        return createdByUserId;
+    public void setCreatedByUserId(Long createdByUserId) {
+        this.createdByUserId = createdByUserId;
     }
 
 
