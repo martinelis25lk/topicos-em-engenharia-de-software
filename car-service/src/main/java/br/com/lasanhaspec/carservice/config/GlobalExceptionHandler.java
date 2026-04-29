@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -64,6 +65,24 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(500).body(error);
     }
 
+
+
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAccessDenied(
+            AccessDeniedException ex,
+            HttpServletRequest request) {
+
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                403,
+                "Forbidden",
+                "Você não tem permissão para acessar este recurso",
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(403).body(error);
+    }
 
 
 

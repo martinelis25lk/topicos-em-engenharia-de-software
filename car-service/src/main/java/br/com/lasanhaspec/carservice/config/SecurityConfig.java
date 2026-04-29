@@ -4,6 +4,7 @@ package br.com.lasanhaspec.carservice.config;
 import br.com.lasanhaspec.carservice.filter.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,9 +38,25 @@ public class SecurityConfig {
             throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .exceptionHandling(ex -> ex
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(403);
+                            response.setContentType("application/json");
+                            response.getWriter().write(
+                                    "{\"status\":403," +
+                                            "\"error\":\"Forbidden\"," +
+                                            "\"message\":\"Você não tem permissão para acessar este recurso\"," +
+                                            "\"path\":\"" + request.getRequestURI() + "\"}"
+                            );
+                        })
+                )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()  //rotas publicas
-                        .anyRequest().authenticated()  //todoo resto
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/chronic-issues/*/approve").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/chronic-issues/*/reject").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/catalog/vehicles/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/catalog/vehicles/**").hasAuthority("ROLE_ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
