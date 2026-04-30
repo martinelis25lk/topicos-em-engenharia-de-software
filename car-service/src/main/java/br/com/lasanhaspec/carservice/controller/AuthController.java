@@ -1,6 +1,7 @@
 package br.com.lasanhaspec.carservice.controller;
 
 
+import br.com.lasanhaspec.carservice.domain.enums.Role;
 import br.com.lasanhaspec.carservice.domain.models.User;
 import br.com.lasanhaspec.carservice.dto.AuthRequestDTO;
 import br.com.lasanhaspec.carservice.repository.UserRepository;
@@ -54,6 +55,7 @@ public class AuthController {
         User user = new User();
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword())); // hasheia o password
+        user.setRole(Role.ROLE_USER);
 
 
         //3 salva no banco

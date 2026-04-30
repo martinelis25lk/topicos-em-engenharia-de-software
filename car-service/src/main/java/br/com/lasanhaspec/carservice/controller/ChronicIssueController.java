@@ -19,8 +19,6 @@ public class ChronicIssueController {
 
     private final ChronicIssueService chronicIssueService;
 
-
-
     public ChronicIssueController(ChronicIssueService chronicIssueService){
         this.chronicIssueService = chronicIssueService;
     }
@@ -29,7 +27,7 @@ public class ChronicIssueController {
 
 
 
-    // GET    /chronic-issues/models            getAllModelsWithIssues
+    // GET    /chronic-issues/models            todos os modelos com issue?
     @GetMapping("/models")
     public ResponseEntity<List<VehicleChronicSummaryDTO>> getAllModelsWithIssues(){
         return ResponseEntity.ok(chronicIssueService.getAllModelsWithIssues());
@@ -54,6 +52,15 @@ public class ChronicIssueController {
     }
 
 
+   // POST   /chronic-issues/{id}/occurrence   reportOccurrence
+   @PostMapping("/{id}/occurrence")
+   public ResponseEntity<Void> reportOccurrence(
+           @PathVariable("id") Long issueId,
+           @RequestParam Long vehicleId
+   ) {
+       chronicIssueService.reportOccurrence(issueId, vehicleId);
+       return ResponseEntity.ok().build();
+   }
 
 
     // POST   /chronic-issues                   createIssue
@@ -64,17 +71,32 @@ public class ChronicIssueController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ChronicIssueDetailDTO> updateIssue(@PathVariable Long id, @RequestBody ChronicIssueDTO dto){
+        return ResponseEntity.ok(chronicIssueService.updateChronicIssue(id, dto));
+    }
 
 
-   // POST   /chronic-issues/{id}/occurrence   reportOccurrence
-   @PostMapping("/{id}/occurrence")
-   public ResponseEntity<Void> reportOccurrence(
-           @PathVariable("id") Long issueId,
-           @RequestParam Long vehicleId
-   ) {
-       chronicIssueService.reportOccurrence(issueId, vehicleId);
-       return ResponseEntity.ok().build();
-   }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteIssue(@PathVariable Long id){
+        chronicIssueService.deleteIssue(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @PatchMapping("/{id}/approve")
+    public ResponseEntity<Void> approveIssue(@PathVariable Long id){
+        chronicIssueService.approveChronicIssue(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @PatchMapping("/{id}/reject")
+    public ResponseEntity<Void> rejectIssue(@PathVariable Long id){
+        chronicIssueService.rejectChronicIssue(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 
 

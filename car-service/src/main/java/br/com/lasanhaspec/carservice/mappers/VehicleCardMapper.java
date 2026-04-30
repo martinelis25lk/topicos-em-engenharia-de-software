@@ -3,8 +3,6 @@ package br.com.lasanhaspec.carservice.mappers;
 import br.com.lasanhaspec.carservice.domain.models.UserVehicle;
 import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
 import br.com.lasanhaspec.carservice.dto.VehicleCardDTO;
-import br.com.lasanhaspec.carservice.service.UserVehicleService;
-
 
 
 public class VehicleCardMapper {

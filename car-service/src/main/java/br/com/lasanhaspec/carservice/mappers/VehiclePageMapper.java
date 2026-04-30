@@ -50,16 +50,12 @@ public class VehiclePageMapper {
 
         TechnicalSpecsDTO specs = new TechnicalSpecsDTO();
 
-
-
-
         specs.setTransmissionType(vehicle.getTransmissionType() != null ? vehicle.getTransmissionType().name() : null
         );
         specs.setAspirationType(vehicle.getAspirationType() != null ? vehicle.getAspirationType().name() : null
         );
         specs.setFuelType(vehicle.getFuelType() != null ?   vehicle.getFuelType().name() : null
         );
-
 
         specs.setFactoryHorsepower(vehicle.getFactoryHorsepower());
         specs.setFactoryTorque(vehicle.getFactoryTorque());

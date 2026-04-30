@@ -39,6 +39,8 @@ public class VehicleCatalogModel {
     private Integer factoryTorque;
     private Integer factoryWeight;
 
+
+
     @Enumerated(EnumType.STRING)
     private AspirationType aspirationType;
 
