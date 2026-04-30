@@ -203,6 +203,8 @@ Projeto desenvolvido como iniciativa independente com foco em aprendizado práti
 
   ----
 
+- agora sim tive uma ideia interessante pra microserviço e que faça sentido com o rumo q a aplicação tá tomando, vou tentar integrar um serviço de disponibilidade de informações da tabela FIPE juntamente com um serviço de captura de informações de peças de carros, acho q vo ter q fazer algum tipo de scraping em sites de autopeças nacionais pra ter mais dados, tentar acessar as apis do mercado livre e ebay e tentar normalizar esses dados de forma consistente para serem servidos no meu projeto principal.
+
 
 
 
