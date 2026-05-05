@@ -45,8 +45,6 @@ public class VehicleCatalogModel {
     private AspirationType aspirationType;
 
 
-
-    //novoa atributos
     private Double displacement;
     private Integer cylinderCount;
     private Double topSpeed;
@@ -64,6 +62,38 @@ public class VehicleCatalogModel {
     @Enumerated(EnumType.STRING)
     private TransmissionModel transmissionModel;
     private Integer gearCount;
+
+
+    //campos pra correspondencia fipe
+    private String fipeBrandCode;
+    private String fipeModelCode;
+    private String fipeYearCode;
+
+
+
+    public String getFipeBrandCode() {
+        return fipeBrandCode;
+    }
+
+    public void setFipeBrandCode(String fipeBrandCode) {
+        this.fipeBrandCode = fipeBrandCode;
+    }
+
+    public String getFipeModelCode() {
+        return fipeModelCode;
+    }
+
+    public void setFipeModelCode(String fipeModelCode) {
+        this.fipeModelCode = fipeModelCode;
+    }
+
+    public String getFipeYearCode() {
+        return fipeYearCode;
+    }
+
+    public void setFipeYearCode(String fipeYearCode) {
+        this.fipeYearCode = fipeYearCode;
+    }
 
 
 

@@ -14,6 +14,39 @@ public class CreateVehicleCatalogModelDTO {
     private Integer factoryWeight ;
 
 
+    // campos para correspondência com a FIPE
+    private String fipeBrandCode;   // ex: "26" (BMW)
+    private String fipeModelCode;   // ex: "5571" (325i)
+    private String fipeYearCode;    // ex: "1995-1"
+
+
+
+    public String getFipeBrandCode() {
+        return fipeBrandCode;
+    }
+
+    public void setFipeBrandCode(String fipeBrandCode) {
+        this.fipeBrandCode = fipeBrandCode;
+    }
+
+    public String getFipeModelCode() {
+        return fipeModelCode;
+    }
+
+    public void setFipeModelCode(String fipeModelCode) {
+        this.fipeModelCode = fipeModelCode;
+    }
+
+    public String getFipeYearCode() {
+        return fipeYearCode;
+    }
+
+    public void setFipeYearCode(String fipeYearCode) {
+        this.fipeYearCode = fipeYearCode;
+    }
+
+
+
 
     public String getBrand() {
         return brand;

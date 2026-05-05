@@ -2,10 +2,7 @@ package br.com.lasanhaspec.carservice.mappers;
 
 import br.com.lasanhaspec.carservice.domain.models.CommunitySetup;
 import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
-import br.com.lasanhaspec.carservice.dto.CommunitySetupDTO;
-import br.com.lasanhaspec.carservice.dto.TechnicalSpecsDTO;
-import br.com.lasanhaspec.carservice.dto.VehiclePageDTO;
-import br.com.lasanhaspec.carservice.dto.VehicleSummaryDTO;
+import br.com.lasanhaspec.carservice.dto.*;
 
 import java.util.List;
 
@@ -14,7 +11,9 @@ public class VehiclePageMapper {
 
 
 
-    public static VehiclePageDTO toDTO(VehicleCatalogModel vehicle, List<CommunitySetup> setups){
+    public static VehiclePageDTO toDTO(VehicleCatalogModel vehicle,
+                                       List<CommunitySetup> setups,
+                                       FipeResponseDTO fipePrice){
 
         VehiclePageDTO dto = new VehiclePageDTO();
 
@@ -23,6 +22,12 @@ public class VehiclePageMapper {
 
         dto.setTechnicalSpecs(buildSpecs(vehicle));
         dto.setCommunitySetups(buildCommunitySetups(setups));
+
+        if(fipePrice!= null){
+            dto.setFipeCode(fipePrice.getCodigoFipe());
+            dto.setFipePrice(fipePrice.getValor());
+            dto.setFipeReferenceMonth(fipePrice.getMesReferencia());
+        }
 
         return dto;
     }
