@@ -56,6 +56,10 @@ public class VehicleCatalogService {
         vehicle.setFactoryWeight(dto.getFactoryWeight());
         vehicle.setFactoryTorque(dto.getFactoryTorque());
 
+        vehicle.setFipeBrandCode(dto.getFipeBrandCode());
+        vehicle.setFipeModelCode(dto.getFipeModelCode());
+        vehicle.setFipeYearCode(dto.getFipeYearCode());
+
 
         vehicleCatalogRepository.save(vehicle);
 
