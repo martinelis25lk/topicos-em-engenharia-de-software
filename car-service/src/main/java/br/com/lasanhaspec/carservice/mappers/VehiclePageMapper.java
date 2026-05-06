@@ -44,6 +44,7 @@ public class VehiclePageMapper {
         summary.setBrand(vehicle.getBrand());
         summary.setModel(vehicle.getModel());
         summary.setYear(vehicle.getYear());
+        summary.setId(vehicle.getId());
 
         return summary;
 

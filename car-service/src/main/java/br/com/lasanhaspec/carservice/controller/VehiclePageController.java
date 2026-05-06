@@ -14,14 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class VehiclePageController {
 
 
-
-    //precisa da instancia do dto
-    //precisa da instancia do service
-    //precisa de mapper? acho q n
-
     private final VehiclePageService vehiclePageService;
-
-
 
     public VehiclePageController(VehiclePageService vehiclePageService){
         this.vehiclePageService = vehiclePageService;
@@ -34,26 +27,6 @@ public class VehiclePageController {
         return vehiclePageService.buildVehiclePage(id);
 
     }
-
-
-
-
-
-    //CATÁLOGO
-    //GET    /catalog/vehicles
-    //POST   /catalog/vehicles
-    //GET    /catalog/vehicles/{id}
-
-    //VEÍCULOS DO USUÁRIO
-    //POST   /user-vehicles
-    //GET    /user-vehicles/{id}
-    //POST   /user-vehicles/{id}/images
-
-    //PÁGINA DO MODELO
-    //GET    /vehicles/{id}/page
-
-
-
 
 
 

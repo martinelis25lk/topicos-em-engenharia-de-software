@@ -16,15 +16,24 @@ public class MarketServiceClient {
     }
 
     public FipeResponseDTO getFipePrice(String brandCode, String modelCode, String yearCode) {
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/market/fipe/price")
-                        .queryParam("brandCode", brandCode)
-                        .queryParam("modelCode", modelCode)
-                        .queryParam("yearCode", yearCode)
-                        .build())
-                .retrieve()
-                .bodyToMono(FipeResponseDTO.class)
-                .block();
+        try {
+            return webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/market/fipe/price")
+                            .queryParam("brandCode", brandCode)
+                            .queryParam("modelCode", modelCode)
+                            .queryParam("yearCode", yearCode)
+                            .build())
+                    .retrieve()
+                    .bodyToMono(FipeResponseDTO.class)
+                    .block();
+        } catch (Exception e) {
+            System.err.println("Erro ao chamar FIPE: " + e.getMessage());
+            return null;
+        }
     }
+
+
+
+
 }
