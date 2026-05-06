@@ -42,16 +42,31 @@ O objetivo é centralizar conhecimento técnico, experiências reais e projetos 
 Andei me informando sobre microserviços e percebi que não é todo projeto que se deve começar de cara com esse tipo de arquitetura de software, e que em muitos casos há a necessidade de maturar o projeto em um
 monolitico bem estruturado e de acordo com a escalabilidade e necessidades do projeto, ir quebrando o sistema para uma nova concepção, mas como este projeto é mais como uma cobaia para fins didáticos e de diversão mesmo. Então o projeto segue uma abordagem baseada em microserviços, iniciando com um serviço central de veículos.
 
+
+## 🧠 Arquitetura (em evolução)
+
+Inicialmente o projeto nasceu como um monolito estruturado, mas está evoluindo para uma arquitetura baseada em serviços conforme novas necessidades surgem.
+
+Hoje a separação está caminhando para:
+
+- `car-service` → domínio principal (veículos, garagem, crônicos)
+- `market-service` → dados externos (FIPE, preços, análise de mercado)
+
+### Fluxo geral:
+
+```mermaid
 graph TD
-    Controller --> Service
-    Service --> Repository
-    Repository --> Database
-    Service --> SetupRulesService
-    UserVehicle --> CurrentSetup
-    CurrentSetup --> CommunitySetup
 
+    User((User / Frontend)) -->|HTTP| CarService[car-service]
 
+    CarService -->|REST| MarketService[market-service]
 
+    CarService -->|Evento: VehicleCreated| RabbitMQ[(RabbitMQ)]
+
+    RabbitMQ -->|Consume Event| MarketService
+
+    MarketService -->|HTTP| FIPE[FIPE API external]
+```
 
 ## 🇧🇷 Problema
 
