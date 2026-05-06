@@ -63,7 +63,7 @@ public class TechnicalSpecsDTO {
     public void setCylinderCount(Integer cylinderCount) {this.cylinderCount = cylinderCount;
     }
 
-    public double getTopSpeed() {return topSpeed;
+    public Double getTopSpeed() {return topSpeed;
     }
 
     public void setTopSpeed(Double topSpeed) {this.topSpeed = topSpeed;

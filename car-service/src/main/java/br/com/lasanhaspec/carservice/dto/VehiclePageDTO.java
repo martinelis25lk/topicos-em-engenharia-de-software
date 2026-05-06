@@ -17,6 +17,35 @@ public class VehiclePageDTO {
     private TechnicalSpecsDTO technicalSpecs;
     private List<CommunitySetupDTO> communitySetups;
 
+    private String fipePrice;
+    private String fipeReferenceMonth;
+    private String fipeCode;
+
+
+    public String getFipeReferenceMonth() {
+        return fipeReferenceMonth;
+    }
+
+    public void setFipeReferenceMonth(String fipeReferenceMonth) {
+        this.fipeReferenceMonth = fipeReferenceMonth;
+    }
+
+    public String getFipeCode() {
+        return fipeCode;
+    }
+
+    public void setFipeCode(String fipeCode) {
+        this.fipeCode = fipeCode;
+    }
+
+    public String getFipePrice() {
+        return fipePrice;
+    }
+
+    public void setFipePrice(String fipePrice) {
+        this.fipePrice = fipePrice;
+    }
+
 
 
     public VehicleSummaryDTO getVehicle() {
