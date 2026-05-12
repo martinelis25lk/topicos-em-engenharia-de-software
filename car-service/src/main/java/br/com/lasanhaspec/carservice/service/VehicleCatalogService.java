@@ -58,7 +58,7 @@ public class VehicleCatalogService {
 
         vehicle.setFipeBrandCode(dto.getFipeBrandCode());
         vehicle.setFipeModelCode(dto.getFipeModelCode());
-        vehicle.setFipeYearCode(dto.getFipeYearCode());
+        vehicle.setFipeYearCode(dto.getFipeYearCode()); 
 
 
         vehicleCatalogRepository.save(vehicle);
