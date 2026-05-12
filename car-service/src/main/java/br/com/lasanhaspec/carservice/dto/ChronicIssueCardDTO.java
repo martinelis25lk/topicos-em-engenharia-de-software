@@ -9,6 +9,7 @@ public class ChronicIssueCardDTO {
     private String title;
     private Integer millageMin, millageMax, costMin, costMax;
     private String description, severity;
+    private String preventiveMaintenance;
 
     public Long getId() {
         return id;

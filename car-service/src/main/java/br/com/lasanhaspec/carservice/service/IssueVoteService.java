@@ -5,10 +5,10 @@ import br.com.lasanhaspec.carservice.domain.enums.IssueStatus;
 import br.com.lasanhaspec.carservice.domain.enums.VoteType;
 import br.com.lasanhaspec.carservice.domain.models.ChronicIssue;
 import br.com.lasanhaspec.carservice.domain.models.IssueVote;
-import br.com.lasanhaspec.carservice.domain.models.VehicleImage;
 import br.com.lasanhaspec.carservice.exception.ResourceNotFoundException;
 import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
 import br.com.lasanhaspec.carservice.repository.IssueVoteRepository;
+import br.com.lasanhaspec.carservice.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,14 +19,17 @@ public class IssueVoteService {
 
     private final IssueVoteRepository issueVoteRepository;
     private final ChronicIssueRepository chronicIssueRepository;
+    private final UserRepository userRepository;
 
 
 
     public IssueVoteService(IssueVoteRepository issueVoteRepository,
-                            ChronicIssueRepository chronicIssueRepository){
+                            ChronicIssueRepository chronicIssueRepository,
+                            UserRepository userRepository){
 
         this.issueVoteRepository = issueVoteRepository;
         this.chronicIssueRepository = chronicIssueRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -37,13 +40,17 @@ public class IssueVoteService {
                 .orElseThrow(() -> new ResourceNotFoundException("Issue not found kkservice"));
 
 
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+
         Optional<IssueVote> existingVote =
                 issueVoteRepository.findByIssueIdAndUserId(issueId, userId);
 
-        IssueVote newIssueVote = null;
+
         if ((existingVote.isEmpty())) {
 
-            newIssueVote = new IssueVote();
+            IssueVote newIssueVote = new IssueVote();
             newIssueVote.setIssue(chronicIssue);
             newIssueVote.setUserId(userId);
             newIssueVote.setVoteType(voteType);
@@ -81,16 +88,16 @@ public class IssueVoteService {
 
             vote.setVoteType(voteType);
 
-
-            // se numero de votos da entidade cronicos for > 10,setar campo getusewfulvotes
-            if(chronicIssue.getUsefulVotes() >= 10
-                    && chronicIssue.getStatus() == IssueStatus.PENDING) {
-                chronicIssue.setStatus(IssueStatus.IN_REVIEW);
-            }
-
-
             issueVoteRepository.save(vote);
         }
+
+        // se numero de votos da entidade cronicos for > 10,setar campo getusewfulvotes
+        if(chronicIssue.getUsefulVotes() >= 10
+                && chronicIssue.getStatus() == IssueStatus.PENDING) {
+            chronicIssue.setStatus(IssueStatus.IN_REVIEW);
+        }
+
+
 
         chronicIssueRepository.save(chronicIssue);
 
