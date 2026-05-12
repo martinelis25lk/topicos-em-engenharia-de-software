@@ -223,3 +223,16 @@ Projeto desenvolvido como iniciativa independente com foco em aprendizado práti
 
 
 
+* Sobre a feture de consulta em apis de peças como do Mercado livre, ebay, eutoparts etc...
+
+- Crônico aprovado → peças relacionadas → custo estimado de manutenção
+- exemplo: Ford Fiesta 2004
+  Crônico aprovado: bomba d’água com vazamento
+  ↓
+  Peças relacionadas:
+- bomba d’água
+- junta
+- aditivo
+- correia auxiliar
+  ↓
+  Preço médio no mercado
