@@ -158,9 +158,12 @@ public class ChronicIssueService {
         ChronicIssue chronicIssue = chronicIssueRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("issue not found"));
 
-        if (chronicIssue.getStatus() == IssueStatus.IN_REVIEW){
-            chronicIssue.setStatus(IssueStatus.REJECTED);
+        if (chronicIssue.getStatus() != IssueStatus.IN_REVIEW
+                && chronicIssue.getStatus() != IssueStatus.PENDING) {
+            throw new BusinessException("Only pending or in review issues can be rejected");
         }
+
+        chronicIssue.setStatus(IssueStatus.REJECTED);
         chronicIssueRepository.save(chronicIssue);
 
     }

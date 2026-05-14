@@ -4,6 +4,11 @@ import br.com.lasanhaspec.carservice.domain.enums.VoteType;
 
 public class IssueVoteRequestDTO {
 
+
+    private Long userId;
+    private VoteType voteType;
+
+
     public Long getUserId() {
         return userId;
     }
@@ -12,16 +17,15 @@ public class IssueVoteRequestDTO {
         this.userId = userId;
     }
 
-    public VoteType getVoteType() {
-        return voteType;
-    }
+
 
     public void setVoteType(VoteType voteType) {
         this.voteType = voteType;
     }
 
-    private Long userId;
-    private VoteType voteType;
+    public VoteType getVoteType() {
+        return voteType;
+    }
 
 
 }

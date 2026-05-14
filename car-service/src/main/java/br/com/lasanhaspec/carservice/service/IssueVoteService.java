@@ -5,6 +5,8 @@ import br.com.lasanhaspec.carservice.domain.enums.IssueStatus;
 import br.com.lasanhaspec.carservice.domain.enums.VoteType;
 import br.com.lasanhaspec.carservice.domain.models.ChronicIssue;
 import br.com.lasanhaspec.carservice.domain.models.IssueVote;
+import br.com.lasanhaspec.carservice.domain.models.User;
+import br.com.lasanhaspec.carservice.exception.BusinessException;
 import br.com.lasanhaspec.carservice.exception.ResourceNotFoundException;
 import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
 import br.com.lasanhaspec.carservice.repository.IssueVoteRepository;
@@ -35,20 +37,19 @@ public class IssueVoteService {
 
 
     @Transactional
-    public void vote(Long issueId, Long userId, VoteType voteType) {
+    public void vote(Long issueId, String email, VoteType voteType) {
         ChronicIssue chronicIssue = chronicIssueRepository.findById(issueId)
-                .orElseThrow(() -> new ResourceNotFoundException("Issue not found kkservice"));
+                .orElseThrow(() -> new ResourceNotFoundException("Issue not found"));
 
-
-        userRepository.findById(userId)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+        Long userId = user.getId();
 
         Optional<IssueVote> existingVote =
                 issueVoteRepository.findByIssueIdAndUserId(issueId, userId);
 
-
-        if ((existingVote.isEmpty())) {
+        if (existingVote.isEmpty()) {
 
             IssueVote newIssueVote = new IssueVote();
             newIssueVote.setIssue(chronicIssue);
@@ -56,25 +57,22 @@ public class IssueVoteService {
             newIssueVote.setVoteType(voteType);
             issueVoteRepository.save(newIssueVote);
 
-
             if (voteType == VoteType.USEFUL) {
                 chronicIssue.setUsefulVotes(chronicIssue.getUsefulVotes() + 1);
             } else {
                 chronicIssue.setNotUsefulVotes(chronicIssue.getNotUsefulVotes() + 1);
             }
 
-
         } else {
 
             IssueVote vote = existingVote.get();
 
             if (vote.getVoteType() == voteType) {
-                return;
+                throw new BusinessException("You have already voted this way on this issue");
             }
 
             if (vote.getVoteType() == VoteType.USEFUL) {
                 chronicIssue.setUsefulVotes(chronicIssue.getUsefulVotes() - 1);
-
             } else {
                 chronicIssue.setNotUsefulVotes(chronicIssue.getNotUsefulVotes() - 1);
             }
@@ -85,23 +83,16 @@ public class IssueVoteService {
                 chronicIssue.setNotUsefulVotes(chronicIssue.getNotUsefulVotes() + 1);
             }
 
-
             vote.setVoteType(voteType);
-
             issueVoteRepository.save(vote);
         }
 
-        // se numero de votos da entidade cronicos for > 10,setar campo getusewfulvotes
-        if(chronicIssue.getUsefulVotes() >= 10
+        if (chronicIssue.getUsefulVotes() >= 10
                 && chronicIssue.getStatus() == IssueStatus.PENDING) {
             chronicIssue.setStatus(IssueStatus.IN_REVIEW);
         }
 
-
-
         chronicIssueRepository.save(chronicIssue);
-
-
     }
 
 
