@@ -10,4 +10,7 @@ import java.util.Optional;
 public interface UserVehicleRepository extends JpaRepository<UserVehicle, Long> {
 
     Optional <UserVehicle> findById(Long id);
+
+
+    List<UserVehicle> findByUserId(Long id);
 }
