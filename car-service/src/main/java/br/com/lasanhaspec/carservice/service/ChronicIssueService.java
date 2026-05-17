@@ -85,6 +85,7 @@ public class ChronicIssueService {
 
         System.out.println("ENTITY millageMax = " + chronic.getMillageMax());
         System.out.println("ENTITY preventiveMaintenance = " + chronic.getPreventiveMaintenance());
+        // teste github
 
 
 
@@ -94,6 +95,7 @@ public class ChronicIssueService {
 
 
     }
+
 
 
     public ChronicIssueDetailDTO updateChronicIssue(Long id, ChronicIssueDTO  dto){
