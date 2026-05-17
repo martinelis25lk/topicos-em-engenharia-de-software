@@ -1,10 +1,7 @@
 package br.com.lasanhaspec.carservice.controller;
 
 
-import br.com.lasanhaspec.carservice.dto.ChronicIssueDTO;
-import br.com.lasanhaspec.carservice.dto.ChronicIssueDetailDTO;
-import br.com.lasanhaspec.carservice.dto.VehicleChronicPageDTO;
-import br.com.lasanhaspec.carservice.dto.VehicleChronicSummaryDTO;
+import br.com.lasanhaspec.carservice.dto.*;
 import br.com.lasanhaspec.carservice.service.ChronicIssueService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,12 +50,12 @@ public class ChronicIssueController {
 
 
    // POST   /chronic-issues/{id}/occurrence   reportOccurrence
-   @PostMapping("/{id}/occurrence")
+   @PostMapping("/{issueId}/occurrence")
    public ResponseEntity<Void> reportOccurrence(
-           @PathVariable("id") Long issueId,
-           @RequestParam Long vehicleId
+           @PathVariable Long issueId,
+           @RequestBody ReportOccurrenceRequestDTO dto
    ) {
-       chronicIssueService.reportOccurrence(issueId, vehicleId);
+       chronicIssueService.reportOccurrence(issueId, dto);
        return ResponseEntity.ok().build();
    }
 

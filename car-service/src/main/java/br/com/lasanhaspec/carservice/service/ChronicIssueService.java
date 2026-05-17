@@ -62,6 +62,9 @@ public class ChronicIssueService {
 
         ChronicIssue chronic = new ChronicIssue();
 
+        System.out.println("DTO millageMax = " + chronicIssueDTO.getMillageMax());
+        System.out.println("DTO preventiveMaintenance = " + chronicIssueDTO.getPreventiveMaintenance());
+
 
         chronic.setVehicleCatalogModel(model);
         chronic.setTitle(chronicIssueDTO.getTitle());
@@ -80,12 +83,19 @@ public class ChronicIssueService {
         chronic.setPreventiveMaintenance(chronicIssueDTO.getPreventiveMaintenance());
         chronic.setCreatedByUserId(chronicIssueDTO.getCreatedByUserId());
 
+        System.out.println("ENTITY millageMax = " + chronic.getMillageMax());
+        System.out.println("ENTITY preventiveMaintenance = " + chronic.getPreventiveMaintenance());
+        // teste github
+
+
+
 
         // 3. salva e retorna o id
         return chronicIssueRepository.save(chronic).getId();
 
 
     }
+
 
 
     public ChronicIssueDetailDTO updateChronicIssue(Long id, ChronicIssueDTO  dto){
@@ -150,17 +160,15 @@ public class ChronicIssueService {
         ChronicIssue chronicIssue = chronicIssueRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("issue not found"));
 
-        if (chronicIssue.getStatus() == IssueStatus.IN_REVIEW){
-            chronicIssue.setStatus(IssueStatus.REJECTED);
+        if (chronicIssue.getStatus() != IssueStatus.IN_REVIEW
+                && chronicIssue.getStatus() != IssueStatus.PENDING) {
+            throw new BusinessException("Only pending or in review issues can be rejected");
         }
+
+        chronicIssue.setStatus(IssueStatus.REJECTED);
         chronicIssueRepository.save(chronicIssue);
 
     }
-
-
-
-
-
 
 
 
@@ -224,7 +232,9 @@ public class ChronicIssueService {
         cardDTO.setSeverity(chronicIssue.getSeverity().name());
         cardDTO.setTitle(chronicIssue.getTitle());
         cardDTO.setDescription(chronicIssue.getDescription());
+
         cardDTO.setMillageMax(chronicIssue.getMillageMax());
+
         cardDTO.setMillageMin(chronicIssue.getMillageMin());
         cardDTO.setCostMin(chronicIssue.getCostMin());
         cardDTO.setCostMax(chronicIssue.getCostMax());
@@ -335,42 +345,32 @@ public class ChronicIssueService {
 
 
     //registrar ocorrencia
-    public void reportOccurrence(Long issueId, Long vehicleId){
+    public void reportOccurrence(Long issueId, ReportOccurrenceRequestDTO dto) {
 
+        ChronicIssue issue = chronicIssueRepository.findById(issueId)
+                .orElseThrow(() -> new ResourceNotFoundException("Issue not found"));
 
-        //busca o chronicissue
-        ChronicIssue issue = chronicIssueRepository.findById(issueId).
-                orElseThrow(()-> new ResourceNotFoundException("Issue not found"));
+        UserVehicle vehicle = userVehicleRepository.findById(dto.getVehicleId())
+                .orElseThrow(() -> new ResourceNotFoundException("vehicle not found"));
 
-
-        //busca o uservehicle veiculo do usuario
-        UserVehicle vehicle = userVehicleRepository.findById(vehicleId).
-                orElseThrow(()-> new ResourceNotFoundException("vehicle not found"));
-
-
-        //há uma diferença entre saber se dois ids tem o mesmo valor e se dois objetos long são a mesma instancia em memoria
-
-        if(!vehicle.getVehicleCatalogModel().getId()
-                .equals(issue.getVehicleCatalogModel().getId())){
-            throw new BusinessException("vehicle from uservehicle anf issue vehicle do not match");
+        if (!vehicle.getVehicleCatalogModel().getId()
+                .equals(issue.getVehicleCatalogModel().getId())) {
+            throw new BusinessException("vehicle from uservehicle and issue vehicle do not match");
         }
 
-
-        //validando duplicidade
-        if(issueOccurrenceRepository.existsByChronicIssueIdAndUserVehicleId(issueId,vehicleId)){
-            throw new BusinessException("occurence already registed to this vehicle");
+        if (issueOccurrenceRepository.existsByChronicIssueIdAndUserVehicleId(issueId, dto.getVehicleId())) {
+            throw new BusinessException("occurrence already registered to this vehicle");
         }
-
-
-
 
         IssueOcurrence occurrence = new IssueOcurrence();
         occurrence.setChronicIssue(issue);
         occurrence.setUserVehicle(vehicle);
+        occurrence.setMillageAtOccurrence(dto.getMillageAtOccurrence());
+        occurrence.setRepairCost(dto.getRepairCost());
+        occurrence.setDescription(dto.getDescription());
 
         issueOccurrenceRepository.save(occurrence);
 
-        // incrementa o contador de ocorrências no crônico
         issue.setOccurrences(issue.getOccurrences() + 1);
         chronicIssueRepository.save(issue);
     }

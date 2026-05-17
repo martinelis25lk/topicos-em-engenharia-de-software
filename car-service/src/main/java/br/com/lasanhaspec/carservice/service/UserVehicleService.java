@@ -1,6 +1,7 @@
 package br.com.lasanhaspec.carservice.service;
 
 
+import br.com.lasanhaspec.carservice.domain.models.User;
 import br.com.lasanhaspec.carservice.domain.models.UserVehicle;
 import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
 import br.com.lasanhaspec.carservice.domain.models.VehicleImage;
@@ -10,6 +11,7 @@ import br.com.lasanhaspec.carservice.exception.BusinessException;
 import br.com.lasanhaspec.carservice.exception.ResourceNotFoundException;
 import br.com.lasanhaspec.carservice.infrastructure.storage.S3StorageService;
 import br.com.lasanhaspec.carservice.mappers.VehicleCardMapper;
+import br.com.lasanhaspec.carservice.repository.UserRepository;
 import br.com.lasanhaspec.carservice.repository.UserVehicleRepository;
 import br.com.lasanhaspec.carservice.repository.VehicleCatalogRepository;
 import br.com.lasanhaspec.carservice.repository.VehicleImageRepository;
@@ -25,27 +27,26 @@ import java.util.List;
 public class UserVehicleService {
 
 
-
     private final UserVehicleRepository userVehicleRepository;
     private final VehicleImageRepository vehicleImageRepository;
     private final S3StorageService storageService;
     private final VehicleCatalogRepository vehicleCatalogRepository;
-
+    private final UserRepository userRepository;
 
     private static final long MAX_SIZE = 5 * 1024 * 1024; // 5mb
-
-
 
     public UserVehicleService(
             UserVehicleRepository userVehicleRepository,
             S3StorageService storageService,
             VehicleCatalogRepository vehicleCatalogRepository,
-            VehicleImageRepository vehicleImageRepository
+            VehicleImageRepository vehicleImageRepository,
+            UserRepository userRepository
             ){
         this.userVehicleRepository = userVehicleRepository;
         this.storageService = storageService;
         this.vehicleCatalogRepository = vehicleCatalogRepository;
         this.vehicleImageRepository = vehicleImageRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -117,30 +118,90 @@ public class UserVehicleService {
 
 
 
+    public VehicleCardDTO getVehicleByIdForAuthenticatedUser(Long vehicleId, String email) {
 
-    public Long createVehicle(CreateUserVehicleDTO dto){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        UserVehicle vehicle = userVehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
+
+        if (!vehicle.getUserId().equals(user.getId())) {
+            throw new BusinessException("You do not have permission to access this vehicle");
+        }
+
+        return VehicleCardMapper.toDTO(vehicle);
+    }
+
+
+    public VehicleCardDTO updateVehicleFromAuthenticatedUser(
+            Long vehicleId,
+            CreateUserVehicleDTO dto,
+            String email
+    ) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        UserVehicle vehicle = userVehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
+
+        if (!vehicle.getUserId().equals(user.getId())) {
+            throw new BusinessException("You do not have permission to update this vehicle");
+        }
+
+        VehicleCatalogModel model = vehicleCatalogRepository.findById(dto.getVehicleCatalogModelId())
+                .orElseThrow(() -> new ResourceNotFoundException("Catalog vehicle not found"));
+
+        vehicle.setVehicleCatalogModel(model);
+        vehicle.setNickname(dto.getNickName());
+        vehicle.setCurrentHorsePower(dto.getCurrentHorsePower());
+        vehicle.setCurrentTorque(dto.getCurrentTorque());
+        vehicle.setCurrentWeight(dto.getCurrentWeight());
+
+        UserVehicle saved = userVehicleRepository.save(vehicle);
+
+        return VehicleCardMapper.toDTO(saved);
+    }
+
+
+
+    public void deleteVehicleFromAuthenticatedUser(Long vehicleId, String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        UserVehicle vehicle = userVehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
+
+        if (!vehicle.getUserId().equals(user.getId())) {
+            throw new BusinessException("You do not have permission to delete this vehicle");
+        }
+
+        userVehicleRepository.delete(vehicle);
+    }
+
+
+
+    public Long createUserVehicle(CreateUserVehicleDTO dto, String email){
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()->
+                        new ResourceNotFoundException("User not found"));
+
         VehicleCatalogModel model = vehicleCatalogRepository
                 .findById(dto.getVehicleCatalogModelId())
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Catalog vehicle not found, create firsta a vehicle in the catalog"));
-
+                        new ResourceNotFoundException("Catalog vehicle not found, create first a a vehicle in the catalog"));
 
         UserVehicle vehicle = new UserVehicle();
-        vehicle.setUserId(dto.getUserId());
-
+        vehicle.setUserId(user.getId());
         vehicle.setVehicleCatalogModel(model);
-
         vehicle.setNickname(dto.getNickName());
         vehicle.setCurrentHorsePower(dto.getCurrentHorsePower());
         vehicle.setCurrentWeight(dto.getCurrentWeight());
         vehicle.setCurrentTorque(dto.getCurrentTorque());
-
-        System.out.println("ENTITY HP: " + vehicle.getCurrentHorsePower());
-
         vehicle.setActive(true);
-
         return userVehicleRepository.save(vehicle).getId();
-
     }
 
 
@@ -248,6 +309,18 @@ public class UserVehicleService {
     }
 
 
+    public List<VehicleCardDTO> getVehiclesFromAuthenticatedUser(String email) {
 
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
+
+        List<UserVehicle> vehicles =
+                userVehicleRepository.findByUserId(user.getId());
+
+        return vehicles.stream()
+                .map(VehicleCardMapper::toDTO)
+                .toList();
+    }
 }
 

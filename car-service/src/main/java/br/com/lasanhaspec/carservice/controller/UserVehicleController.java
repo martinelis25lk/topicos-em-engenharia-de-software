@@ -5,6 +5,7 @@ import br.com.lasanhaspec.carservice.dto.CreateUserVehicleDTO;
 import br.com.lasanhaspec.carservice.dto.VehicleCardDTO;
 import br.com.lasanhaspec.carservice.service.UserVehicleService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,10 +50,12 @@ public class UserVehicleController {
 
 
     @PostMapping
-    public ResponseEntity<Long>createVehicle(@RequestBody CreateUserVehicleDTO dto){
+    public ResponseEntity<Long>createUserVehicle(
+            @RequestBody CreateUserVehicleDTO dto,
+            Authentication authentication){
 
-        Long id = userVehicleService.createVehicle(dto);
-        System.out.println("DTO HP: " + dto.getCurrentHorsePower());
+        String email = authentication.getName();
+        Long id = userVehicleService.createUserVehicle(dto, email);
         return ResponseEntity.ok(id);
     }
 
@@ -73,17 +76,21 @@ public class UserVehicleController {
     }
 
 
-    //retorna lista de veiculos do usuario
+    //retorna lista de veiculos cadastrados em todas as garagens
     @GetMapping()
     public ResponseEntity<List<VehicleCardDTO>> getUserVehicles(){
         return ResponseEntity.ok(userVehicleService.getUserVehicles());
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<VehicleCardDTO> getOneUserVehicles(@PathVariable Long id){
-        return ResponseEntity.ok(userVehicleService.getVehicleById(id));
-        // revisar os metodos no service e repositorio
+
+    @GetMapping("/me")
+    public ResponseEntity<List<VehicleCardDTO>> getMyVehicles(Authentication authentication) {
+        String email = authentication.getName();
+
+        return ResponseEntity.ok(
+                userVehicleService.getVehiclesFromAuthenticatedUser(email)
+        );
     }
 
 
@@ -97,16 +104,43 @@ public class UserVehicleController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<VehicleCardDTO> updateVehicle(@PathVariable Long id, @RequestBody CreateUserVehicleDTO dto){
-        return ResponseEntity.ok(userVehicleService.udpateVehicle(id, dto));
+    public ResponseEntity<VehicleCardDTO> updateVehicle(
+            @PathVariable Long id,
+            @RequestBody CreateUserVehicleDTO dto,
+            Authentication authentication
+    ) {
+        String email = authentication.getName();
+
+        return ResponseEntity.ok(
+                userVehicleService.updateVehicleFromAuthenticatedUser(id, dto, email)
+        );
     }
 
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVehicle(@PathVariable Long id){
-        userVehicleService.deleteVehicle(id);
+    public ResponseEntity<Void> deleteVehicle(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
+        String email = authentication.getName();
+
+        userVehicleService.deleteVehicleFromAuthenticatedUser(id, email);
+
         return ResponseEntity.noContent().build();
+    }
+
+
+    @GetMapping("/{vehicleId}")
+    public ResponseEntity<VehicleCardDTO> getOneUserVehicle(
+            @PathVariable Long vehicleId,
+            Authentication authentication
+    ) {
+        String email = authentication.getName();
+
+        return ResponseEntity.ok(
+                userVehicleService.getVehicleByIdForAuthenticatedUser(vehicleId, email)
+        );
     }
 
 
