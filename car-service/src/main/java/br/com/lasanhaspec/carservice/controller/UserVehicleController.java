@@ -28,12 +28,14 @@ public class UserVehicleController {
     @PostMapping("/{vehicleId}/images")
     public ResponseEntity<String> uploadImage(
             @PathVariable Long vehicleId,
-            @RequestParam("file") MultipartFile file
+            @RequestParam("file") MultipartFile file,
+            Authentication authentication
     ) {
 
-        System.out.println("CHEGOU NO CONTROLLER");
-        String imageUrl = userVehicleService.uploadVehicleImage(vehicleId, file);
-        System.out.println("CHEGOU NO CONTROLLER");
+
+
+        String email = authentication.getName();
+        String imageUrl = userVehicleService.uploadVehicleImage(vehicleId, file, email);
         return ResponseEntity.ok(imageUrl);
     }
 
@@ -42,9 +44,11 @@ public class UserVehicleController {
     @PutMapping("/{vehicleId}/images/{imageId}/primary")
     public ResponseEntity<Void> setPrimaryImage(
             @PathVariable Long vehicleId,
-            @PathVariable Long imageId
+            @PathVariable Long imageId,
+            Authentication authentication
     ) {
-        userVehicleService.setPrimaryImage(vehicleId, imageId);
+        String email = authentication.getName();
+        userVehicleService.setPrimaryImage(vehicleId, imageId, email);
         return ResponseEntity.noContent().build();
     }
 
@@ -67,11 +71,14 @@ public class UserVehicleController {
     }
 
 
-    @DeleteMapping("/vehicles/{vehicleId}/images/{imageId}")
+    @DeleteMapping("/{vehicleId}/images/{imageId}")
     public ResponseEntity<Void> deleteImage(
             @PathVariable Long vehicleId,
-            @PathVariable Long imageId){
-        userVehicleService.deleteVehicleImage(vehicleId, imageId);
+            @PathVariable Long imageId,
+            Authentication authentication){
+
+        String email = authentication.getName();
+        userVehicleService.deleteVehicleImage(vehicleId, imageId, email);
         return ResponseEntity.noContent().build();
     }
 
@@ -92,15 +99,6 @@ public class UserVehicleController {
                 userVehicleService.getVehiclesFromAuthenticatedUser(email)
         );
     }
-
-
-
-    @GetMapping("/ping")
-    public String ping() {
-        return "pong";
-    }
-
-
 
 
     @PutMapping("/{id}")

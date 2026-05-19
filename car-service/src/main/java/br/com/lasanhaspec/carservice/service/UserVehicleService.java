@@ -51,7 +51,9 @@ public class UserVehicleService {
 
 
 
-    public String uploadVehicleImage(Long vehicleId, MultipartFile file) {
+    public String uploadVehicleImage(Long vehicleId, MultipartFile file, String email) {
+
+        UserVehicle vhc = getOwnedVehicle(vehicleId, email);
 
 
         UserVehicle vehicle = userVehicleRepository.findById(vehicleId)
@@ -205,7 +207,18 @@ public class UserVehicleService {
     }
 
 
-    public void deleteVehicleImage(Long vehicleId, Long imageId){
+    public void deleteVehicleImage(Long vehicleId, Long imageId, String email){
+
+        UserVehicle vehicle = getOwnedVehicle(vehicleId, email);
+
+        VehicleImage image1 = vehicleImageRepository.findById(imageId)
+                .orElseThrow(() -> new ResourceNotFoundException("Image not found"));
+
+        if (!image1.getUserVehicle().getId().equals(vehicle.getId())) {
+            throw new BusinessException("Image does not belong to this vehicle");
+        }
+
+
         VehicleImage image = vehicleImageRepository.findById(imageId)
                 .orElseThrow(()-> new ResourceNotFoundException("Image not found, kkk uservehicle service"));
 
@@ -265,32 +278,20 @@ public class UserVehicleService {
 
 
     @Transactional
-    public void setPrimaryImage(Long vehicleId, Long imageId) {
+    public void setPrimaryImage(Long vehicleId, Long imageId, String email) {
 
-
-
-        //buscar imagem
-        VehicleImage image = new VehicleImage();
-        image = vehicleImageRepository.findById(imageId)
-                .orElseThrow(() -> new ResourceNotFoundException("image not found kk vehcileservice"));
-
-        System.out.println("TESTES HHHHHH service DE PRIMARY");
-
-        //valida se petence ao veiculo
-        if(!image.getUserVehicle().getId().equals(vehicleId)){
-            throw new BusinessException("this image does not belong to the vehicle");
-
+        UserVehicle vehicle = getOwnedVehicle(vehicleId, email);
+        VehicleImage image = vehicleImageRepository.findById(imageId)
+                .orElseThrow(() -> new ResourceNotFoundException("Image not found"));
+        if (!image.getUserVehicle().getId().equals(vehicle.getId())) {
+            throw new BusinessException("Image does not belong to this vehicle");
         }
-
-        //remove primary das outras
-        vehicleImageRepository.clearPrimaryByVehicle(vehicleId);
-
-
+        vehicle.getImages().forEach(img -> img.setPrimaryImage(false));
 
         image.setPrimaryImage(true);
 
+        vehicleImageRepository.saveAll(vehicle.getImages());
         vehicleImageRepository.save(image);
-
 
     }
 
@@ -322,5 +323,22 @@ public class UserVehicleService {
                 .map(VehicleCardMapper::toDTO)
                 .toList();
     }
+
+
+    private UserVehicle getOwnedVehicle(Long vehicleId, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        UserVehicle vehicle = userVehicleRepository.findById(vehicleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found"));
+
+        if (!vehicle.getUserId().equals(user.getId())) {
+            throw new BusinessException("You do not have permission to access this vehicle");
+        }
+
+        return vehicle;
+    }
+
+
 }
 
