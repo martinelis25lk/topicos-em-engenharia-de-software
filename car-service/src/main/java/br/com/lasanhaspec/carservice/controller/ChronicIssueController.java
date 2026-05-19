@@ -70,7 +70,7 @@ public class ChronicIssueController {
 
         String email = authentication.getName();
         Long id = chronicIssueService.createIssue(dto, email);
-        return ResponseEntity.ok(chronicIssueService.createIssue(dto));
+        return ResponseEntity.ok(id);
 
     }
 

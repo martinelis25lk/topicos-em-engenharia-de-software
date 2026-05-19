@@ -55,7 +55,6 @@ public class UserVehicleService {
 
         UserVehicle vhc = getOwnedVehicle(vehicleId, email);
 
-
         UserVehicle vehicle = userVehicleRepository.findById(vehicleId)
                 .orElseThrow(() -> new ResourceNotFoundException("vehicle not found UserVehicleService KKKKK"));
 
@@ -65,17 +64,13 @@ public class UserVehicleService {
             throw new BusinessException("Only 5 images per vehicle");
         }
 
-
-
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("Arquivo vazio");
         }
 
-
         if (file.getSize() > MAX_SIZE) {
             throw new IllegalArgumentException("Arquivo muito grande");
         }
-
 
         String contentType = file.getContentType();
 
@@ -83,10 +78,7 @@ public class UserVehicleService {
             throw new IllegalArgumentException("Apenas imagens são permitidas");
         }
 
-
         String filename = file.getOriginalFilename();
-
-
 
         if (filename == null ||
                 !(filename.toLowerCase().endsWith(".jpg") ||
@@ -96,9 +88,7 @@ public class UserVehicleService {
             throw new IllegalArgumentException("Formato de imagem não suportado");
         }
 
-
         S3StorageService.UploadResult result = storageService.uploadFile(file);
-
 
         VehicleImage image = new VehicleImage();
         image.setUserVehicle(vehicle);
@@ -110,7 +100,6 @@ public class UserVehicleService {
 
         boolean hasImages = vehicleImageRepository.existsByUserVehicleId(vehicleId);
         image.setPrimaryImage(!hasImages);
-
 
         vehicleImageRepository.save(image);
         System.out.println("SALVOU IMAGEM NO BANCO");
@@ -211,16 +200,12 @@ public class UserVehicleService {
 
         UserVehicle vehicle = getOwnedVehicle(vehicleId, email);
 
-        VehicleImage image1 = vehicleImageRepository.findById(imageId)
+        VehicleImage image = vehicleImageRepository.findById(imageId)
                 .orElseThrow(() -> new ResourceNotFoundException("Image not found"));
 
-        if (!image1.getUserVehicle().getId().equals(vehicle.getId())) {
+        if (!image.getUserVehicle().getId().equals(vehicle.getId())) {
             throw new BusinessException("Image does not belong to this vehicle");
         }
-
-
-        VehicleImage image = vehicleImageRepository.findById(imageId)
-                .orElseThrow(()-> new ResourceNotFoundException("Image not found, kkk uservehicle service"));
 
 
         if (image.getUserVehicle() == null ||

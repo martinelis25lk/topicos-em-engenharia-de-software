@@ -79,7 +79,7 @@ public class ChronicIssueService {
         chronic.setRepairComplexity(RepairComplexity.valueOf(chronicIssueDTO.getRepairComplexity()));
         chronic.setSymptoms(chronicIssueDTO.getSymptoms());
         chronic.setPreventiveMaintenance(chronicIssueDTO.getPreventiveMaintenance());
-        chronic.setCreatedByUserId(chronicIssueDTO.getCreatedByUserId());
+        chronic.setCreatedByUserId(user.getId());
 
         return chronicIssueRepository.save(chronic).getId();
 
