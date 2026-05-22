@@ -62,7 +62,7 @@ public class ChronicIssueController {
 
 
     // POST   /chronic-issues                   createIssue
-    @PostMapping("/create-issue")
+    @PostMapping()
     public ResponseEntity<Long> createIssue(
             @RequestBody  ChronicIssueDTO dto,
             Authentication authentication

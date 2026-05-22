@@ -9,8 +9,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
+
+
 
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -63,12 +64,6 @@ public class UserVehicleController {
         return ResponseEntity.ok(id);
     }
 
-
-    @PostMapping("/teste")
-    public String teste() {
-        System.out.println("BATEU NO TESTE");
-        return "ok";
-    }
 
 
     @DeleteMapping("/{vehicleId}/images/{imageId}")

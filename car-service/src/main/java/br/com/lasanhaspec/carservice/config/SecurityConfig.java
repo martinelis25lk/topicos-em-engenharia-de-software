@@ -51,7 +51,9 @@ public class SecurityConfig {
                         })
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**", "/swagger-ui/**",
+                                "/v3/api-docs/**").permitAll()
+
                         .requestMatchers(HttpMethod.PATCH, "/chronic-issues/*/approve").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/chronic-issues/*/reject").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/catalog/vehicles/**").hasAuthority("ROLE_ADMIN")
