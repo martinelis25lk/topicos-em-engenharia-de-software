@@ -325,5 +325,17 @@ public class UserVehicleService {
     }
 
 
+
+    public List<VehicleCardDTO> getFeedVehicles(){
+        return userVehicleRepository.findFeedVehiclesWithImages()
+                .stream()
+                .map(VehicleCardMapper::toDTO)
+                .toList();
+
+    }
+
+
+
+
 }
 

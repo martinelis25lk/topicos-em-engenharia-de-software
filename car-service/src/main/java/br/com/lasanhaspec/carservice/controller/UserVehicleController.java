@@ -123,6 +123,11 @@ public class UserVehicleController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("feed")
+    public ResponseEntity<List<VehicleCardDTO>> getFeedVehicles(){
+        return ResponseEntity.ok(userVehicleService.getFeedVehicles());
+    }
+
 
     @GetMapping("/{vehicleId}")
     public ResponseEntity<VehicleCardDTO> getOneUserVehicle(
@@ -135,6 +140,9 @@ public class UserVehicleController {
                 userVehicleService.getVehicleByIdForAuthenticatedUser(vehicleId, email)
         );
     }
+
+
+
 
 
 
