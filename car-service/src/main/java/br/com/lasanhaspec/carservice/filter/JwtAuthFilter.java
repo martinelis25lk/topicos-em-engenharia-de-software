@@ -38,41 +38,38 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     public void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException{
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
+        String path = request.getServletPath();
 
-        //pega o header authorization do request
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String userEmail;
-
-
-
-        // 2. se não tem header ou não começa com "Bearer ", deixa passar
-
-        if (authHeader == null ||  !authHeader.startsWith("Bearer")){
+        // ignora autenticação JWT para endpoints públicos de auth
+        if (path.startsWith("/auth/")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 3. extrai o token removendo o prefixo "Bearer "
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userEmail;
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         jwt = authHeader.substring(7);
 
-
-
-        //4 etxrai o email de dentro do token
         userEmail = jwtService.extractUserName(jwt);
 
+        if (
+                userEmail != null &&
+                        SecurityContextHolder.getContext().getAuthentication() == null
+        ) {
+            UserDetails userDetails =
+                    userDetailsService.loadUserByUsername(userEmail);
 
-        // 5. se tem email e o usuário ainda não está autenticado
-        if (userEmail != null &&
-                SecurityContextHolder.getContext().getAuthentication() == null) {
-
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-
-            // 6. valida o token
             if (jwtService.isTokenValid(jwt, userDetails)) {
-
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
@@ -84,14 +81,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
 
-                // 7. registra o usuário como autenticado no Spring Security
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
         filterChain.doFilter(request, response);
     }
-}
+
+    }
 
 
 

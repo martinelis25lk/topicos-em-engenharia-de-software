@@ -54,6 +54,7 @@ public class AuthController {
         //2 cria o usuário
         User user = new User();
         user.setEmail(dto.getEmail());
+        user.setUsername(dto.getUsername());
         user.setPassword(passwordEncoder.encode(dto.getPassword())); // hasheia o password
         user.setRole(Role.ROLE_USER);
 
@@ -61,6 +62,8 @@ public class AuthController {
         //3 salva no banco
 
         userRepository.save(user);
+
+
 
         // 4 gera o token
         String token = jwtService.generateToken(user);
@@ -82,6 +85,9 @@ public class AuthController {
                         dto.getPassword())
 
         );
+
+        System.out.println("EMAIL RECEBIDO: " + dto.getEmail());
+        System.out.println("SENHA RECEBIDA: " + dto.getPassword());
 
 
         //busca o usuário
