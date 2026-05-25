@@ -9,10 +9,7 @@ import br.com.lasanhaspec.carservice.domain.models.*;
 import br.com.lasanhaspec.carservice.dto.*;
 import br.com.lasanhaspec.carservice.exception.BusinessException;
 import br.com.lasanhaspec.carservice.exception.ResourceNotFoundException;
-import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
-import br.com.lasanhaspec.carservice.repository.IssueOccurrenceRepository;
-import br.com.lasanhaspec.carservice.repository.UserVehicleRepository;
-import br.com.lasanhaspec.carservice.repository.VehicleCatalogRepository;
+import br.com.lasanhaspec.carservice.repository.*;
 import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +25,7 @@ public class ChronicIssueService {
     private final IssueOccurrenceRepository issueOccurrenceRepository;
     private final ReliabilityScoreCalculator reliabilityScoreCalculator;
     private final UserVehicleRepository userVehicleRepository;
+    private final UserRepository userRepository;
 
 
 
@@ -36,14 +34,15 @@ public class ChronicIssueService {
             VehicleCatalogRepository vehicleCatalogRepository,
             IssueOccurrenceRepository issueOccurrenceRepository,
             ReliabilityScoreCalculator reliabilityScoreCalculator,
-            UserVehicleRepository userVehicleRepository
-
+            UserVehicleRepository userVehicleRepository,
+            UserRepository userRepository
     ){
         this.chronicIssueRepository = chronicIssueRepository;
         this.vehicleCatalogRepository = vehicleCatalogRepository;
         this.issueOccurrenceRepository = issueOccurrenceRepository;
         this.reliabilityScoreCalculator = reliabilityScoreCalculator;
         this.userVehicleRepository = userVehicleRepository;
+        this.userRepository = userRepository;
 
     }
 
@@ -51,7 +50,10 @@ public class ChronicIssueService {
 
 
     //criar um novco cronico
-    public Long createIssue(ChronicIssueDTO chronicIssueDTO){
+    public Long createIssue(ChronicIssueDTO chronicIssueDTO, String email){
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         VehicleCatalogModel model = vehicleCatalogRepository
                 .findById(chronicIssueDTO.getVehicleCatalogModelId())
@@ -61,10 +63,6 @@ public class ChronicIssueService {
         //cria a entidade nova
 
         ChronicIssue chronic = new ChronicIssue();
-
-        System.out.println("DTO millageMax = " + chronicIssueDTO.getMillageMax());
-        System.out.println("DTO preventiveMaintenance = " + chronicIssueDTO.getPreventiveMaintenance());
-
 
         chronic.setVehicleCatalogModel(model);
         chronic.setTitle(chronicIssueDTO.getTitle());
@@ -81,16 +79,8 @@ public class ChronicIssueService {
         chronic.setRepairComplexity(RepairComplexity.valueOf(chronicIssueDTO.getRepairComplexity()));
         chronic.setSymptoms(chronicIssueDTO.getSymptoms());
         chronic.setPreventiveMaintenance(chronicIssueDTO.getPreventiveMaintenance());
-        chronic.setCreatedByUserId(chronicIssueDTO.getCreatedByUserId());
+        chronic.setCreatedByUserId(user.getId());
 
-        System.out.println("ENTITY millageMax = " + chronic.getMillageMax());
-        System.out.println("ENTITY preventiveMaintenance = " + chronic.getPreventiveMaintenance());
-        // teste github
-
-
-
-
-        // 3. salva e retorna o id
         return chronicIssueRepository.save(chronic).getId();
 
 

@@ -4,6 +4,7 @@ package br.com.lasanhaspec.carservice.controller;
 import br.com.lasanhaspec.carservice.dto.*;
 import br.com.lasanhaspec.carservice.service.ChronicIssueService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -61,9 +62,15 @@ public class ChronicIssueController {
 
 
     // POST   /chronic-issues                   createIssue
-    @PostMapping("/create-issue")
-    public ResponseEntity<Long> createIssue(@RequestBody  ChronicIssueDTO dto){
-        return ResponseEntity.ok(chronicIssueService.createIssue(dto));
+    @PostMapping()
+    public ResponseEntity<Long> createIssue(
+            @RequestBody  ChronicIssueDTO dto,
+            Authentication authentication
+            ){
+
+        String email = authentication.getName();
+        Long id = chronicIssueService.createIssue(dto, email);
+        return ResponseEntity.ok(id);
 
     }
 
