@@ -1,24 +1,22 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import GaragePage from "../pages/GaragePage"; // default import
-import  VehiclePage  from "../pages/VehiclePage"; // named imports
-
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import GaragePage from "../pages/GaragePage";
+import VehiclePage from "../pages/VehiclePage";
+import LoginPage from "../pages/LoginPage";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export function AppRouter() {
+  return (
+    <BrowserRouter>
+      <Routes>
 
- return (
+        <Route path="/login" element={<LoginPage />} />
 
-  <BrowserRouter>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<GaragePage />} />
+          <Route path="/vehicle/:id" element={<VehiclePage />} />
+        </Route>
 
-   <Routes>
-
-    <Route path="/" element={<GaragePage />} />
-    <Route path="/vehicle/:id" element={<VehiclePage />} />
-
-   </Routes>
-
-  </BrowserRouter>
-
- )
-
+      </Routes>
+    </BrowserRouter>
+  );
 }
