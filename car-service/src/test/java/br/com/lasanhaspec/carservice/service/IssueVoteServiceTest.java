@@ -6,6 +6,7 @@ import br.com.lasanhaspec.carservice.domain.enums.VoteType;
 import br.com.lasanhaspec.carservice.domain.models.ChronicIssue;
 import br.com.lasanhaspec.carservice.domain.models.IssueVote;
 import br.com.lasanhaspec.carservice.domain.models.User;
+import br.com.lasanhaspec.carservice.exception.BusinessException;
 import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
 import br.com.lasanhaspec.carservice.repository.IssueVoteRepository;
 import br.com.lasanhaspec.carservice.repository.UserRepository;
@@ -19,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.any;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -74,4 +76,28 @@ public class IssueVoteServiceTest {
         verify(issueVoteRepository).save(ArgumentMatchers.any(IssueVote.class));
         verify(chronicIssueRepository).save(issue);
     }
-}
+
+
+
+    @Test
+    void shouldThrowWhenUserVotesSameWayTwice(){
+
+        Long issueId = 1L;
+        Long userId = 2L;
+        String email = "user@test.com";
+
+        IssueVote existingVote = new IssueVote();
+        existingVote.setVoteType(VoteType.USEFUL);
+        userRepository.findByEmail(email);
+        chronicIssueRepository.findById(issueId);
+
+        issueVoteRepository.findByIssueIdAndUserId(issueId, userId);
+
+        assertThrows(
+                BusinessException.class,
+                () -> issueVoteService.vote(issueId, email, VoteType.USEFUL)
+
+);
+
+    }
+} 
