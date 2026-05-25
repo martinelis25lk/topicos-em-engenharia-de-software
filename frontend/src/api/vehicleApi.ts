@@ -19,6 +19,11 @@ export const getUserVehicles = async () => {
   return response.data;
 };
 
+export const getFeedVehicles = async () => {
+  const response = await api.get("/user-vehicles/feed");
+  return response.data;
+};
+
 
 export const getVehicleById = async (id: number) => {
   const response = await api.get(`/user-vehicles/${id}`);
