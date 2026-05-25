@@ -81,3 +81,20 @@
   margin-top: 8px;
   text-align: center;
 }
+
+
+
+.login-register-link {
+  margin-top: 16px;
+  text-align: center;
+  color: #aaa;
+}
+
+.login-register-link a {
+  color: #00ffae;
+  text-decoration: none;
+}
+
+.login-register-link a:hover {
+  text-decoration: underline;
+}

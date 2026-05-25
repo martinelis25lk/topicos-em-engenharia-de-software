@@ -1,45 +1,53 @@
-import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { login } from "../api/authApi";
+import { useNavigate, Link } from "react-router-dom";
+import { register } from "../api/authApi";
 import "./LoginPage.css";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const navigate = useNavigate();
 
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   async function handleSubmit(event: React.FormEvent) {
-  event.preventDefault();
+    event.preventDefault();
 
-  try {
-    localStorage.removeItem("token");
+    try {
+      await register({
+        username,
+        email,
+        password,
+      });
 
-    const token = await login({ email, password });
-
-    localStorage.setItem("token", token);
-
-    navigate("/");
-  } catch (error) {
-    console.error("Erro no login:", error);
-    setError("Usuário ou senha inválidos.");
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+      setError("Erro ao criar conta.");
+    }
   }
-}
 
   return (
     <main className="login-page">
       <section className="login-card">
-        <h1 className="login-title">LasanhaSpec</h1>
+        <h1 className="login-title">Criar conta</h1>
+
         <p className="login-subtitle">
-          Entre para acessar sua garagem digital.
+          Cadastre-se para acessar sua garagem digital
         </p>
 
         <form className="login-form" onSubmit={handleSubmit}>
           <input
             className="login-input"
-            placeholder="Usuário ou email"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+
+          <input
+            className="login-input"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -53,19 +61,15 @@ export default function LoginPage() {
           />
 
           <button className="login-button" type="submit">
-            Entrar
+            Criar conta
           </button>
-
-          <p className="login-register-link">
-             Não tem conta? 
-              <Link
-              to="/register" onClick={() => localStorage.removeItem("token")}>
-              Cadastre-se
-              </Link>
-          </p>
 
           {error && <p className="login-error">{error}</p>}
         </form>
+
+        <p className="login-register-link">
+          Já tem conta? <Link to="/login">Entrar</Link>
+        </p>
       </section>
     </main>
   );

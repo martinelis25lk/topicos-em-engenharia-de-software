@@ -3,12 +3,13 @@ import axios from "axios";
 const API_URL = "http://localhost:8080";
 
 type LoginRequest = {
-  username: string;
+  email: string;
   password: string;
 };
 
 type RegisterRequest = {
   username: string;
+  email: string;
   password: string;
 };
 

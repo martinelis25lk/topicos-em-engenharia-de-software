@@ -15,7 +15,7 @@ const getAuthHeaders = () => {
 };
 
 export const getUserVehicles = async () => {
-  const response = await api.get("/user-vehicles");
+  const response = await api.get("/user-vehicles/me");
   return response.data;
 };
 

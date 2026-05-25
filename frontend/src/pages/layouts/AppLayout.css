@@ -1,0 +1,82 @@
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  background: #0b0b0d;
+  color: white;
+}
+
+.sidebar {
+  width: 240px;
+  background: #15151a;
+  border-right: 1px solid #26262d;
+  padding: 24px 16px;
+}
+
+.sidebar h1 {
+  color: #00ffae;
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.sidebar p {
+  color: #777;
+  font-size: 12px;
+  margin-bottom: 32px;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar a {
+  color: #aaa;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.sidebar a.active,
+.sidebar a:hover {
+  background: #12382d;
+  color: #00ffae;
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar {
+  height: 64px;
+  border-bottom: 1px solid #26262d;
+  background: #16161b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+}
+
+.topbar input {
+  width: 420px;
+  max-width: 60%;
+  background: #222229;
+  border: 1px solid #33333a;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+.topbar button {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.content {
+  padding: 24px;
+}
