@@ -1,38 +1,71 @@
 package br.com.lasanhaspec.carservice.dto;
 
+import jakarta.validation.constraints.*;
+
 import java.util.List;
 
 public class ChronicIssueDTO {
 
+    @NotNull
+    @Positive
     private Long vehicleCatalogModelId;
 
+
+    @NotBlank
+    @Size(min = 3, max = 30)
     private String title;
 
+    @NotBlank
+    @Size(min = 3, max = 30)
     private String description;
 
+    @NotBlank
+    @Size(min = 3, max = 20)
     private String severity;
 
+    @NotBlank
+    @Size(min = 3, max = 20)
     private String category;
 
+
+    @NotNull
+    @PositiveOrZero
     private Integer millageMin;
 
+    @NotNull
+    @PositiveOrZero
     private Integer millageMax;
 
+
+    @NotNull
+    @PositiveOrZero
     private Integer costMin;
 
+    @NotNull
+    @PositiveOrZero
     private Integer costMax;
 
+    @NotBlank
+    @Size(min = 2, max = 100)
     private String affectedEngines;
 
+    @NotBlank
+    @Size(min = 4, max = 100)
     private String affectedYears;
 
+    @NotBlank
+    @Size(min = 3, max = 20)
     private String repairComplexity;
+
+
+
+    @NotNull
+    @Positive
+    private Long createdByUserId;
 
     private List<String> symptoms;
 
     private List<String> preventiveMaintenance;
-
-    private Long createdByUserId;
 
     public String getIssueStatus() {
         return IssueStatus;

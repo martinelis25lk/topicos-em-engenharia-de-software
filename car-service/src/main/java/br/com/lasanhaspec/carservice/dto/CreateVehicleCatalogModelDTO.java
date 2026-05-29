@@ -1,22 +1,53 @@
 package br.com.lasanhaspec.carservice.dto;
 
 
+import jakarta.validation.constraints.*;
+
 public class CreateVehicleCatalogModelDTO {
 
 
-    private  String brand;
+    @NotBlank
+    @Size(min = 2, max = 40)
+    private String brand;
+
+    @NotBlank
+    @Size(min = 3, max = 40)
     private String aspirationType;
+
+    @NotNull
+    @Min(1886)
+    @Max(2035)
     private Integer year;
-    private  String engineCode;
+
+    @NotBlank
+    @Size(min = 1, max = 40)
+    private String engineCode;
+
+    @NotNull
+    @Positive
     private Integer factoryHorsePower;
-    private Integer factoryTorque ;
-    private String model ;
-    private Integer factoryWeight ;
+
+    @NotNull
+    @Positive
+    private Integer factoryTorque;
+
+    @NotBlank
+    @Size(min = 1, max = 60)
+    private String model;
+
+    @NotNull
+    @Positive
+    private Integer factoryWeight;
 
 
     // campos para correspondência com a FIPE
+    @Size(max = 20)
     private String fipeBrandCode;   // ex: "26" (BMW)
+
+    @Size(max = 20)
     private String fipeModelCode;   // ex: "5571" (325i)
+
+    @Size(max = 20)
     private String fipeYearCode;    // ex: "1995-1"
 
 

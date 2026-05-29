@@ -2,6 +2,7 @@ package br.com.lasanhaspec.carservice.controller;
 
 import br.com.lasanhaspec.carservice.dto.IssueVoteRequestDTO;
 import br.com.lasanhaspec.carservice.service.IssueVoteService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class IssueVoteController {
 
     @PostMapping("/{issueId}/vote")
     public ResponseEntity<Void> vote(
+            @Valid
             @PathVariable Long issueId,
             @RequestBody IssueVoteRequestDTO dto,
             Authentication authentication

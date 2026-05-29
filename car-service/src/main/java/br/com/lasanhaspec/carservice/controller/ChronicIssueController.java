@@ -3,6 +3,7 @@ package br.com.lasanhaspec.carservice.controller;
 
 import br.com.lasanhaspec.carservice.dto.*;
 import br.com.lasanhaspec.carservice.service.ChronicIssueService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,6 @@ public class ChronicIssueController {
     public ChronicIssueController(ChronicIssueService chronicIssueService){
         this.chronicIssueService = chronicIssueService;
     }
-
-
 
 
 
@@ -76,7 +75,7 @@ public class ChronicIssueController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<ChronicIssueDetailDTO> updateIssue(@PathVariable Long id, @RequestBody ChronicIssueDTO dto){
+    public ResponseEntity<ChronicIssueDetailDTO> updateIssue(@Valid @PathVariable Long id, @RequestBody ChronicIssueDTO dto){
         return ResponseEntity.ok(chronicIssueService.updateChronicIssue(id, dto));
     }
 
@@ -100,9 +99,6 @@ public class ChronicIssueController {
         chronicIssueService.rejectChronicIssue(id);
         return ResponseEntity.noContent().build();
     }
-
-
-
 
 
 }

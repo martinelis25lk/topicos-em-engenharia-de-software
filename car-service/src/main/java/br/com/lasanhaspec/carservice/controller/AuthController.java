@@ -76,8 +76,6 @@ public class AuthController {
 
         userRepository.save(user);
 
-
-
         // 4 gera o token
         String token = jwtService.generateToken(user);
 

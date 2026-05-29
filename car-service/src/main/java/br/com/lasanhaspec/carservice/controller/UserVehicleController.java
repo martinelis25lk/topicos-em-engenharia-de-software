@@ -4,6 +4,7 @@ package br.com.lasanhaspec.carservice.controller;
 import br.com.lasanhaspec.carservice.dto.CreateUserVehicleDTO;
 import br.com.lasanhaspec.carservice.dto.VehicleCardDTO;
 import br.com.lasanhaspec.carservice.service.UserVehicleService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -56,7 +57,7 @@ public class UserVehicleController {
 
     @PostMapping
     public ResponseEntity<Long>createUserVehicle(
-            @RequestBody CreateUserVehicleDTO dto,
+            @Valid @RequestBody CreateUserVehicleDTO dto,
             Authentication authentication){
 
         String email = authentication.getName();
@@ -99,7 +100,7 @@ public class UserVehicleController {
     @PutMapping("/{id}")
     public ResponseEntity<VehicleCardDTO> updateVehicle(
             @PathVariable Long id,
-            @RequestBody CreateUserVehicleDTO dto,
+            @Valid @RequestBody CreateUserVehicleDTO dto,
             Authentication authentication
     ) {
         String email = authentication.getName();
@@ -140,10 +141,6 @@ public class UserVehicleController {
                 userVehicleService.getVehicleByIdForAuthenticatedUser(vehicleId, email)
         );
     }
-
-
-
-
 
 
 

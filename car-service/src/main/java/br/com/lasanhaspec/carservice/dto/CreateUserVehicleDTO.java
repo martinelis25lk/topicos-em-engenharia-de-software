@@ -1,11 +1,34 @@
 package br.com.lasanhaspec.carservice.dto;
 
+import jakarta.validation.constraints.*;
+
 public class CreateUserVehicleDTO {
+
+
     private Long userId;
+
+
+    @NotNull
+    @Positive
     private Long vehicleCatalogModelId;
+
+    @NotBlank
+    @Size(min = 3, max = 30)
     private String nickName;
+
+
+    @Positive
+    @NotNull
     private Integer currentHorsePower;
+
+
+    @Positive
+    @NotNull
     private Integer currentWeight;
+
+
+    @Positive
+    @NotNull
     private Integer currentTorque;
 
 
