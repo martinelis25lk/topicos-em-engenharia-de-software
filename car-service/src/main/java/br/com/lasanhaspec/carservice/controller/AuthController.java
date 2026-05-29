@@ -3,10 +3,10 @@ package br.com.lasanhaspec.carservice.controller;
 
 import br.com.lasanhaspec.carservice.domain.enums.Role;
 import br.com.lasanhaspec.carservice.domain.models.User;
-import br.com.lasanhaspec.carservice.dto.AuthRequestDTO;
+import br.com.lasanhaspec.carservice.dto.RegisterRequestDTO;
 import br.com.lasanhaspec.carservice.repository.UserRepository;
 import br.com.lasanhaspec.carservice.service.JwtService;
-import io.jsonwebtoken.security.Password;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,7 +41,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody AuthRequestDTO dto) {
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequestDTO dto) {
 
 
         //1 verifica se email já existe
@@ -74,7 +74,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody AuthRequestDTO dto) {
+    public ResponseEntity<String> login(@Valid @RequestBody RegisterRequestDTO dto) {
 
 
         //autentica, lança excecao automaticamente se credenciais invalidas
@@ -85,10 +85,6 @@ public class AuthController {
                         dto.getPassword())
 
         );
-
-        System.out.println("EMAIL RECEBIDO: " + dto.getEmail());
-        System.out.println("SENHA RECEBIDA: " + dto.getPassword());
-
 
         //busca o usuário
 

@@ -1,9 +1,24 @@
 package br.com.lasanhaspec.carservice.dto;
 
-public class AuthRequestDTO {
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
+public class RegisterRequestDTO {
+
+
+    @NotBlank
+    @Size(min = 6, max = 100)
     private String password;
+
+    @NotBlank
+    @Email
+    @Size(max = 120)
     private String email;
+
+
+    @NotBlank
+    @Size(min = 3, max = 25)
     private String username;
 
 

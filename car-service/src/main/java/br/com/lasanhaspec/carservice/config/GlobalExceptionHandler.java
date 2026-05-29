@@ -1,6 +1,6 @@
 package br.com.lasanhaspec.carservice.config;
 
-
+import java.util.List;
 import br.com.lasanhaspec.carservice.dto.ErrorResponseDTO;
 import br.com.lasanhaspec.carservice.exception.BusinessException;
 import br.com.lasanhaspec.carservice.exception.ResourceNotFoundException;
@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -82,6 +83,28 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(403).body(error);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseDTO> handleValidationException(
+            MethodArgumentNotValidException ex,
+            HttpServletRequest request){
+        String message = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .findFirst()
+                .orElse("Dados inválidos");
+
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                LocalDateTime.now(),
+                400,
+                "Bad Request",
+                message,
+                request.getRequestURI()
+        );
+        return ResponseEntity.badRequest().body(error);
+
     }
 
 
