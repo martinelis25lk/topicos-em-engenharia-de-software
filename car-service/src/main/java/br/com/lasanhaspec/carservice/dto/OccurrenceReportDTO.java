@@ -40,4 +40,7 @@ public class OccurrenceReportDTO {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public void setUserVehicleId(Long userVehicleId) { this.userVehicleId = userVehicleId;
+    }
 }

@@ -80,24 +80,76 @@ public class IssueVoteServiceTest {
 
 
     @Test
-    void shouldThrowWhenUserVotesSameWayTwice(){
-
+    void shouldThrowWhenUserVotesSameWayTwice() {
         Long issueId = 1L;
-        Long userId = 2L;
         String email = "user@test.com";
 
-        IssueVote existingVote = new IssueVote();
-        existingVote.setVoteType(VoteType.USEFUL);
-        userRepository.findByEmail(email);
-        chronicIssueRepository.findById(issueId);
+        ChronicIssue issue = new ChronicIssue();
+        issue.setUsefulVotes(1);
+        issue.setNotUsefulVotes(0);
+        issue.setStatus(IssueStatus.PENDING);
 
-        issueVoteRepository.findByIssueIdAndUserId(issueId, userId);
+        User user = new User();
+        user.setId(2L);
+        user.setEmail(email);
+
+        IssueVote existingVote = new IssueVote();
+        existingVote.setUserId(2L);
+        existingVote.setVoteType(VoteType.USEFUL);
+
+        when(chronicIssueRepository.findById(issueId))
+                .thenReturn(Optional.of(issue));
+
+        when(userRepository.findByEmail(email))
+                .thenReturn(Optional.of(user));
+
+        when(issueVoteRepository.findByIssueIdAndUserId(issueId, 2L))
+                .thenReturn(Optional.of(existingVote));
 
         assertThrows(
                 BusinessException.class,
                 () -> issueVoteService.vote(issueId, email, VoteType.USEFUL)
-
-);
-
+        );
     }
+
+
+
+
+    @Test
+    void shouldChangeVoteFromUsefulToNotUseful() {
+        Long issueId = 1L;
+        String email = "user@test.com";
+
+        ChronicIssue issue = new ChronicIssue();
+        issue.setUsefulVotes(1);
+        issue.setNotUsefulVotes(0);
+        issue.setStatus(IssueStatus.PENDING);
+
+        User user = new User();
+        user.setId(2L);
+        user.setEmail(email);
+
+        IssueVote existingVote = new IssueVote();
+        existingVote.setUserId(2L);
+        existingVote.setVoteType(VoteType.USEFUL);
+
+        when(chronicIssueRepository.findById(issueId))
+                .thenReturn(Optional.of(issue));
+
+        when(userRepository.findByEmail(email))
+                .thenReturn(Optional.of(user));
+
+        when(issueVoteRepository.findByIssueIdAndUserId(issueId, 2L))
+                .thenReturn(Optional.of(existingVote));
+
+        issueVoteService.vote(issueId, email, VoteType.NOT_USEFUL);
+
+        assertEquals(0, issue.getUsefulVotes());
+        assertEquals(1, issue.getNotUsefulVotes());
+        assertEquals(VoteType.NOT_USEFUL, existingVote.getVoteType());
+
+        verify(issueVoteRepository).save(existingVote);
+        verify(chronicIssueRepository).save(issue);
+    }
+
 } 

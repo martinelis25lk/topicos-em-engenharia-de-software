@@ -10,4 +10,6 @@ import java.util.List;
 public interface ChronicIssueRepository extends JpaRepository<ChronicIssue, Long> {
 
     List<ChronicIssue> findByVehicleCatalogModelIdAndStatus(Long vehicleCatalogModelId, IssueStatus status);
+
+    Object findById(Long issueId);
 }

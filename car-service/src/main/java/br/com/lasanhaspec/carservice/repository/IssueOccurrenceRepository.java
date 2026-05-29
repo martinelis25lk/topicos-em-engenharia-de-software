@@ -9,4 +9,6 @@ public interface IssueOccurrenceRepository  extends JpaRepository<IssueOcurrence
     List<IssueOcurrence> findByChronicIssueId(Long issueId);
 
     boolean existsByChronicIssueIdAndUserVehicleId(Long issueId, Long vehicleId);
+
+    Object existsByIssueIdAndUserVehicleId(Long issueId, Long userVehicleId);
 }
