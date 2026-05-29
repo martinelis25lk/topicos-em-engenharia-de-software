@@ -8,6 +8,7 @@ public class OccurrenceReportDTO {
     private Double repairCost;
     private Double millageAtOccurrence;
     private String description;
+    private Long userVehicleId;
 
     public String getUsername() {
         return username;
