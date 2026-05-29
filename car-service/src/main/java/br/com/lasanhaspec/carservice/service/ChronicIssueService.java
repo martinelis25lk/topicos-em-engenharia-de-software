@@ -49,8 +49,10 @@ public class ChronicIssueService {
 
 
 
-    //criar um novco cronico
+    //criar um novo cronico
     public Long createIssue(ChronicIssueDTO chronicIssueDTO, String email){
+
+
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -59,7 +61,12 @@ public class ChronicIssueService {
                 .findById(chronicIssueDTO.getVehicleCatalogModelId())
                 .orElseThrow(() -> new ResourceNotFoundException("catalog vehicle not found"));
 
+        boolean userHasThisModel = userVehicleRepository
+                .existsByUserIdAndVehicleCatalogModelId(user.getId(), model.getId());
 
+        if (!userHasThisModel) {
+            throw new BusinessException("You must have this vehicle model in your garage to create a chronic issue");
+        }
         //cria a entidade nova
 
         ChronicIssue chronic = new ChronicIssue();

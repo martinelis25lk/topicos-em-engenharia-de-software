@@ -22,5 +22,7 @@ public interface UserVehicleRepository extends JpaRepository<UserVehicle, Long> 
     List<UserVehicle> findFeedVehiclesWithImages();
 
 
+    boolean existsByUserIdAndVehicleCatalogModelId(Long userId, Long vehicleCatalogModelId);
+
     List<UserVehicle> findByUserId(Long id);
 }
