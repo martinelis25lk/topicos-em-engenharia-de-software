@@ -3,6 +3,7 @@ package br.com.lasanhaspec.carservice.controller;
 
 import br.com.lasanhaspec.carservice.domain.enums.Role;
 import br.com.lasanhaspec.carservice.domain.models.User;
+import br.com.lasanhaspec.carservice.dto.LoginRequestDTO;
 import br.com.lasanhaspec.carservice.dto.RegisterRequestDTO;
 import br.com.lasanhaspec.carservice.repository.UserRepository;
 import br.com.lasanhaspec.carservice.service.JwtService;
@@ -15,6 +16,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+
+//feat: algo novo de valor
+//fix: correção de bug
+//refactor: melhora interna sem mudar comportamento
+//test: adiciona ou ajusta testes
+//docs: documentação
+//chore: ajustes de build/config
+
+
+
+
 
 @RestController
 @RequestMapping("/auth")
@@ -74,7 +87,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody RegisterRequestDTO dto) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDTO dto) {
 
 
         //autentica, lança excecao automaticamente se credenciais invalidas
