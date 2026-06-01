@@ -68,6 +68,46 @@ public class User implements  UserDetails{
     @Override
     public boolean isEnabled() { return true; }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public String getProfileImageS3Key() {
+        return profileImageS3Key;
+    }
+
+    public void setProfileImageS3Key(String profileImageS3Key) {
+        this.profileImageS3Key = profileImageS3Key;
+    }
+
+    private String fullName;
+
+    @Column(length = 500)
+    private String description;
+
+    private String profileImageUrl;
+
+    private String profileImageS3Key;
 
 
     public Long getId() {

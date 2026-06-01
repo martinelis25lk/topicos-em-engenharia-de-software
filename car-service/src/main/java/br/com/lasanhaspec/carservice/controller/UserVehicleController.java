@@ -34,8 +34,6 @@ public class UserVehicleController {
             Authentication authentication
     ) {
 
-
-
         String email = authentication.getName();
         String imageUrl = userVehicleService.uploadVehicleImage(vehicleId, file, email);
         return ResponseEntity.ok(imageUrl);
