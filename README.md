@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # LasanhaSpec
 Um projeto mais intimista, mas que não deixa de ser ambicioso para todos aqueles que gostam de carros ou que querem aprender mais sobre eles.
 
@@ -236,3 +237,7 @@ Projeto desenvolvido como iniciativa independente com foco em aprendizado práti
 - correia auxiliar
   ↓
   Preço médio no mercado
+=======
+# topicos-em-engenharia-de-software
+projeto final da disciplina de engenharia de software com AWS 
+>>>>>>> afd673bafa9019b8d523432f416cbc58492501a3
