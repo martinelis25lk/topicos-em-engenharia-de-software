@@ -6,8 +6,10 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import AppLayout from "../pages/layouts/AppLayout";
 import RegisterPage from "../pages/RegisterPage";
 import FeedPage from "../pages/FeedPage";
-
-
+import ProfilePage from "../pages/ProfilePage";
+import DashboardPage from "../pages/DashboardPage";
+import AccountSettingsPage from "../pages/AccountSettingsPage";
+import CatalogPage from "../pages/CatalogPage";
 
 export function AppRouter() {
   return (
@@ -17,14 +19,18 @@ export function AppRouter() {
         <Route path="/register" element={<RegisterPage />} />
 
         <Route element={<ProtectedRoute />}>
-        <Route element={<AppLayout />}>
-        <Route path="/" element={<FeedPage />} />
-        <Route path="/feed" element={<FeedPage />} />  
-        <Route path="/garage" element={<GaragePage />} />
-        <Route path="/vehicle/:id" element={<VehiclePage />} />
-      </Route>
-    </Route>
-   </Routes>
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<FeedPage />} />
+            <Route path="/feed" element={<FeedPage />} />
+            <Route path="/garage" element={<GaragePage />} />
+            <Route path="/vehicle/:id" element={<VehiclePage />} />
+            <Route path="/catalog" element={<CatalogPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/account/settings" element={<AccountSettingsPage />} />
+          </Route>
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

@@ -1,37 +1,58 @@
+.performance-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.performance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.perf-label {
+  color: #c0c0cc;
+  font-weight: 500;
+}
+
+.perf-factory {
+  color: #666;
+  font-size: 12px;
+}
+
+.perf-arrow {
+  color: #444;
+  font-size: 12px;
+}
+
+.perf-current {
+  font-weight: 700;
+  font-size: 14px;
+}
+
 .performance-bar {
   position: relative;
-  height: 20px;
-  border-radius: 3px;
-  background: #5e5c5c;
+  height: 8px;
+  border-radius: 4px;
+  background: #2a2a35;
   overflow: hidden;
-  margin-top: 6px;
 }
 
 .performance-base {
   position: absolute;
   height: 100%;
-  background: #333;
+  background: #3a3a45;
+  border-radius: 4px;
 }
-
-
-
 
 .performance-diff {
   position: absolute;
   height: 100%;
+  border-radius: 4px;
 }
 
-.performance-bar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background-image: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.12) 1px,
-    transparent 1px
-  );
-
-  background-size: 20% 100%; /* controla quantidade de divisões */
-  pointer-events: none;
+.perf-diff {
+  font-size: 11px;
+  text-align: right;
 }

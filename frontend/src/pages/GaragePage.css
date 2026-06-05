@@ -1,50 +1,34 @@
-.garage-page {
-  width: 100%;
-  padding: 24px;
+.garage-item {
+  position: relative;
 }
 
-
-
-.garage-header h1 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 4px;
-}
-
-.garage-header-text {
-  text-align: left;
-}
-
-
-
-/* Lista */
-.garage-list {
+.garage-delete-btn {
+  all: unset;
+  position: absolute;
+  top: 12px;
+  right: 12px;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* BOTÃO */
-.add-vehicle-btn {
-  background-color: #00ffae;
-  color: #000;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s ease;
-  
-}
-
-.add-vehicle-btn:hover {
-  background-color: #00e69c;
-}
-
-.garage-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #1a1a22;
+  border: 1px solid #2a2a35;
+  color: #555;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.garage-delete-btn:hover {
+  background: #ef444418;
+  border-color: #ef444444;
+  color: #ef4444;
+}
+
+.garage-delete-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
