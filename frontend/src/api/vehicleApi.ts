@@ -1,19 +1,5 @@
 import api from "./api";
 
-import axios from "axios";
-
-const API_URL = "http://localhost:8080";
-
-const getAuthHeaders = () => {
-  const token = localStorage.getItem("token");
-
-  return {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-};
-
 // ── User Vehicles ──────────────────────────────────────────
 export const getUserVehicles = async () => {
   const response = await api.get("/user-vehicles/me");
@@ -45,42 +31,36 @@ export const deleteUserVehicle = async (id: number) => {
   await api.delete(`/user-vehicles/${id}`);
 };
 
-// ── Catalog (ROLE_ADMIN only) ──────────────────────────────
+// ── Imagens de veículo ─────────────────────────────────────
+export const uploadVehicleImage = async (vehicleId: number, file: File) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await api.post(`/user-vehicles/${vehicleId}/images`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return response.data; // retorna a URL
+};
+
+export const deleteVehicleImage = async (vehicleId: number, imageId: number) => {
+  await api.delete(`/user-vehicles/${vehicleId}/images/${imageId}`);
+};
+
+export const setPrimaryImage = async (vehicleId: number, imageId: number) => {
+  await api.put(`/user-vehicles/${vehicleId}/images/${imageId}/primary`);
+};
+
+// ── Catalog ────────────────────────────────────────────────
 export const getCatalogVehicles = async () => {
   const response = await api.get("/catalog/vehicles");
   return response.data;
 };
 
-export const createCatalogVehicle = async (data: {
-  brand: string;
-  model: string;
-  year: number;
-  engineCode: string;
-  aspirationType: string;
-  factoryHorsePower: number;
-  factoryTorque: number;
-  factoryWeight: number;
-  fipeBrandCode?: string;
-  fipeModelCode?: string;
-  fipeYearCode?: string;
-}) => {
+export const createCatalogVehicle = async (data: object) => {
   const response = await api.post("/catalog/vehicles", data);
   return response.data;
 };
 
-export const updateCatalogVehicle = async (id: number, data: {
-  brand: string;
-  model: string;
-  year: number;
-  engineCode: string;
-  aspirationType: string;
-  factoryHorsePower: number;
-  factoryTorque: number;
-  factoryWeight: number;
-  fipeBrandCode?: string;
-  fipeModelCode?: string;
-  fipeYearCode?: string;
-}) => {
+export const updateCatalogVehicle = async (id: number, data: object) => {
   const response = await api.put(`/catalog/vehicles/${id}`, data);
   return response.data;
 };

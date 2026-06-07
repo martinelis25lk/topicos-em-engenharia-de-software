@@ -1,28 +1,28 @@
 .vc-card {
   display: flex;
-  background: #141418;
-  border: 1px solid #22222a;
+  background: #111116;
+  border: 1px solid #1e1e28;
   border-radius: 14px;
   overflow: hidden;
-  cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
   width: 100%;
 }
 
 .vc-card:hover {
-  border-color: #00ffae55;
-  box-shadow: 0 0 18px #00ffae18;
+  border-color: #00ffae44;
+  box-shadow: 0 0 20px #00ffae12;
   transform: translateY(-2px);
 }
 
 /* ── Imagem ───────────────────────────────────────────────── */
 .vc-image {
   position: relative;
-  width: 380px;
-  min-width: 380px;
-  max-height: 300px;
+  width: 360px;
+  min-width: 360px;
   overflow: hidden;
   flex-shrink: 0;
+  background: #0d0d12;
+  cursor: pointer;
 }
 
 .vc-image img {
@@ -30,41 +30,98 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.3s;
+}
+
+.vc-card:hover .vc-image img {
+  transform: scale(1.03);
 }
 
 .vc-image-placeholder {
   width: 100%;
-  height: 100%;
-  min-height: 220px;
-  background: #1a1a20;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #444;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.vc-image-placeholder:hover {
+  background: #15151c;
+  color: #666;
+}
+
+/* Botão upload */
+.vc-upload-btn {
+  all: unset;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: #000000bb;
+  backdrop-filter: blur(6px);
+  border: 1px solid #ffffff22;
+  border-radius: 7px;
+  color: #aaa;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  box-sizing: border-box;
+  z-index: 5;
 }
+
+.vc-upload-btn:hover {
+  background: #00ffae22;
+  border-color: #00ffae55;
+  color: #00ffae;
+}
+
+.vc-upload-btn--loading { opacity: 0.6; cursor: not-allowed; }
+
+.vc-upload-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #555;
+  border-top-color: #00ffae;
+  border-radius: 50%;
+  animation: vc-spin 0.7s linear infinite;
+}
+
+@keyframes vc-spin { to { transform: rotate(360deg); } }
 
 /* Owner badge */
 .vc-owner-badge {
   position: absolute;
-  bottom: 12px;
-  left: 12px;
+  top: 10px;
+  left: 10px;
   background: #000000cc;
   backdrop-filter: blur(6px);
   border-radius: 8px;
-  padding: 6px 10px;
+  padding: 5px 10px;
   display: flex;
   flex-direction: column;
   gap: 1px;
 }
 
 .vc-owner-label {
-  font-size: 10px;
-  color: #888;
+  font-size: 9px;
+  color: #666;
   line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .vc-owner-name {
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 700;
   color: #fff;
   line-height: 1.2;
 }
@@ -72,48 +129,101 @@
 /* ── Conteúdo ─────────────────────────────────────────────── */
 .vc-content {
   flex: 1;
-  padding: 22px 24px;
+  padding: 20px 22px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   min-width: 0;
+  cursor: pointer;
 }
 
 .vc-title-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
 }
 
 .vc-name {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 19px;
+  font-weight: 800;
   color: #f0f0f0;
   margin: 0 0 4px;
   line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .vc-engine {
-  font-size: 13px;
-  color: #888;
+  font-size: 12.5px;
+  color: #666;
   margin: 0;
+  font-family: "Courier New", monospace;
+}
+
+.vc-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
 }
 
 .vc-mods-badge {
   background: #1e1e28;
-  border: 1px solid #2e2e3a;
-  color: #aaa;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 10px;
+  border: 1px solid #2a2a38;
+  color: #888;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
   border-radius: 20px;
   white-space: nowrap;
-  flex-shrink: 0;
+  letter-spacing: 0.03em;
 }
 
+.vc-drive-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+}
+
+.drive-awd { background: #2e1a00; color: #fb923c; border: 1px solid #fb923c33; }
+.drive-rwd { background: #1a1a2e; color: #60a5fa; border: 1px solid #60a5fa33; }
+.drive-fwd { background: #1a2e1a; color: #4ade80; border: 1px solid #4ade8033; }
+
+/* ── Barras ───────────────────────────────────────────────── */
 .vc-bars {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+}
+
+/* ── Stats extras ─────────────────────────────────────────── */
+.vc-extra-stats {
+  display: flex;
+  gap: 16px;
+  padding-top: 10px;
+  border-top: 1px solid #1e1e28;
+  flex-wrap: wrap;
+}
+
+.vc-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vc-stat-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: #d0d0d8;
+  line-height: 1;
+}
+
+.vc-stat-label {
+  font-size: 10px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }

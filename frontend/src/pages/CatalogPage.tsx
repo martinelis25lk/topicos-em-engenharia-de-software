@@ -6,17 +6,10 @@ import {
   deleteCatalogVehicle,
 } from "../api/vehicleApi";
 import { useCurrentUser } from "../hooks/useCurrentUser";
-import type { CatalogVehicle } from "../types/catalog";
+import type { CatalogVehicle, CatalogVehicleForm } from "../types/catalog";
+import CatalogFormModal from "../components/CatalogFormModal/CatalogFormModal";
 import "./CatalogPage.css";
 
-const ASPIRATION_TYPES = ["NATURALLY_ASPIRATED", "TURBOCHARGED", "SUPERCHARGED", "TWIN_TURBO", "HYBRID"];
-
-const emptyForm = {
-  brand: "", model: "", year: new Date().getFullYear(),
-  engineCode: "", aspirationType: "NATURALLY_ASPIRATED",
-  factoryHorsePower: 0, factoryTorque: 0, factoryWeight: 0,
-  fipeBrandCode: "", fipeModelCode: "", fipeYearCode: "",
-};
 
 export default function CatalogPage() {
   const user = useCurrentUser();
@@ -27,87 +20,70 @@ export default function CatalogPage() {
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<CatalogVehicle | null>(null);
-  const [form, setForm] = useState({ ...emptyForm });
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState("");
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [error, setError] = useState("");
 
   async function load() {
     setLoading(true);
-    try { setVehicles(await getCatalogVehicles()); }
-    catch { setError("Erro ao carregar catálogo."); }
-    finally { setLoading(false); }
+    try {
+      setVehicles(await getCatalogVehicles());
+    } catch {
+      setError("Erro ao carregar catálogo.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => { load(); }, []);
 
   const filtered = vehicles.filter((v) =>
-    `${v.brand} ${v.model} ${v.year} ${v.engineCode}`.toLowerCase().includes(search.toLowerCase())
+    `${v.brand} ${v.model} ${v.year} ${v.engineCode}`
+      .toLowerCase()
+      .includes(search.toLowerCase())
   );
+
+  async function handleSubmit(form: CatalogVehicleForm) {
+    if (editing) {
+      await updateCatalogVehicle(editing.id, form);
+    } else {
+      await createCatalogVehicle(form);
+    }
+    setShowForm(false);
+    setEditing(null);
+    load();
+  }
+
+  async function handleDelete(id: number) {
+    if (!confirm("Remover este modelo do catálogo? Esta ação não pode ser desfeita.")) return;
+    setDeletingId(id);
+    try {
+      await deleteCatalogVehicle(id);
+      load();
+    } catch {
+      alert("Erro ao remover.");
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
   function openCreate() {
     setEditing(null);
-    setForm({ ...emptyForm });
-    setError("");
     setShowForm(true);
   }
 
   function openEdit(v: CatalogVehicle) {
     setEditing(v);
-    setForm({
-      brand: v.brand, model: v.model, year: v.year,
-      engineCode: v.engineCode, aspirationType: v.aspirationType ?? "NATURALLY_ASPIRATED",
-      factoryHorsePower: v.factoryHorsepower ?? 0,
-      factoryTorque: v.factoryTorque ?? 0,
-      factoryWeight: v.factoryWeight ?? 0,
-      fipeBrandCode: v.fipeBrandCode ?? "",
-      fipeModelCode: v.fipeModelCode ?? "",
-      fipeYearCode: v.fipeYearCode ?? "",
-    });
-    setError("");
     setShowForm(true);
-  }
-
-  async function handleSubmit() {
-    if (!form.brand || !form.model || !form.engineCode) {
-      setError("Preencha marca, modelo e código do motor.");
-      return;
-    }
-    setSubmitting(true);
-    setError("");
-    try {
-      if (editing) {
-        await updateCatalogVehicle(editing.id, form);
-      } else {
-        await createCatalogVehicle(form);
-      }
-      setShowForm(false);
-      load();
-    } catch {
-      setError("Erro ao salvar. Verifique os campos.");
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  async function handleDelete(id: number) {
-    if (!confirm("Remover este modelo do catálogo?")) return;
-    setDeletingId(id);
-    try { await deleteCatalogVehicle(id); load(); }
-    catch { alert("Erro ao remover."); }
-    finally { setDeletingId(null); }
-  }
-
-  function F(key: keyof typeof form, value: string | number) {
-    setForm((p) => ({ ...p, [key]: value }));
   }
 
   return (
     <div className="catalog-page">
+
+      {/* ── Header ──────────────────────────────────────── */}
       <div className="catalog-header">
         <div>
           <h1>Vehicle Catalog</h1>
-          <p>Base de modelos de fábrica</p>
+          <p>Base de modelos de fábrica · {vehicles.length} modelos</p>
         </div>
         {isAdmin && (
           <button className="catalog-add-btn" onClick={openCreate}>
@@ -120,47 +96,102 @@ export default function CatalogPage() {
         )}
       </div>
 
-      <input
-        className="catalog-search"
-        placeholder="Buscar por marca, modelo, motor ou ano..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      {/* ── Admin banner ─────────────────────────────────── */}
+      {isAdmin && (
+        <div className="catalog-admin-banner">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Você está logado como <strong>Admin</strong> — pode criar, editar e remover modelos do catálogo.
+        </div>
+      )}
+
+      {/* ── Search ───────────────────────────────────────── */}
+      <div className="catalog-search-row">
+        <div className="catalog-search-wrap">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            className="catalog-search"
+            placeholder="Buscar marca, modelo, motor ou ano..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <span className="catalog-count">{filtered.length} resultado{filtered.length !== 1 ? "s" : ""}</span>
+      </div>
+
+      {/* ── Tabela ───────────────────────────────────────── */}
+      {error && <p className="catalog-error">{error}</p>}
 
       {loading ? (
-        <p className="catalog-loading">Carregando...</p>
+        <div className="catalog-loading">
+          <div className="catalog-spinner" />
+          <p>Carregando catálogo...</p>
+        </div>
       ) : (
         <div className="catalog-table-wrap">
           <table className="catalog-table">
             <thead>
               <tr>
-                <th>Marca</th>
-                <th>Modelo</th>
+                <th>Marca / Modelo</th>
                 <th>Ano</th>
                 <th>Motor</th>
+                <th>Aspiração</th>
                 <th>HP</th>
                 <th>Torque</th>
                 <th>Peso</th>
-                {isAdmin && <th>Ações</th>}
+                <th>Tração</th>
+                <th>Câmbio</th>
+                {isAdmin && <th className="th-actions">Ações</th>}
               </tr>
             </thead>
             <tbody>
               {filtered.length === 0 ? (
-                <tr><td colSpan={8} className="catalog-empty">Nenhum modelo encontrado.</td></tr>
+                <tr>
+                  <td colSpan={isAdmin ? 10 : 9} className="catalog-empty">
+                    Nenhum modelo encontrado.
+                  </td>
+                </tr>
               ) : (
                 filtered.map((v) => (
                   <tr key={v.id}>
-                    <td>{v.brand}</td>
-                    <td className="catalog-model">{v.model}</td>
-                    <td>{v.year}</td>
+                    <td>
+                      <div className="catalog-brand-model">
+                        <span className="catalog-brand">{v.brand}</span>
+                        <span className="catalog-model-name">{v.model}</span>
+                      </div>
+                    </td>
+                    <td className="catalog-year">{v.year}</td>
                     <td className="catalog-engine">{v.engineCode}</td>
-                    <td className="catalog-value">{v.factoryHorsepower}hp</td>
-                    <td className="catalog-value">{v.factoryTorque}lb-ft</td>
-                    <td className="catalog-value">{v.factoryWeight}kg</td>
+                    <td>
+                      <span className={`catalog-asp-badge asp-${v.aspirationType?.toLowerCase()}`}>
+                        {v.aspirationType?.replace("_", " ")}
+                      </span>
+                    </td>
+                    <td className="catalog-value">{v.factoryHorsepower}<span className="catalog-unit">hp</span></td>
+                    <td className="catalog-value">{v.factoryTorque}<span className="catalog-unit">Nm</span></td>
+                    <td className="catalog-value">{v.factoryWeight}<span className="catalog-unit">kg</span></td>
+                    <td>
+                      <span className={`catalog-drive-badge drive-${v.driveType?.toLowerCase()}`}>
+                        {v.driveType ?? "—"}
+                      </span>
+                    </td>
+                    <td className="catalog-transmission">
+                      {v.transmissionType?.replace("_", " ") ?? "—"}
+                      {v.gearCount ? ` · ${v.gearCount}v` : ""}
+                    </td>
                     {isAdmin && (
                       <td>
                         <div className="catalog-actions">
-                          <button className="catalog-btn-edit" onClick={() => openEdit(v)}>
+                          <button
+                            className="catalog-btn-edit"
+                            onClick={() => openEdit(v)}
+                            title="Editar"
+                          >
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
                               stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -171,13 +202,16 @@ export default function CatalogPage() {
                             className="catalog-btn-delete"
                             onClick={() => handleDelete(v.id)}
                             disabled={deletingId === v.id}
+                            title="Remover"
                           >
-                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-                              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="3 6 5 6 21 6"/>
-                              <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                              <path d="M10 11v6M14 11v6"/>
-                            </svg>
+                            {deletingId === v.id ? "..." : (
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                                <path d="M10 11v6M14 11v6"/>
+                              </svg>
+                            )}
                           </button>
                         </div>
                       </td>
@@ -190,58 +224,13 @@ export default function CatalogPage() {
         </div>
       )}
 
-      {/* ── Form modal ─────────────────────────────────── */}
+      {/* ── Modal de formulário ───────────────────────────── */}
       {showForm && (
-        <div className="modal-overlay" onClick={() => setShowForm(false)}>
-          <div className="modal-box catalog-form-box" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>{editing ? "Editar Modelo" : "Novo Modelo"}</h2>
-              <button className="modal-close" onClick={() => setShowForm(false)}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-              </button>
-            </div>
-
-            <div className="catalog-form">
-              <div className="cf-row">
-                <label><span>Marca *</span><input value={form.brand} onChange={(e) => F("brand", e.target.value)} placeholder="Ex: Nissan" /></label>
-                <label><span>Modelo *</span><input value={form.model} onChange={(e) => F("model", e.target.value)} placeholder="Ex: Skyline R34" /></label>
-              </div>
-              <div className="cf-row">
-                <label><span>Ano *</span><input type="number" value={form.year} onChange={(e) => F("year", Number(e.target.value))} /></label>
-                <label><span>Código do motor *</span><input value={form.engineCode} onChange={(e) => F("engineCode", e.target.value)} placeholder="Ex: RB26DETT" /></label>
-              </div>
-              <label>
-                <span>Aspiração</span>
-                <select value={form.aspirationType} onChange={(e) => F("aspirationType", e.target.value)}>
-                  {ASPIRATION_TYPES.map((a) => <option key={a} value={a}>{a.replace(/_/g, " ")}</option>)}
-                </select>
-              </label>
-              <div className="cf-row">
-                <label><span>HP de fábrica *</span><input type="number" value={form.factoryHorsePower} onChange={(e) => F("factoryHorsePower", Number(e.target.value))} /></label>
-                <label><span>Torque de fábrica *</span><input type="number" value={form.factoryTorque} onChange={(e) => F("factoryTorque", Number(e.target.value))} /></label>
-                <label><span>Peso de fábrica (kg) *</span><input type="number" value={form.factoryWeight} onChange={(e) => F("factoryWeight", Number(e.target.value))} /></label>
-              </div>
-              <p className="cf-section">FIPE (opcional)</p>
-              <div className="cf-row">
-                <label><span>Brand Code</span><input value={form.fipeBrandCode} onChange={(e) => F("fipeBrandCode", e.target.value)} placeholder="Ex: 26" /></label>
-                <label><span>Model Code</span><input value={form.fipeModelCode} onChange={(e) => F("fipeModelCode", e.target.value)} placeholder="Ex: 5571" /></label>
-                <label><span>Year Code</span><input value={form.fipeYearCode} onChange={(e) => F("fipeYearCode", e.target.value)} placeholder="Ex: 1995-1" /></label>
-              </div>
-            </div>
-
-            {error && <p className="modal-error" style={{ margin: "0 20px 8px" }}>{error}</p>}
-
-            <div className="modal-actions">
-              <button className="modal-btn-cancel" onClick={() => setShowForm(false)}>Cancelar</button>
-              <button className="modal-btn-submit" onClick={handleSubmit} disabled={submitting}>
-                {submitting ? "Salvando..." : editing ? "Salvar alterações" : "Criar modelo"}
-              </button>
-            </div>
-          </div>
-        </div>
+        <CatalogFormModal
+          editing={editing}
+          onClose={() => { setShowForm(false); setEditing(null); }}
+          onSubmit={handleSubmit}
+        />
       )}
     </div>
   );
