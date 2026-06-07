@@ -2,6 +2,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  color: #080606;
 }
 
 /* ── Trigger ─────────────────────────────────────────────── */
@@ -14,7 +15,7 @@
   border-radius: 10px;
   padding: 6px 10px 6px 6px;
   cursor: pointer;
-  color: #fff;
+  color: #080606;
   transition: background 0.18s, border-color 0.18s;
   font-family: inherit;
   box-sizing: border-box;
@@ -99,6 +100,7 @@
   z-index: 1000;
   animation: um-slide-in 0.15s ease;
   transform-origin: top right;
+  color:blue;
 }
 
 @keyframes um-slide-in {
@@ -152,11 +154,13 @@
   cursor: pointer;
   box-sizing: border-box;
   transition: background 0.14s, color 0.14s;
+ 
+
 }
 
 .um-item:hover {
-  background: #222230;
-  color: #f0f0f0;
+  background: #838383;
+  color: #bff5a8;
 }
 
 .um-item-icon {
@@ -177,10 +181,12 @@
 }
 
 .um-item--danger:hover {
-  background: #6b8f7112;
-  color: #8ab893;
+  background: #19098512;
+  color: #089324;
 }
 
 .um-item--danger:hover .um-item-icon {
   color: #8ab893;
 }
+
+

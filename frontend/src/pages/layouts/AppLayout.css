@@ -68,14 +68,6 @@
   border-radius: 8px;
 }
 
-.topbar button {
-  background: #ef4444;
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  cursor: pointer;
-}
 
 .content {
   padding: 24px;
@@ -118,6 +110,12 @@
   cursor: pointer;
   padding: 0;
   transition: background 0.18s, color 0.18s, border-color 0.18s;
+  background-color: #202221;
+}
+
+.topbar button {
+
+  background-color: #212020;
 }
 
 .topbar-notif:hover {
