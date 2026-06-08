@@ -12,9 +12,7 @@ export default function AppLayout() {
           <NavLink to="/feed">Feed</NavLink>
           <NavLink to="/garage">Garage</NavLink>
           <NavLink to="/catalog">Catalog</NavLink>
-          <NavLink to="/chronic-issues" className="nav-wip" onClick={(e) => e.preventDefault()}>
-            Chronic Issues <span className="nav-wip-badge">em breve</span>
-          </NavLink>
+          <NavLink to="/chronic-issues">Chronic Issues</NavLink>
           <NavLink to="/explore" className="nav-wip" onClick={(e) => e.preventDefault()}>
             Explore <span className="nav-wip-badge">em breve</span>
           </NavLink>

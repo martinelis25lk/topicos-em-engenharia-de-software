@@ -10,6 +10,9 @@ import ProfilePage from "../pages/ProfilePage";
 import DashboardPage from "../pages/DashboardPage";
 import AccountSettingsPage from "../pages/AccountSettingsPage";
 import CatalogPage from "../pages/CatalogPage";
+import ChronicIssuesPage from "../pages/ChronicIssuesPage";
+import ModelChronicPage from "../pages/ModelChronicPage";
+import IssueDetailPage from "../pages/IssueDetailPage";
 
 export function AppRouter() {
   return (
@@ -25,6 +28,9 @@ export function AppRouter() {
             <Route path="/garage" element={<GaragePage />} />
             <Route path="/vehicle/:id" element={<VehiclePage />} />
             <Route path="/catalog" element={<CatalogPage />} />
+            <Route path="/chronic-issues" element={<ChronicIssuesPage />} />
+            <Route path="/chronic-issues/models/:id" element={<ModelChronicPage />} />
+            <Route path="/chronic-issues/:id" element={<IssueDetailPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/account/settings" element={<AccountSettingsPage />} />

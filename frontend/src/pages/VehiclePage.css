@@ -64,3 +64,16 @@
   padding: 8px 12px;
   border-radius: 6px;
 }
+
+.vehicle-back {
+  all: unset;
+  cursor: pointer;
+  color: #666;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  transition: color 0.15s;
+}
+.vehicle-back:hover { color: #f0f0f0; }
