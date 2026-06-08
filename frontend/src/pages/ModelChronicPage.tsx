@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   getModelChronicPage, voteOnIssue, approveIssue, rejectIssue,
-  type VehicleChronicPage, type ChronicIssueCard,
+  type VehicleChronicPage
 } from "../api/chronicIssueApi";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import CreateChronicIssueModal from "../components/ChronicIssue/CreateChronicIssueModal";

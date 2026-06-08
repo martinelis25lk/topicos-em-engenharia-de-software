@@ -102,14 +102,6 @@ const VehicleCard = ({ vehicle, onImageUploaded }: Props) => {
             <p className="vc-engine">{vehicle.engine}</p>
           </div>
           <div className="vc-badges">
-            {vehicle.modificationsCount != null && vehicle.modificationsCount > 0 && (
-              <span className="vc-mods-badge">{vehicle.modificationsCount} mods</span>
-            )}
-            {vehicle.driveType && (
-              <span className={`vc-drive-badge drive-${vehicle.driveType.toLowerCase()}`}>
-                {vehicle.driveType}
-              </span>
-            )}
           </div>
         </div>
 
@@ -147,38 +139,6 @@ const VehicleCard = ({ vehicle, onImageUploaded }: Props) => {
             unit=" hp/t"
           />
         </div>
-
-        {/* Stats extras */}
-        {(vehicle.acceleration0to100 || vehicle.displacement) && (
-          <div className="vc-extra-stats">
-            {vehicle.displacement && (
-              <div className="vc-stat">
-                <span className="vc-stat-val">{vehicle.displacement}L</span>
-                <span className="vc-stat-label">Cilindrada</span>
-              </div>
-            )}
-            {vehicle.acceleration0to100 && (
-              <div className="vc-stat">
-                <span className="vc-stat-val">{vehicle.acceleration0to100}s</span>
-                <span className="vc-stat-label">0–100</span>
-              </div>
-            )}
-            {vehicle.transmissionModel && (
-              <div className="vc-stat">
-                <span className="vc-stat-val">{vehicle.transmissionModel.replace(/_/g, " ")}</span>
-                <span className="vc-stat-label">Câmbio</span>
-              </div>
-            )}
-            {vehicle.powerGainPercentage != null && vehicle.powerGainPercentage > 0 && (
-              <div className="vc-stat">
-                <span className="vc-stat-val" style={{ color: "#00ffae" }}>
-                  +{Math.round(vehicle.powerGainPercentage)}%
-                </span>
-                <span className="vc-stat-label">Ganho HP</span>
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );

@@ -19,7 +19,6 @@ const VehiclePage = () => {
       </button>
 
       <div className="vehicle-hero">
-        {data.imageUrl && <img src={data.imageUrl} alt={data.name} />}
         <h1>{data.name}</h1>
         <p>{data.engine}</p>
       </div>
@@ -33,22 +32,8 @@ const VehiclePage = () => {
 
       <div className="vehicle-card small">
         <h2>Info</h2>
-        <p><strong>Dono:</strong> {data.ownerName}</p>
-        <p><strong>Ano:</strong> {data.year}</p>
         <p><strong>Motor:</strong> {data.engine}</p>
-        <p><strong>Mods:</strong> {data.modsCount}</p>
       </div>
-
-      {data.mods?.length > 0 && (
-        <div className="vehicle-card">
-          <h2>Modificações</h2>
-          <div className="mods-grid">
-            {data.mods?.map((mod) => (
-              <div key={mod.name} className="mod-card">{mod.name}</div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
