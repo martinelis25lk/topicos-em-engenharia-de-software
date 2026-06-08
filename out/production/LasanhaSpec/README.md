@@ -42,16 +42,31 @@ O objetivo é centralizar conhecimento técnico, experiências reais e projetos 
 Andei me informando sobre microserviços e percebi que não é todo projeto que se deve começar de cara com esse tipo de arquitetura de software, e que em muitos casos há a necessidade de maturar o projeto em um
 monolitico bem estruturado e de acordo com a escalabilidade e necessidades do projeto, ir quebrando o sistema para uma nova concepção, mas como este projeto é mais como uma cobaia para fins didáticos e de diversão mesmo. Então o projeto segue uma abordagem baseada em microserviços, iniciando com um serviço central de veículos.
 
+
+## 🧠 Arquitetura (em evolução)
+
+Inicialmente o projeto nasceu como um monolito estruturado, mas está evoluindo para uma arquitetura baseada em serviços conforme novas necessidades surgem.
+
+Hoje a separação está caminhando para:
+
+- `car-service` → domínio principal (veículos, garagem, crônicos)
+- `market-service` → dados externos (FIPE, preços, análise de mercado)
+
+### Fluxo geral:
+
+```mermaid
 graph TD
-    Controller --> Service
-    Service --> Repository
-    Repository --> Database
-    Service --> SetupRulesService
-    UserVehicle --> CurrentSetup
-    CurrentSetup --> CommunitySetup
 
+    User((User / Frontend)) -->|HTTP| CarService[car-service]
 
+    CarService -->|REST| MarketService[market-service]
 
+    CarService -->|Evento: VehicleCreated| RabbitMQ[(RabbitMQ)]
+
+    RabbitMQ -->|Consume Event| MarketService
+
+    MarketService -->|HTTP| FIPE[FIPE API external]
+```
 
 ## 🇧🇷 Problema
 
@@ -183,7 +198,43 @@ Transformar a plataforma em referência para:
 
 Projeto desenvolvido como iniciativa independente com foco em aprendizado prático e potencial de produto real, readme ainda em andamento tbm kkk
 
----
 
+
+
+
+## Status das Funcionalidades
+
+###  Implementado
+- Cadastro e autenticação de usuários (JWT + Spring Security)
+- Garagem do usuário (CRUD de veículos)
+- Upload de imagens para AWS S3
+- Catálogo de veículos base
+- Problemas crônicos por modelo com sistema de votos
+
+###  Em desenvolvimento
+- Frontend (React + TypeScript)
+- Feed social
+- Setups da comunidade
+
+  ----
+
+- agora sim tive uma ideia interessante pra microserviço e que faça sentido com o rumo q a aplicação tá tomando, vou tentar integrar um serviço de disponibilidade de informações da tabela FIPE juntamente com um serviço de captura de informações de peças de carros, acho q vo ter q fazer algum tipo de scraping em sites de autopeças nacionais pra ter mais dados, tentar acessar as apis do mercado livre e ebay e tentar normalizar esses dados de forma consistente para serem servidos no meu projeto principal.
+
+
+
+
+* Sobre a feture de consulta em apis de peças como do Mercado livre, ebay, eutoparts etc...
+
+- Crônico aprovado → peças relacionadas → custo estimado de manutenção
+- exemplo: Ford Fiesta 2004
+  Crônico aprovado: bomba d’água com vazamento
+  ↓
+  Peças relacionadas:
+- bomba d’água
+- junta
+- aditivo
+- correia auxiliar
+  ↓
+  Preço médio no mercado
 
 

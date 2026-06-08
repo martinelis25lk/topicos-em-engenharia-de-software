@@ -1,0 +1,79 @@
+.vehicle-page {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* HERO */
+.vehicle-hero {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.vehicle-hero img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+}
+
+.vehicle-hero h1 {
+  margin-top: 12px;
+}
+
+.vehicle-hero p {
+  color: #888;
+}
+
+/* BOTÃO */
+.vehicle-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.post-btn {
+  background: #00ffae;
+  color: #000;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* CARDS */
+.vehicle-card {
+  background: #1a1a1a;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.vehicle-card.small {
+  font-size: 14px;
+}
+
+/* MODS */
+.mods-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mod-card {
+  background: #222;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.vehicle-back {
+  all: unset;
+  cursor: pointer;
+  color: #666;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  transition: color 0.15s;
+}
+.vehicle-back:hover { color: #f0f0f0; }
