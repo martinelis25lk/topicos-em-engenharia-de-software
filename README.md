@@ -1,240 +1,272 @@
 # LasanhaSpec
-Um projeto mais intimista, mas que não deixa de ser ambicioso para todos aqueles que gostam de carros ou que querem aprender mais sobre eles.
 
-É uma plataforma voltada mais  para entusiastas do mundo automotivo, das corridas e da preparação. 
-Com foco em análise técnica de veículos, preparação automotiva e impacto de modificações de performance, consumo, custo e manutenabilidade.
+LasanhaSpec é um hub automotivo feito para entusiastas de carros, com foco em análise técnica, garagem digital e registro colaborativo de problemas recorrentes (crônicos).
 
-O projeto nasceu da ideia do autor de sempre pensar nos carros como grandes legos/lasanhas alinhado ao prazer e curiosidade em programar coisas diferentes.
-E como todo bom grande lasanheiro, quem não gostaria de um programa acessível de análise de performance baseado em valores e impactos reais que as modificações proporcionam para o seu possante, hein? haha
-
-
-obs: por quê LasanhaSpec? bom, na comunidade gearhead de carros modificados, o carros são carinhosamente apelidados de lasanhas, pq como toda boa lasanha,, tem várias camadas(peças) e o cozinheiro(gearhead) se diverte montando haha.
-
- Sobre o Projeto
-
-Lasanha Spec é uma plataforma voltada para entusiastas de carros usados e modificados, com foco inicial no mercado brasileiro.
-
-O objetivo é centralizar conhecimento técnico, experiências reais e projetos automotivos em um único ambiente acessível, estruturado e confiável aplicar conceitos de:
-
-
-### Backend
-
-* Java
-* Spring Boot
-* Spring Data JPA
-* Hibernate
-* Banco relacional
-* AWS S3 para imagens
-* Microserviços
-
-### Frontend (em desenvolvimento)
-
-* React
-* TypeScript
-* Vite
+A proposta não é apenas ser um catálogo de veículos, mas centralizar informações reais de uso, manutenção, modificações e experiências de proprietários.
 
 ---
 
+# 2ª Avaliação — Protótipo 1 (Disciplina)
 
+Este documento também serve como mapeamento direto dos requisitos da avaliação.
 
+---
 
+## A — Funcionalidades da aplicação web
 
-Andei me informando sobre microserviços e percebi que não é todo projeto que se deve começar de cara com esse tipo de arquitetura de software, e que em muitos casos há a necessidade de maturar o projeto em um
-monolitico bem estruturado e de acordo com a escalabilidade e necessidades do projeto, ir quebrando o sistema para uma nova concepção, mas como este projeto é mais como uma cobaia para fins didáticos e de diversão mesmo. Então o projeto segue uma abordagem baseada em microserviços, iniciando com um serviço central de veículos.
+### 1. Controle de autenticação e autorização (Login e Registro)
 
+O sistema possui autenticação completa baseada em JWT.
 
-## 🧠 Arquitetura (em evolução)
+- Registro de usuário
+  - `POST /auth/register`
+  - validação de email único
+  - senha criptografada com BCrypt
+  - retorno de token JWT
 
-Inicialmente o projeto nasceu como um monolito estruturado, mas está evoluindo para uma arquitetura baseada em serviços conforme novas necessidades surgem.
+- Login
+  - `POST /auth/login`
+  - autenticação via Spring Security
+  - geração de JWT
 
-Hoje a separação está caminhando para:
+- Segurança
+  - `JwtAuthFilter` intercepta requisições
+  - `SecurityContext` mantém usuário autenticado
 
-- `car-service` → domínio principal (veículos, garagem, crônicos)
-- `market-service` → dados externos (FIPE, preços, análise de mercado)
+No frontend:
+- token armazenado no cliente
+- `ProtectedRoute` bloqueia acesso a rotas protegidas
 
-### Fluxo geral:
+---
+
+### 2. Dashboard do usuário autenticado
+
+Após login, o usuário acessa a área autenticada.
+
+- `DashboardPage.tsx` já existe, mas ainda está em construção
+- layout principal com menu lateral funcional
+- rotas já implementadas:
+  - garagem
+  - catálogo
+  - crônicos
+  - perfil
+
+O dashboard ainda precisa de finalização visual e funcional.
+
+---
+
+### 3. Edição de perfil do usuário
+
+Funcionalidade implementada:
+
+- `PATCH /users/me`
+- `UserController`
+
+No frontend:
+- página de perfil
+- página de configurações da conta
+
+---
+
+### 4. Upload de imagem de perfil
+
+Implementado com integração AWS S3:
+
+- `POST /users/me/profile-image`
+- serviço `S3StorageService`
+- URL da imagem salva no campo `profileImageUrl`
+
+---
+
+### 5. Propriedades do usuário
+
+A entidade User contém:
+
+- id
+- nome completo
+- username
+- email
+- senha (hash)
+- imagem de perfil
+- descrição
+- data de criação
+- role
+
+---
+
+### 6. Alteração de senha
+
+Funcionalidade ainda não implementada como endpoint separado.
+
+---
+
+# B — Infraestrutura AWS
+
+## AWS S3
+
+Em uso para upload de imagens de usuários e veículos.
+
+---
+
+## Infraestrutura não documentada
+
+Ainda não há evidência completa dos seguintes itens:
+
+- VPC
+- EC2
+- Security Groups
+- tabela de rotas
+- IP público
+
+O projeto atualmente roda em ambiente local com docker-compose.
+
+---
+
+# C — Repositório e documentação
+
+## Repositório Git
+
+Projeto versionado com estrutura organizada:
+
+- car-service
+- market-service
+- frontend
+- docs
+
+---
+
+## Documentação existente
+
+- chronic-issues-module.md
+- profile-image-feature.md
+- Domain-decisions.md
+
+---
+
+## Documentação pendente
+
+- aws-deploy.md (ainda não criado)
+
+---
+
+# Fluxo de autenticação
+
+Registro de usuário gera JWT  
+Login autentica e retorna JWT  
+Frontend armazena token  
+Backend valida via JwtAuthFilter  
+
+---
+
+# Entidade User
+
+- id
+- nome completo
+- username
+- email
+- senha (hash)
+- imagem de perfil
+- descrição
+- data de criação
+- role
+
+---
+
+# Arquitetura
+
+O sistema começou como monolito e está evoluindo para uma arquitetura baseada em serviços.
+
+## car-service
+Responsável pelo domínio principal:
+- usuários
+- veículos
+- garagem
+- crônicos
+- uploads
+
+## market-service
+Responsável por dados externos:
+- integração com FIPE
+- dados de mercado
+- evolução futura para peças e preços
+
+---
+
+# Fluxo geral
+
+Frontend → car-service → market-service → APIs externas (FIPE)
+
+---
+
+# Infraestrutura AWS (resumo)
+
+- S3 em uso
+- EC2 pendente de deploy/documentação
+- VPC pendente
+- Security Groups pendente
+
+---
+
+# Checklist da avaliação
+
+- Login e registro implementados
+- JWT funcionando
+- Edição de perfil implementada
+- Upload de imagem funcionando
+- Repositório Git estruturado
+- Documentação parcial existente
+- Dashboard ainda em construção
+- Infraestrutura AWS ainda não evidenciada completamente
+
+---
+
+# Sobre o projeto
+
+O problema abordado é a dificuldade de centralizar informações confiáveis sobre veículos antigos no Brasil.
+
+Hoje essas informações estão dispersas em fóruns, vídeos e comunidades informais.
+
+---
+
+# Proposta
+
+Criar uma plataforma que centraliza:
+
+- garagem digital
+- histórico de modificações
+- problemas recorrentes por modelo
+- análise técnica de veículos
+- dados de mercado
+
+---
+
+# Funcionalidades principais
+
+## Garagem digital
+- cadastro de veículos
+- fotos
+- status do veículo
+
+## Crônicos
+- problemas recorrentes por modelo
+- sistema de votos
+- severidade e impacto
+
+## Setups
+- modificações do veículo
+- histórico de evolução
+
+## Imagens
+- upload via S3
+- galeria por veículo
+
+---
+
+# Arquitetura simplificada
 
 ```mermaid
 graph TD
 
-    User((User / Frontend)) -->|HTTP| CarService[car-service]
-
-    CarService -->|REST| MarketService[market-service]
-
-    CarService -->|Evento: VehicleCreated| RabbitMQ[(RabbitMQ)]
-
-    RabbitMQ -->|Consume Event| MarketService
-
-    MarketService -->|HTTP| FIPE[FIPE API external]
-```
-
-## 🇧🇷 Problema
-
-O Brasil possui uma frota de veículos de passeio cada vez mais envelhecida, impulsionada pelo alto custo dos carros novos desde a pandemia.
-
-Consequências:
-
-* Crescente dependência de veículos antigos
-* Manutenções complexas e caras
-* Falhas recorrentes pouco documentadas
-* Informação dispersa em fóruns e vídeos
-* Alto risco para proprietários e compradores
-
-Entusiastas frequentemente dependem de conhecimento informal para evitar prejuízos graves.
-
----
-
-##  Proposta da Plataforma
-
-Criar um hub que combine:
-
-* Base de conhecimento técnica
-* Rede social de projetos automotivos
-* Garagem digital do usuário
-* Documentação de problemas crônicos(eu considero essa feature o diferencial do meu projeto)
-* Compartilhamento de builds e modificações
-
----
-
-##  Público-Alvo
-
-### Entusiastas hardcore
-
-* Realizam modificações profundas
-* Buscam dados técnicos
-* Compartilham projetos
-
-###  Donos apaixonados
-
-* Gostam de um modelo específico
-* Querem aprender mais
-* Podem fazer upgrades leves
-
-###  Usuários curiosos ou compradores
-
-* Pesquisam antes de adquirir um veículo
-* Precisam de informações rápidas e confiáveis
-
----
-
-##  Funcionalidades do MVP
-
-###  Garagem do Usuário
-
-* Cadastro de veículos próprios
-* Informações básicas e personalização
-* Ativação/desativação
-
----
-
-###  Setups / Builds
-
-* Modificações atuais do veículo
-* Versionamento de configurações
-* Estatísticas básicas como cavalos, torque, kilometragem, potencial de preparação, infomações de KM/troca de óleo
-
----
-
-###  Imagens do Veículo
-
-* Upload para armazenamento na nuvem
-* Múltiplas fotos por veículo
-* Exibição tipo feed do instagram
-
----
-
-###  Crônicos por Modelo
-
-Base colaborativa de problemas recorrentes:
-
-* Descrição do problema
-* Sintomas
-* Severidade
-* Manutenção preventiva
-* Estimativa de custo
-* Votos de utilidade
-
----
-
-###  Interação Social Básica
-
-* Curtidas em fotos e builds
-* Feed simples de atualizações
-
----
-
-
-
-##  Objetivo do Projeto
-
-Validar a utilidade da plataforma e construir uma base sólida para evolução futura, evitando complexidade prematura.
-
----
-
-##  Status do Projeto
-
-Em desenvolvimento ativo.
-
-Funcionalidades core do backend já implementadas ou em progresso, incluindo:
-
-* Modelagem de domínio
-* Estrutura de APIs REST
-* Integração com storage na nuvem
-
----
-
-##  Visão de Longo Prazo
-
-Transformar a plataforma em referência para:
-
-* Conhecimento técnico automotivo colaborativo
-* Comunidade de entusiastas
-* Documentação de builds reais
-* Prevenção de problemas mecânicos comuns
-
----
-
-##  Autor
-
-Projeto desenvolvido como iniciativa independente com foco em aprendizado prático e potencial de produto real, readme ainda em andamento tbm kkk
-
-
-
-
-
-## Status das Funcionalidades
-
-###  Implementado
-- Cadastro e autenticação de usuários (JWT + Spring Security)
-- Garagem do usuário (CRUD de veículos)
-- Upload de imagens para AWS S3
-- Catálogo de veículos base
-- Problemas crônicos por modelo com sistema de votos
-
-###  Em desenvolvimento
-- Frontend (React + TypeScript)
-- Feed social
-- Setups da comunidade
-
-  ----
-
-- agora sim tive uma ideia interessante pra microserviço e que faça sentido com o rumo q a aplicação tá tomando, vou tentar integrar um serviço de disponibilidade de informações da tabela FIPE juntamente com um serviço de captura de informações de peças de carros, acho q vo ter q fazer algum tipo de scraping em sites de autopeças nacionais pra ter mais dados, tentar acessar as apis do mercado livre e ebay e tentar normalizar esses dados de forma consistente para serem servidos no meu projeto principal.
-
-
-
-
-* Sobre a feture de consulta em apis de peças como do Mercado livre, ebay, eutoparts etc...
-
-- Crônico aprovado → peças relacionadas → custo estimado de manutenção
-- exemplo: Ford Fiesta 2004
-  Crônico aprovado: bomba d’água com vazamento
-  ↓
-  Peças relacionadas:
-- bomba d’água
-- junta
-- aditivo
-- correia auxiliar
-  ↓
-  Preço médio no mercado
-
-
+Frontend --> CarService
+CarService --> MarketService
+MarketService --> FIPE
