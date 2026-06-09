@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080";
+const API_URL = "http://98.81.151.18:8080";
 
 type LoginRequest = {
   email: string;
