@@ -1,12 +1,8 @@
 package br.com.lasanhaspec.carservice.service;
 
 import br.com.lasanhaspec.carservice.domain.models.User;
-import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
-import br.com.lasanhaspec.carservice.dto.ChronicIssueDTO;
 import br.com.lasanhaspec.carservice.exception.ResourceNotFoundException;
-import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
 import br.com.lasanhaspec.carservice.repository.UserRepository;
-import br.com.lasanhaspec.carservice.repository.VehicleCatalogRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

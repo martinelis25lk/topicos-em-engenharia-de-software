@@ -1,15 +1,10 @@
 package br.com.lasanhaspec.carservice.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import br.com.lasanhaspec.carservice.domain.enums.IssueStatus;
-import br.com.lasanhaspec.carservice.domain.enums.VoteType;
-import br.com.lasanhaspec.carservice.domain.models.ChronicIssue;
-import br.com.lasanhaspec.carservice.domain.models.IssueVote;
+
 import br.com.lasanhaspec.carservice.domain.models.User;
 import br.com.lasanhaspec.carservice.exception.BusinessException;
 import br.com.lasanhaspec.carservice.exception.ResourceNotFoundException;
-import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
-import br.com.lasanhaspec.carservice.repository.IssueVoteRepository;
 import br.com.lasanhaspec.carservice.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +16,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)

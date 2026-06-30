@@ -1,7 +1,6 @@
 package br.com.lasanhaspec.carservice.controller;
 
 import org.springframework.http.MediaType;
-import br.com.lasanhaspec.carservice.service.UserVehicleService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

@@ -6,15 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import br.com.lasanhaspec.carservice.domain.models.ChronicIssue;
-import br.com.lasanhaspec.carservice.domain.models.UserVehicle;
-import br.com.lasanhaspec.carservice.domain.models.VehicleCatalogModel;
-import br.com.lasanhaspec.carservice.dto.OccurrenceReportDTO;
-import br.com.lasanhaspec.carservice.dto.ReportOccurrenceRequestDTO;
 import br.com.lasanhaspec.carservice.exception.BusinessException;
-import br.com.lasanhaspec.carservice.repository.ChronicIssueRepository;
-import br.com.lasanhaspec.carservice.repository.IssueOccurrenceRepository;
-import br.com.lasanhaspec.carservice.repository.UserVehicleRepository;
 import org.junit.jupiter.api.Test;
 import java.util.Optional;
 

@@ -1,7 +1,5 @@
 package br.com.lasanhaspec.carservice.service;
 
-import br.com.lasanhaspec.carservice.domain.enums.IssueSeverity;
-import br.com.lasanhaspec.carservice.domain.models.ChronicIssue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
