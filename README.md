@@ -270,3 +270,60 @@ graph TD
 Frontend --> CarService
 CarService --> MarketService
 MarketService --> FIPE
+
+
+### 7. Módulo de Multimídia (Imagens, Áudios e Vídeos)
+
+Implementado um módulo dedicado para upload, listagem e remoção de arquivos de mídia (imagens, áudios e vídeos), com armazenamento físico no AWS S3 e metadados persistidos no banco relacional.
+
+- Controller
+  - `MultiMediaController` (`/api/multimedia`)
+  - rotas separadas por tipo de mídia: `/imagem`, `/audio`, `/video`
+  - autenticação via JWT obrigatória em todas as rotas (exceto onde explicitado)
+
+**Endpoints**
+
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/api/multimedia/imagem` | Cadastra uma imagem (multipart/form-data) |
+| POST | `/api/multimedia/audio` | Cadastra um áudio (multipart/form-data) |
+| POST | `/api/multimedia/video` | Cadastra um vídeo (multipart/form-data) |
+| GET | `/api/multimedia` | Lista as mídias do usuário autenticado |
+| GET | `/api/multimedia/{id}` | Busca uma mídia específica por ID |
+| DELETE | `/api/multimedia/{id}` | Remove uma mídia (banco + arquivo no S3) |
+
+Cada upload recebe `nome` (identificação amigável) e `file` (arquivo binário) via `multipart/form-data`, além do usuário autenticado extraído do token JWT (`Authentication`).
+
+**Fluxo de upload**
+
+1. Frontend envia o arquivo via `FormData` para a rota correspondente ao tipo de mídia
+2. Controller converte o `MultipartFile` recebido em um arquivo temporário local
+3. Service de domínio (`ImagemService`, `AudioService` ou `VideoService`) envia esse arquivo para o AWS S3 através do `S3StorageService`
+4. A URL pública gerada pelo S3 é salva no campo `caminhoArquivo` da entidade, junto com nome, data de cadastro e username do dono
+5. O arquivo temporário local é apagado após o envio ao S3
+
+**Fluxo de remoção**
+
+1. Busca a mídia pelo ID no banco
+2. Extrai a chave do arquivo a partir da URL salva (`caminhoArquivo`)
+3. Remove o objeto do bucket S3
+4. Remove o registro do banco de dados
+
+**Modelo de dados**
+
+- `Midia` — entidade base (JPA), com `id`, `nome`, `caminhoArquivo`, `dataCadastro`, `userId`, `username` e `tipo`
+- `Imagem`, `Audio`, `Video` — especializações de `Midia`, cada uma com service próprio
+
+**Armazenamento (AWS S3)**
+
+- `S3StorageService` implementa a interface `StorageService`
+- bucket: `lasanhaspec-vehicle-images-dev` (região `us-east-2`)
+- cada arquivo recebe um nome único via `UUID` para evitar colisões
+- suporta upload tanto a partir de `MultipartFile` quanto de um caminho de arquivo local
+
+**Frontend**
+
+- `multiMediaApi.ts` — client HTTP (axios) que consome as rotas acima, incluindo o token JWT (`localStorage`) em cada requisição
+- `MultiMediaPage.tsx` — tela de listagem, upload (com seleção de tipo: imagem/áudio/vídeo) e remoção de mídias do usuário logado, com busca por termo
+
+---
