@@ -11,6 +11,9 @@ const MultimediaPage = () => {
   const [midiaExpandida, setMidiaExpandida] = useState<any | null>(null);
   const [carregandoMidias, setCarregandoMidias] = useState<boolean>(false);
   
+  // 🔍 NOVO: Estado para armazenar o termo da pesquisa
+  const [termoPesquisa, setTermoPesquisa] = useState<string>("");
+
   // Estados do formulário de cadastro
   const [nome, setNome] = useState<string>("");
   const [tipo, setTipo] = useState<TipoMidia>("imagem");
@@ -96,6 +99,17 @@ const MultimediaPage = () => {
     }
   };
 
+  // 🔍 NOVO: Filtra as mídias na memória antes de renderizar na tela
+  // Procura tanto no título/nome quanto no tipo da mídia (caso digitem 'imagem', 'video', etc)
+  const midiasFiltradas = midias.filter((midia) => {
+    const termo = termoPesquisa.toLowerCase();
+    return (
+      midia.nome.toLowerCase().includes(termo) ||
+      midia.tipo.toLowerCase().includes(termo) ||
+      midia.username?.toLowerCase().includes(termo)
+    );
+  });
+
   return (
     <div className="garage-page multimedia-page">
       
@@ -122,118 +136,150 @@ const MultimediaPage = () => {
         </div>
       </div>
 
+      {/* ── 🔍 NOVO: Barra de Busca (Só aparece se o banco tiver alguma mídia) ── */}
+      {midias.length > 0 && (
+        <div style={styles.searchContainer}>
+          <div style={styles.searchIconWrapper}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <input
+            type="text"
+            placeholder="Buscar mídias por nome, tipo ou quem enviou..."
+            value={termoPesquisa}
+            onChange={(e) => setTermoPesquisa(e.target.value)}
+            style={styles.searchInput}
+          />
+          {termoPesquisa && (
+            <button onClick={() => setTermoPesquisa("")} style={styles.clearSearchBtn}>
+              &times;
+            </button>
+          )}
+        </div>
+      )}
+
       {/* ── Conteúdo / Grade de Mídias ──────────────────── */}
       {carregandoMidias ? (
         <div style={{ textAlign: "center", padding: "40px", color: "#666" }}>Carregando mídias...</div>
       ) : midias.length > 0 ? (
-        <div className="media-grid" style={styles.grid}>
-          {midias.map((midia) => {
-            const podeDeletar = true;
+        // Se o usuário digitou algo e o filtro limpou a lista inteira
+        midiasFiltradas.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
+            Nenhum arquivo encontrado para "<strong>{termoPesquisa}</strong>".
+          </div>
+        ) : (
+          // 💡 Trocamos 'midias.map' por 'midiasFiltradas.map'
+          <div className="media-grid" style={styles.grid}>
+            {midiasFiltradas.map((midia) => {
+              const podeDeletar = true;
 
-            return (
-              <div 
-                key={midia.id} 
-                onClick={() => setMidiaExpandida(midia)}
-                style={{ 
-                  position: 'relative', 
-                  border: '1px solid #e0e0e0', 
-                  padding: '20px', 
-                  borderRadius: '12px',
-                  boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
-                  backgroundColor: '#fff',
-                  transition: 'transform 0.2s',
-                  cursor: 'pointer'
-                }}
-              >
-                
-                {/* ❌ Botão de deletar condicional */}
-                {podeDeletar && (
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation(); // Evita abrir o modal de zoom ao clicar no X
-                      handleDeletar(midia.id);
-                    }}
-                    style={{
-                      position: 'absolute',
-                      top: '12px',
-                      right: '12px',
-                      backgroundColor: '#ff4d4d',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '50%',
-                      width: '26px',
-                      height: '26px',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 'bold',
-                      fontSize: '14px',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                      zIndex: 10
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#cc0000'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ff4d4d'}
-                    title="Excluir mídia permanentemente"
-                  >
-                    &times;
-                  </button>
-                )}
-
-                {/* 📁 Cabeçalho e Identificação do Card */}
-                <div style={{ marginBottom: '12px', paddingRight: '20px' }}>
-                  <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', color: '#333' }}>
-                    {midia.nome}
-                  </h3>
-                  <span style={{ 
-                    fontSize: '11px', 
-                    backgroundColor: '#f0f0f0', 
-                    padding: '3px 8px', 
-                    borderRadius: '4px',
-                    color: '#666',
-                    textTransform: 'uppercase',
-                    fontWeight: 'bold'
-                  }}>
-                    {midia.tipo}
-                  </span>
-                </div>
-
-                {/* 🎮 Renderização de acordo com o tipo da mídia */}
-                <div style={{ marginTop: '15px' }}>
-                  {midia.tipo === 'IMAGEM' && (
-                    <img 
-                      src={midia.caminhoArquivo} 
-                      alt={midia.nome} 
-                      style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '6px' }} 
-                    />
+              return (
+                <div 
+                  key={midia.id} 
+                  onClick={() => setMidiaExpandida(midia)}
+                  style={{ 
+                    position: 'relative', 
+                    border: '1px solid #e0e0e0', 
+                    padding: '20px', 
+                    borderRadius: '12px',
+                    boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+                    backgroundColor: '#fff',
+                    transition: 'transform 0.2s',
+                    cursor: 'pointer'
+                  }}
+                >
+                  
+                  {/* ❌ Botão de deletar condicional */}
+                  {podeDeletar && (
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeletar(midia.id);
+                      }}
+                      style={{
+                        position: 'absolute',
+                        top: '12px',
+                        right: '12px',
+                        backgroundColor: '#ff4d4d',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '50%',
+                        width: '26px',
+                        height: '26px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontWeight: 'bold',
+                        fontSize: '14px',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                        zIndex: 10
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#cc0000'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ff4d4d'}
+                      title="Excluir mídia permanentemente"
+                    >
+                      &times;
+                    </button>
                   )}
 
-                  {midia.tipo === 'AUDIO' && (
-                    <div onClick={(e) => e.stopPropagation()}>
-                      <audio controls src={midia.caminhoArquivo} style={{ width: '100%' }}>
-                        Seu navegador não suporta o elemento de áudio.
-                      </audio>
-                    </div>
-                  )}
+                  {/* 📁 Cabeçalho e Identificação do Card */}
+                  <div style={{ marginBottom: '12px', paddingRight: '20px' }}>
+                    <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', color: '#333' }}>
+                      {midia.nome}
+                    </h3>
+                    <span style={{ 
+                      fontSize: '11px', 
+                      backgroundColor: '#f0f0f0', 
+                      padding: '3px 8px', 
+                      borderRadius: '4px',
+                      color: '#666',
+                      textTransform: 'uppercase',
+                      fontWeight: 'bold'
+                    }}>
+                      {midia.tipo}
+                    </span>
+                  </div>
 
-                  {midia.tipo === 'VIDEO' && (
-                    <div onClick={(e) => e.stopPropagation()}>
-                      <video controls src={midia.caminhoArquivo} style={{ width: '100%', borderRadius: '6px' }}>
-                        Seu navegador não suporta o elemento de vídeo.
-                      </video>
-                    </div>
-                  )}
+                  {/* 🎮 Renderização de acordo com o tipo da mídia */}
+                  <div style={{ marginTop: '15px' }}>
+                    {midia.tipo === 'IMAGEM' && (
+                      <img 
+                        src={midia.caminhoArquivo} 
+                        alt={midia.nome} 
+                        style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '6px' }} 
+                      />
+                    )}
+
+                    {midia.tipo === 'AUDIO' && (
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <audio controls src={midia.caminhoArquivo} style={{ width: '100%' }}>
+                          Seu navegador não suporta o elemento de áudio.
+                        </audio>
+                      </div>
+                    )}
+
+                    {midia.tipo === 'VIDEO' && (
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <video controls src={midia.caminhoArquivo} style={{ width: '100%', borderRadius: '6px' }}>
+                          Seu navegador não suporta o elemento de vídeo.
+                        </video>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 👤 Detalhes adicionais no rodapé do card */}
+                  <div style={{ marginTop: '15px', borderTop: '1px solid #f0f0f0', paddingTop: '10px', fontSize: '12px', color: '#999' }}>
+                    Enviado por: <strong style={{ color: '#555' }}>{midia.username}</strong>
+                  </div>
+
                 </div>
-
-                {/* 👤 Detalhes adicionais no rodapé do card */}
-                <div style={{ marginTop: '15px', borderTop: '1px solid #f0f0f0', paddingTop: '10px', fontSize: '12px', color: '#999' }}>
-                  Enviado por: <strong style={{ color: '#555' }}>{midia.username}</strong>
-                </div>
-
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )
       ) : (
         <div className="media-empty-state" style={styles.emptyState}>
           <p style={{ margin: 0, fontWeight: "500" }}>Nenhuma mídia encontrada.</p>
@@ -316,22 +362,11 @@ const MultimediaPage = () => {
         </div>
       )}
 
-      {/* ── 🌟 Modal de Visão Expandida (Zoom) ─────────────────────────── */}
+      {/* ── Modal de Visão Expandida (Zoom) ─────────────────────────── */}
       {midiaExpandida && (
-        <div 
-          onClick={() => setMidiaExpandida(null)} 
-          style={styles.zoomOverlay}
-        >
-          <div 
-            onClick={(e) => e.stopPropagation()} 
-            style={styles.zoomModal}
-          >
-            <button 
-              onClick={() => setMidiaExpandida(null)}
-              style={styles.zoomCloseBtn}
-            >
-              &times;
-            </button>
+        <div onClick={() => setMidiaExpandida(null)} style={styles.zoomOverlay}>
+          <div onClick={(e) => e.stopPropagation()} style={styles.zoomModal}>
+            <button onClick={() => setMidiaExpandida(null)} style={styles.zoomCloseBtn}>&times;</button>
 
             <h2 style={{ marginTop: 0, marginBottom: '5px' }}>{midiaExpandida.nome}</h2>
             <p style={{ color: '#666', fontSize: '14px', marginBottom: '20px' }}>Enviado por: {midiaExpandida.username}</p>
@@ -359,13 +394,48 @@ const MultimediaPage = () => {
   );
 };
 
-// CSS inline atualizado incluindo a estilização da Grade e dos Cards
 const styles = {
   grid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
     gap: "20px",
     padding: "20px 0"
+  },
+  // 🔍 Novos Estilos para o Input de Busca:
+  searchContainer: {
+    position: "relative" as const,
+    width: "100%",
+    maxWidth: "500px",
+    margin: "0 0 20px 0",
+    display: "flex",
+    alignItems: "center"
+  },
+  searchIconWrapper: {
+    position: "absolute" as const,
+    left: "14px",
+    display: "flex",
+    alignItems: "center",
+    pointerEvents: "none" as const
+  },
+  searchInput: {
+    width: "100%",
+    padding: "12px 40px 12px 42px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    fontSize: "14px",
+    outline: "none",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.02)",
+    transition: "border-color 0.2s"
+  },
+  clearSearchBtn: {
+    position: "absolute" as const,
+    right: "12px",
+    background: "none",
+    border: "none",
+    fontSize: "20px",
+    color: "#999",
+    cursor: "pointer",
+    padding: "4px"
   },
   emptyState: {
     textAlign: "center" as const,
@@ -439,7 +509,7 @@ const styles = {
     borderRadius: "4px",
     border: "1px solid #ccc",
     fontSize: "14px",
-    backgroundColor: "#fff"
+    backgroundColor: "#0e8aac"
   },
   fileInput: {
     padding: "6px 0"
@@ -454,7 +524,7 @@ const styles = {
     padding: "10px 16px",
     borderRadius: "4px",
     border: "1px solid #ccc",
-    backgroundColor: "#fff",
+    backgroundColor: "#c90505",
     cursor: "pointer"
   },
   submitBtn: {
@@ -473,7 +543,6 @@ const styles = {
     borderRadius: "4px",
     fontSize: "14px"
   },
-  // Estilos específicos do Modal de Zoom:
   zoomOverlay: {
     position: "fixed" as const,
     top: 0,
