@@ -1,0 +1,16 @@
+package br.com.lasanhaspec.carservice;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class VehicleServiceApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(VehicleServiceApplication.class, args);
+	}
+
+}
+
+
+//http://localhost:5173/ front

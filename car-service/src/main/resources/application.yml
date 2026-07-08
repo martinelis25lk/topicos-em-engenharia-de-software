@@ -1,0 +1,32 @@
+spring:
+  profiles:
+    active: local
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  datasource:
+    # Substitua o 'SEU-ENDPOINT-DO-RDS' pelo Endpoint longo que a AWS vai te dar na tela do banco
+    url: jdbc:mysql://infoimages.cate2cc2i7i5.us-east-1.rds.amazonaws.com :3306/carservice?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: admin 
+    password: goto2026 
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      # 'update' faz o Spring criar as tabelas automaticamente com base nas suas classes @Entity
+      ddl-auto: update 
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+aws:
+  region: us-east-2
+  s3:
+    bucket-name: lasanhaspec-vehicle-images-dev
+
+jwt:
+  secret: k94sLn43Mf2nFcLQHBZIswCyUk4BICR5pMLJtj13Cxh
+  expiration: 1000000

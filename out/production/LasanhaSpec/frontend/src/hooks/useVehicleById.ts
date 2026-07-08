@@ -1,0 +1,28 @@
+import { useEffect, useState } from "react"
+import type { VehicleDetail } from "../types/vehicle"
+import { getVehicleById } from "../api/vehicleApi"
+
+export function useVehicleById(id: number) {
+  const [data, setData] = useState<VehicleDetail | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    if (!id || isNaN(id)) return
+
+    async function fetchVehicle() {
+      try {
+        const response = await getVehicleById(id)
+        setData(response)
+      } catch {
+        setError(true)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchVehicle()
+  }, [id])
+
+  return { data, loading, error }
+}
