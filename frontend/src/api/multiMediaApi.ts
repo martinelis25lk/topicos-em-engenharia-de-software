@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // URL base apontando para o Controller do seu Spring Boot
-const API_URL = "http://localhost:8080/api/multimedia";
+const API_URL = "http://13.222.159.194:8080/api/multimedia";
 
 // ── Tipagens dos Modelos (Refletindo o seu Backend) ────────────────
 export interface Midia {
