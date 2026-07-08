@@ -2,8 +2,9 @@ version: '3.8'
 
 services:
   backend:
-    context: .
-    dockerfile: back.dockerfile
+    build:
+      context: .
+      dockerfile: back.dockerfile
     ports:
       - "8080:8080"
     environment:
@@ -21,8 +22,9 @@ services:
     restart: always
 
   frontend:
-    context: .
-    dockerfile: frontend/Dockerfile # Garanta que este caminho aponte para o Dockerfile do front
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
     ports:
       - "80:80"
     restart: always
