@@ -15,7 +15,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://ENDERECO_DO_SEU_RDS_AQUI:3306/NOME_DO_BANCO_DE_DADOS?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=USUARIO_DO_RDS_AQUI
       - SPRING_DATASOURCE_PASSWORD=SENHA_DO_RDS_AQUI
-      
+      F
       # ☁️ Credenciais temporárias do S3 (depois mudamos para a Role)
       - AWS_ACCESS_KEY_ID=SUA_ACCESS_KEY_AQUI
       - AWS_SECRET_ACCESS_KEY=SEU_SECRET_KEY_AQUI

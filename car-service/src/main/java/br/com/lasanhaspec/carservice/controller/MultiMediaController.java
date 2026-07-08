@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/multimedia")
-@CrossOrigin(origins = "http://localhost:5173") // Libera o acesso para o Vite do Front-end
+@CrossOrigin(origins = "*") // Libera o acesso para o Vite do Front-end
 public class MultiMediaController {
 
     private final MidiaService midiaService;

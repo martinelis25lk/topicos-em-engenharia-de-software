@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080"; // Replace with your backend API URL
+const API_URL = "http://13.222.159.194:8080"; // Replace with your backend API URL
 
 type LoginRequest = {
   email: string;

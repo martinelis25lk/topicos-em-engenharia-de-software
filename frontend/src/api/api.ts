@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080",
+  // Usa a variável do Vite. Se não existir (em dev local), cai no localhost.
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080",
 });
 
 api.interceptors.request.use((config) => {
