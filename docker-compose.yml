@@ -12,10 +12,10 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       
       # 🗄️ Conexão com o seu MySQL no Amazon RDS
-      - SPRING_DATASOURCE_URL=jdbc:mysql://infoimages.cate2cc2i7i5.us-east-1.rds.amazonaws.com:3306/carservice?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=>
+      - SPRING_DATASOURCE_URL=jdbc:mysql://infoimages.cate2cc2i7i5.us-east-1.rds.amazonaws.com:3306/carservice?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=USUARIO_DO_RDS_AQUI
       - SPRING_DATASOURCE_PASSWORD=SENHA_DO_RDS_AQUI
-      F
+      
       # ☁️ Credenciais temporárias do S3 (depois mudamos para a Role)
       - AWS_ACCESS_KEY_ID=SUA_ACCESS_KEY_AQUI
       - AWS_SECRET_ACCESS_KEY=SEU_SECRET_KEY_AQUI
