@@ -1,60 +1,30 @@
-services:
+version: '3.8'
 
+services:
   backend:
-    build:
-      context: ./car-service
-      dockerfile: ../back.dockerfile
-    container_name: car-service
+    context: .
+    dockerfile: back.dockerfile
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=local
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${POSTGRES_DB:-appdb}
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-appuser}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-secret}
-    depends_on:
-      db:
-        condition: service_healthy
-    networks:
-      - app-network
-    restart: unless-stopped
+      - SPRING_PROFILES_ACTIVE=prod
+      
+      # 🗄️ Conexão com o seu MySQL no Amazon RDS
+      - SPRING_DATASOURCE_URL=jdbc:mysql://ENDERECO_DO_SEU_RDS_AQUI:3306/NOME_DO_BANCO_DE_DADOS?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=USUARIO_DO_RDS_AQUI
+      - SPRING_DATASOURCE_PASSWORD=SENHA_DO_RDS_AQUI
+      
+      # ☁️ Credenciais de acesso ao Amazon S3
+      - AWS_ACCESS_KEY_ID=SUA_ACCESS_KEY_AQUI
+      - AWS_SECRET_ACCESS_KEY=SEU_SECRET_KEY_AQUI
+      - AWS_REGION=us-east-1
+    restart: always
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: ../front.dockerfile
-    container_name: frontend
+    context: .
+    dockerfile: frontend/Dockerfile # Garanta que este caminho aponte para o Dockerfile do front
     ports:
-      - "5173:3000"
+      - "80:80"
+    restart: always
     depends_on:
       - backend
-    networks:
-      - app-network
-    restart: unless-stopped
-
-  db:
-    image: postgres:16-alpine
-    container_name: postgres-db
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB:-appdb}
-      - POSTGRES_USER=${POSTGRES_USER:-appuser}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-secret}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-appuser} -d ${POSTGRES_DB:-appdb}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-volumes:
-  postgres_data:
-
-networks:
-  app-network:
-    driver: bridge
